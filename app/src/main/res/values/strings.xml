@@ -1,0 +1,43 @@
+<resources>
+    <string name="owner">HUCE Tech</string>
+    <string name="app_name">HUCE Money</string>
+    <string name="slogan">Quản lý tài chính cá nhân hiệu quả</string>
+    <string name="login">Đăng nhập</string>
+    <string name="signup">Đăng ký</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="setting">Cài đặt</string>
+    <string name="add">Thêm</string>
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="delete">Xóa</string>
+    <string name="vi_currency">₫</string>
+    <string name="budget_name">Tên nguồn chi</string>
+    <string name="budget_money">Số dư</string>
+    <string name="budget_note">Ghi chú</string>
+    <string name="add_budget">Thêm nguồn chi</string>
+    <string name="email">Email</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="username">Tài khoản</string>
+    <string name="logo_app">logo_app</string>
+    <string name="password">Mật khẩu</string>
+    <string name="welcome">Chào mừng</string>
+    <string name="create_new_account">Tạo tài khoản mới</string>
+    <string name="confirm_password">Nhập lại mật khẩu</string>
+    <string name="rule">Bằng cách nhấn vào nút đăng ký, bạn đã đồng ý với các điều khoản và chính sách của chúng tôi</string>
+    <string name="category">Danh mục thu/chi</string>
+    <string name="add_category">Thêm danh mục</string>
+    <string name="non"> </string>
+    <string-array name="spinner_transaction_items">
+        <item>Khoản chi</item>
+        <item>Khoản thu</item>
+    </string-array>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+</resources>

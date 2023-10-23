@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/baseline_home_white_24"
+        android:title="Trang chủ" />
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/baseline_account_balance_white_24"
+        android:title="Tài khoản" />
+    <item
+        android:id="@+id/nav_transaction"
+        android:icon="@drawable/baseline_add_circle_white_24"
+        android:title="Giao dịch" />
+    <item
+        android:id="@+id/nav_statistic"
+        android:icon="@drawable/baseline_bar_chart_white_24"
+        android:title="Thống kê" />
+    <item
+        android:id="@+id/nav_other"
+        android:icon="@drawable/baseline_apps_white_24"
+        android:title="Khác" />
+</menu>

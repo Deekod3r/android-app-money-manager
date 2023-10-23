@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="accountViewModel"
+            type="com.project.hucemoney.viewmodels.AccountViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".views.fragments.BottomSheetAccountFragment">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="180dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/grey" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnTranfer"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_sync_alt_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Chuyển khoản"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEditAccount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_edit_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Sửa"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_delete_blue_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Xóa"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnStopUsingAccount"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_lock_blue_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Ngừng sử dụng"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="font_size_navbar" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="font_tab_item" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="font_search_view" parent="">
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColorHint">@color/grey</item>
+    </style>
+</resources>

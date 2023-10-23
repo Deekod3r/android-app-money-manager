@@ -1,0 +1,87 @@
+-- CREATE DATABASE money_manager;
+
+-- Create Users Table
+CREATE TABLE "users" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "username" VARCHAR(100) NOT NULL,
+    "email" VARCHAR(100) NOT NULL,
+    "password" VARCHAR(100) NOT NULL,
+    "twoFactorAuthKey" VARCHAR(100)
+    -- Add other user profile information fields here
+);
+
+-- Create Accounts Table
+CREATE TABLE "accounts" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "user" VARCHAR(36) REFERENCES "users"("UUID"),
+    "name" VARCHAR(255) NOT NULL,
+    "currentBalance" DECIMAL(15, 2) NOT NULL,
+    "note" VARCHAR(255)
+    -- Add other account-related fields here
+);
+
+-- Create Categories Table
+CREATE TABLE "categories" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "user" VARCHAR(36) REFERENCES "users"("UUID"),
+    "name" VARCHAR(255) NOT NULL,
+    "type" bool NOT NULL,
+    "note" VARCHAR(255)
+    -- Add other category-related fields here
+);
+
+-- Create Goals Table
+CREATE TABLE "goals" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "user" VARCHAR(36) REFERENCES "users"("UUID"),
+    "name" VARCHAR(255) NOT NULL,
+    "targetAmount" DECIMAL(15, 2) NOT NULL,
+    "currentAmount" DECIMAL(15, 2),
+    "startDate" DATE NOT NULL,
+    "endDate" DATE NOT NULL,
+    "note" VARCHAR(255)
+    -- Add other goal-related fields here
+);
+
+-- Create Transactions Table
+CREATE TABLE "transactions" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "account" VARCHAR(36) REFERENCES "accounts"("UUID"),
+    "date" DATE NOT NULL,
+    "type" bool NOT NULL,
+    "category" VARCHAR(36) REFERENCES "categories"("UUID"),
+    "amount" DECIMAL(15, 2) NOT NULL,
+    "goal" VARCHAR(36) REFERENCES "goals"("UUID"),
+    "note" VARCHAR(255)
+    -- Add other transaction-related fields here
+);
+
+-- Create Budgets Table
+CREATE TABLE "budgets" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "user" VARCHAR(36) REFERENCES "users"("UUID"),
+    "name" VARCHAR(255) NOT NULL,
+    "startDate" DATE NOT NULL,
+    "endDate" DATE NOT NULL,
+    "initialLimit" DECIMAL(15, 2) NOT NULL,
+    "currentBalance" DECIMAL(15, 2) NOT NULL,
+    "category" VARCHAR(36) REFERENCES "categories"("UUID"),
+    "note" VARCHAR(255)
+    -- Add other budget-related fields here
+);
+
+-- Create PasswordResetRequests Table
+CREATE TABLE "passwordResetRequests" (
+    "UUID" VARCHAR(36) PRIMARY KEY,
+    "id" VARCHAR(36) UNIQUE NOT NULL,
+    "user" VARCHAR(36) REFERENCES "users"("UUID"),
+    "token" VARCHAR(100) NOT NULL,
+    "requestDate" TIMESTAMP NOT NULL,
+    "isUsed" BOOLEAN NOT NULL DEFAULT FALSE
+);

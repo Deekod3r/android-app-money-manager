@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentOther"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".views.fragments.OtherFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutOther"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_round_bottom_blue_bg"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ImageView
+                android:id="@+id/btnCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginHorizontal="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="sync"
+                android:src="@drawable/baseline_account_circle_white_48"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <LinearLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:background="@color/blue"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/username"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:text="@string/email"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btnNotify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="notify"
+                android:src="@drawable/baseline_notifications_white_24"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayoutOther">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_settings_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Cài đặt chung"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_data_setting_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Cài đặt dữ liệu"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_fingerprint_blue_24"
+                android:background="@android:color/transparent"
+                android:drawablePadding="10dp"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="10dp"
+                android:text="Đăng nhập bằng Touch/Face ID"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="15dp"
+                android:contentDescription="Biometric Login" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_share_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Giới thiệu cho bạn bè"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_stars_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Đánh giá ứng dụng"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_feedback_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Góp ý với nhà phát triển"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_info_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Trợ giúp và thông tin"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_language_blue_24"
+                android:background="@android:color/transparent"
+                android:drawablePadding="10dp"
+                android:gravity="start|center_vertical"
+                android:paddingHorizontal="10dp"
+                android:text="Ngôn ngữ"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radioLgVietnamese"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:checked="true"
+                android:textColor="@color/black"
+                android:buttonTint="@drawable/custom_radio"
+                android:text="Tiếng Việt" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radioLgEnglish"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:buttonTint="@color/blue"
+                android:text="Tiếng Anh" />
+
+        </LinearLayout>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_logout_red_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="@string/logout"
+            android:textAllCaps="false"
+            android:textColor="@color/red" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/grey" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSync"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:text="Đồng bộ dữ liệu"
+            android:textColor="@color/blue" />
+
+        <TextView
+            android:id="@+id/tvDateSync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:gravity="center"
+            android:text="Chưa đồng bộ dữ liệu"
+            android:textColor="@color/grey" />
+
+        <TextView
+            android:id="@+id/tvVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Phiên bản"
+            android:textColor="@color/grey" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

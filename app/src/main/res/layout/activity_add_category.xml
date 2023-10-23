@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white">
+
+    <data>
+
+        <variable
+            name="accountViewModel"
+            type="com.project.hucemoney.viewmodels.CategoryViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.activities.AddCategoryActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayoutAddCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_round_bottom_blue_bg"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/btnClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="search"
+                    android:src="@drawable/baseline_close_white_24"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:id="@+id/tvTitleAddCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Thêm danh mục"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btnFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="filter"
+                    android:src="@drawable/baseline_check_white_24"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddCategory">
+
+            <EditText
+                android:id="@+id/iconCategory"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:autofillHints=""
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_emoticon_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:hint="Chọn icon"
+                android:enabled="false"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtCategoryName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:autofillHints=""
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_list_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:hint="Tên danh mục"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtParent"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:autofillHints=""
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_category_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:hint="Danh mục cha"
+                android:enabled="false"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtNote"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:autofillHints=""
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_sticky_note_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:hint="Ghi chú"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_height="50dp"
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:background="@drawable/btn_primary"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

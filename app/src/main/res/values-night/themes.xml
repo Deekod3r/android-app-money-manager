@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.HUCEMoney" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="bottomNavigationStyle">@color/red</item>
+    </style>
+
+    <style name="Theme.HUCEMoney" parent="Base.Theme.HUCEMoney" >
+        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryContainer">@color/sky_blue</item>
+        <item name="android:textCursorDrawable">@null</item>
+
+        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="bottomNavigationStyle">@color/red</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+</resources>
