@@ -66,9 +66,8 @@ public interface CategoryDAO {
             "FROM " + FieldData.TABLE_CATEGORIES + " " +
             "WHERE " + FieldData.CATEGORY_FIELD_USER + " = :user" + " " +
             "AND " + FieldData.CATEGORY_FIELD_TYPE + " = :type" + " " +
-            "OR (" + FieldData.CATEGORY_FIELD_NAME + " LIKE :name" + " " +
-            "OR " + FieldData.CATEGORY_FIELD_PARENT + " = :parent)")
-    LiveData<List<Category>> findAll(String user, boolean type, @Nullable String name, @Nullable String parent);
+            "AND " + FieldData.CATEGORY_FIELD_NAME + " LIKE :name")
+    LiveData<List<Category>> findAll(String user, boolean type, String name);
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_CATEGORIES + " " +

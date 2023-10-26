@@ -48,9 +48,12 @@ public class CategoryRepository {
         }
     }
 
-    public LiveData<List<Category>> getAll(String user, boolean type, @Nullable String name, @Nullable String parent) {
+    public LiveData<List<Category>> getAll(String user, boolean type, @Nullable String name) {
         try {
-            return categoryDAO.findAll(user, type, name, parent);
+            if (name == null) {
+                name = "%%";
+            }
+            return categoryDAO.findAll(user, type, name);
         } catch (Exception e) {
             throw e;
         }

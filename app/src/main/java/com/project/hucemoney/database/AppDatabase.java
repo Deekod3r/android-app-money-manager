@@ -1,7 +1,9 @@
 package com.project.hucemoney.database;
 
 import android.content.Context;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -16,6 +18,9 @@ import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.entities.Goal;
 import com.project.hucemoney.entities.User;
 import com.project.hucemoney.utils.AnnotationUtils;
+
+import java.util.List;
+import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Account.class, Goal.class, Category.class},
         version = 11, exportSchema = false)
@@ -34,13 +39,15 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class, DATABASE_NAME)
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
                             .allowMainThreadQueries()
+                            .setQueryCallback((s, list) -> Log.d("RoomQuery", "SQL Query: " + s + " with args: " + list), Executors.newSingleThreadExecutor())
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+
 }
 

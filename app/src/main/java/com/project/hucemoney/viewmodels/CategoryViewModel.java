@@ -104,9 +104,9 @@ public class CategoryViewModel extends AndroidViewModel {
         resultDeleteCategory.setValue(response);
     }
 
-    public void loadCategories(boolean type, @Nullable String name, @Nullable String parent) {
+    public void loadCategories(boolean type, @Nullable String name) {
         try {
-            LiveData<List<Category>> categories = categoryRepository.getAll(sessionManager.getUUID(), type, null, null);
+            LiveData<List<Category>> categories = categoryRepository.getAll(sessionManager.getUUID(), type, name);
             categories.observeForever(ctg -> {
                 categoriesLiveData.setValue(ctg);
                 //accounts.removeObservers(this);

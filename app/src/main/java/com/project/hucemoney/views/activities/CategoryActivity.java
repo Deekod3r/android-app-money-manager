@@ -3,6 +3,7 @@ package com.project.hucemoney.views.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -51,7 +52,7 @@ public class CategoryActivity extends AppCompatActivity {
     private void init() {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         categoryAdapter = new CategoryAdapter(this, categories);
-        categoryViewModel.loadCategories(binding.tabLayout.getSelectedTabPosition() != 0,null, null);
+        categoryViewModel.loadCategories(binding.tabLayout.getSelectedTabPosition() != 0,null);
         binding.setCategoryViewModel(categoryViewModel);
         binding.setLifecycleOwner(this);
     }
@@ -63,12 +64,15 @@ public class CategoryActivity extends AppCompatActivity {
                 int position = binding.tabLayout.getSelectedTabPosition();
                 switch (position) {
                     case 0:
-                        categoryViewModel.loadCategories(false, null, null);
+                        binding.searchView.setQuery("", false);
+                        categoryViewModel.loadCategories(false, null);
                         break;
                     case 1:
-                        categoryViewModel.loadCategories(true, null, null);
+                        binding.searchView.setQuery("", false);
+                        categoryViewModel.loadCategories(true, null);
                         break;
                     case 2:
+                        binding.searchView.setQuery("", false);
                         categoryViewModel.clearCategories();
                         break;
                 }
@@ -95,15 +99,32 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void controlAction() {
+
         binding.btnClose.setOnClickListener(v -> {
             finish();
         });
+
+        binding.searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                newText = "%" + newText + "%";
+                categoryViewModel.loadCategories(binding.tabLayout.getSelectedTabPosition() != 0, newText);
+                return false;
+            }
+        });
+
         categoryAdapter.setOnItemClickListener(category -> {
             Intent intent = new Intent(CategoryActivity.this, EditCategoryActivity.class);
             intent.putExtra("category", category);
             intent.putExtra("type", binding.tabLayout.getSelectedTabPosition());
             startActivity(intent);
         });
+
         binding.btnAddCategory.setOnClickListener(v -> {
             Intent intent = new Intent(CategoryActivity.this, AddCategoryActivity.class);
             intent.putExtra("type", binding.tabLayout.getSelectedTabPosition());
