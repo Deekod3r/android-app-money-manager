@@ -40,7 +40,7 @@ public class AddAccountActivity extends AppCompatActivity {
 
     private void controlAction() {
         binding.btnClose.setOnClickListener(v -> finish());
-        binding.btnSave.setOnClickListener(v -> accountViewModel.insertAccount());
+        binding.btnSave.setOnClickListener(v -> accountViewModel.addAccount());
     }
 
     private void observe() {

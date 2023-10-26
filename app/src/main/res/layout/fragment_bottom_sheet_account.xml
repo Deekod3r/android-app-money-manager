@@ -40,7 +40,7 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnEditAccount"
+            android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@drawable/custom_button_underline_bg"
@@ -54,7 +54,7 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnDeleteAccount"
+            android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@drawable/custom_button_underline_bg"

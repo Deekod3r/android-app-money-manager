@@ -87,7 +87,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.tvAccountName);
-            amount = itemView.findViewById(R.id.tvAccountAmout);
+            amount = itemView.findViewById(R.id.tvAccountAmount);
             more = itemView.findViewById(R.id.imgMoreActionAccount);
         }
 

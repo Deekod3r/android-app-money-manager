@@ -38,14 +38,13 @@ public class AccountViewModel extends AndroidViewModel {
         super(application);
         this.accountRepository = new AccountRepository(application);
         sessionManager = new SessionManager(application);
-        loadAccounts(sessionManager.getUUID());
     }
 
     public LiveData<List<Account>> getAccounts() {
         return accountsLiveData;
     }
 
-    public void insertAccount() {
+    public void addAccount() {
         Response<Account> response = new Response<>();
         try {
             if (isNullOrEmpty(amountAsString)) {
@@ -67,10 +66,6 @@ public class AccountViewModel extends AndroidViewModel {
                 resultAddAccount.setValue(response);
                 return;
             }
-            List<Account> accounts = accountsLiveData.getValue();
-            assert accounts != null;
-            accounts.add(account);
-            accountsLiveData.setValue(accounts);
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Thêm tài khoản thành công");
         } catch (Exception e) {
@@ -79,7 +74,7 @@ public class AccountViewModel extends AndroidViewModel {
         resultAddAccount.setValue(response);
     }
     
-    public void updateAccount(int position) {
+    public void editAccount(int position) {
         Response<Account> response = new Response<>();
         try {
             if (isNullOrEmpty(amountAsString)) {
@@ -99,10 +94,6 @@ public class AccountViewModel extends AndroidViewModel {
                 resultEditAccount.setValue(response);
                 return;
             }
-            List<Account> accounts = accountsLiveData.getValue();
-            assert accounts != null;
-            accounts.set(position, account);
-            accountsLiveData.setValue(accounts);
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Cập nhật tài khoản thành công");
         } catch (Exception e) {
@@ -120,10 +111,10 @@ public class AccountViewModel extends AndroidViewModel {
                 resultDeleteAccount.setValue(response);
                 return;
             }
-            List<Account> accounts = accountsLiveData.getValue();
-            assert accounts != null;
-            accounts.remove(account);
-            accountsLiveData.setValue(accounts);
+            //List<Account> accounts = accountsLiveData.getValue();
+            //assert accounts != null;
+            //accounts.remove(account);
+            //accountsLiveData.setValue(accounts);
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Xóa tài khoản thành công");
         } catch (Exception e) {
@@ -132,9 +123,9 @@ public class AccountViewModel extends AndroidViewModel {
         resultDeleteAccount.setValue(response);
     }
 
-    private void loadAccounts(String user) {
+    public void loadAccounts() {
         try {
-            LiveData<List<Account>> accounts = accountRepository.getAll(user);
+            LiveData<List<Account>> accounts = accountRepository.getAll(sessionManager.getUUID());
             accounts.observeForever(acs -> {
                 accountsLiveData.setValue(acs);
                 long amount = 0;

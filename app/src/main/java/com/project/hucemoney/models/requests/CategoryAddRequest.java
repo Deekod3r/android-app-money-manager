@@ -18,7 +18,6 @@ public class CategoryAddRequest {
     private String note;
     @NonNull
     private String user;
-    @NonNull
     private String parent;
 
     public void setName(String name) {

@@ -20,6 +20,12 @@
         android:theme="@style/Theme.HUCEMoney"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".views.activities.EditCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.ListCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.AddCategoryActivity"
             android:exported="false" />
         <activity

@@ -74,14 +74,14 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
     }
 
     private void controlAction() {
-        binding.btnEditAccount.setOnClickListener(v -> {
+        binding.btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), EditAccountActivity.class);
             intent.putExtra("account", account);
             intent.putExtra("position", position);
             startActivity(intent);
             this.dismiss();
         });
-        binding.btnDeleteAccount.setOnClickListener(v -> {
+        binding.btnDelete.setOnClickListener(v -> {
             FunctionUtils.showDialogConfirm(getContext(), "", "Bạn có chắc chắn muốn xóa tài khoản này không?", DialogType.WARNING,
                     (dialog, which) -> {
                         accountViewModel.deleteAccount(account);

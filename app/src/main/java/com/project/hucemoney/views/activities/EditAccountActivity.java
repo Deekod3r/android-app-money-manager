@@ -48,7 +48,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
     private void controlAction() {
         binding.btnClose.setOnClickListener(v -> finish());
-        binding.btnSave.setOnClickListener(v -> accountViewModel.updateAccount(position));
+        binding.btnSave.setOnClickListener(v -> accountViewModel.editAccount(position));
     }
 
     private void observe() {

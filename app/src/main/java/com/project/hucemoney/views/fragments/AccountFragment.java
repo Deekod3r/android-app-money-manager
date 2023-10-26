@@ -72,6 +72,7 @@ public class AccountFragment extends Fragment {
     private void init() {
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         accountAdapter = new AccountAdapter(getContext(), accounts);
+        accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
         binding.setLifecycleOwner(this);
     }

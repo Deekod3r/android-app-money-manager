@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
 
     private void init() {
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
         binding.setLifecycleOwner(this);
     }

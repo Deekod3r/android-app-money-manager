@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="accountViewModel"
+            name="categoryViewModel"
             type="com.project.hucemoney.viewmodels.CategoryViewModel" />
     </data>
 
@@ -107,9 +107,10 @@
                 android:drawablePadding="5dp"
                 android:ems="10"
                 android:hint="Tên danh mục"
+                android:text="@={categoryViewModel.categoryAddRequest.name}"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp" />
 
@@ -128,7 +129,7 @@
                 android:enabled="false"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp" />
 
@@ -143,9 +144,10 @@
                 android:drawablePadding="5dp"
                 android:ems="10"
                 android:hint="Ghi chú"
+                android:text="@={categoryViewModel.categoryAddRequest.note}"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp"/>
 

@@ -1,5 +1,6 @@
 package com.project.hucemoney.DAOs;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -52,9 +53,6 @@ public interface CategoryDAO {
             "LIMIT :limit OFFSET (:page - 1) * :limit")
     List<Category> findAllPaginated(int page, int limit);
 
-    @Query("SELECT * FROM "+ FieldData.TABLE_CATEGORIES)
-    LiveData<List<Category>> findAll();
-
     @Query("SELECT EXISTS (SELECT 1 " +
             "FROM " + FieldData.TABLE_CATEGORIES + " " +
             "WHERE " + FieldData.FIELD_UUID + " = :uuid)")
@@ -66,8 +64,11 @@ public interface CategoryDAO {
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_CATEGORIES + " " +
-            "WHERE " + FieldData.CATEGORY_FIELD_USER + " = :user")
-    LiveData<List<Category>> findAllByUser(String user);
+            "WHERE " + FieldData.CATEGORY_FIELD_USER + " = :user" + " " +
+            "AND " + FieldData.CATEGORY_FIELD_TYPE + " = :type" + " " +
+            "OR (" + FieldData.CATEGORY_FIELD_NAME + " LIKE :name" + " " +
+            "OR " + FieldData.CATEGORY_FIELD_PARENT + " = :parent)")
+    LiveData<List<Category>> findAll(String user, boolean type, @Nullable String name, @Nullable String parent);
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_CATEGORIES + " " +

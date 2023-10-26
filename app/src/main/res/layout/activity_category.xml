@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="accountViewModel"
+            name="categoryViewModel"
             type="com.project.hucemoney.viewmodels.CategoryViewModel" />
     </data>
 
@@ -74,13 +74,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/custom_round_bottom_blue_bg"
-            app:tabTextColor="@color/white"
-            app:tabSelectedTextColor="@color/yellow"
-            app:tabIndicatorColor="@color/yellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutCategory"
+            app:tabIndicatorColor="@color/yellow"
+            app:tabSelectedTextColor="@color/yellow"
             app:tabTextAppearance="@style/font_tab_item"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutCategory">
+            app:tabTextColor="@color/white">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -99,20 +99,52 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchViewExpense"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            app:iconifiedByDefault="false"
-            android:background="@drawable/edt_primary"
-            android:layout_marginVertical="2dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-            app:queryHint="Tìm kiếm danh mục..."
-            android:theme="@style/font_search_view"
-            app:searchIcon="@drawable/baseline_search_blue_24" />
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="2dp"
+                android:background="@drawable/edt_primary"
+                android:iconifiedByDefault="false"
+                android:theme="@style/font_search_view"
+                app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+                app:queryHint="Tìm kiếm danh mục..."
+                app:searchIcon="@drawable/baseline_search_blue_24" />
+
+            <TextView
+                android:id="@+id/tvNotifyNoData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Không có dữ liệu..."
+                android:textAlignment="center"
+                android:textColor="@color/grey"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/custom_round_bottom_blue_bg"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_category" />
+
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddCategory"

@@ -2,6 +2,7 @@ package com.project.hucemoney.repositories;
 
 import android.app.Application;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import com.project.hucemoney.DAOs.CategoryDAO;
@@ -27,7 +28,7 @@ public class CategoryRepository {
             category.setName(CategoryAddRequest.getName());
             category.setNote(CategoryAddRequest.getNote());
             category.setUser(CategoryAddRequest.getUser());
-            category.setParent(CategoryAddRequest.getParent());
+            category.setParent(CategoryAddRequest.getParent() == null ? "0" : CategoryAddRequest.getParent());
             category.setType(CategoryAddRequest.isType());
             long rowID = categoryDAO.save(category);
             if (rowID <= 0) {
@@ -47,12 +48,9 @@ public class CategoryRepository {
         }
     }
 
-    public LiveData<List<Category>> getAll(String user) {
+    public LiveData<List<Category>> getAll(String user, boolean type, @Nullable String name, @Nullable String parent) {
         try {
-            if (user == null) {
-                return categoryDAO.findAll();
-            }
-            return categoryDAO.findAllByUser(user);
+            return categoryDAO.findAll(user, type, name, parent);
         } catch (Exception e) {
             throw e;
         }
@@ -82,14 +80,13 @@ public class CategoryRepository {
         try {
             Category category = categoryDAO.findByUuid(CategoryEditRequest.getUUID());
             if (category == null) {
-                throw new RuntimeException("Tài khoản không tồn tại");
+                throw new RuntimeException("Danh mục không tồn tại");
             }
             category.setName(CategoryEditRequest.getName());
-            category.setParent(CategoryEditRequest.getParent());
             category.setNote(CategoryEditRequest.getNote());
             long rowID = categoryDAO.update(category);
             if (rowID <= 0) {
-                throw new RuntimeException("Cập nhật tài khoản thất bại");
+                throw new RuntimeException("Cập nhật danh mục thất bại");
             }
             return category;
         } catch (Exception e) {

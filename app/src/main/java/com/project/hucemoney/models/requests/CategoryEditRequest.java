@@ -17,8 +17,6 @@ public class CategoryEditRequest {
     @NonNull
     private String name;
     private String note;
-    @NonNull
-    private String parent;
 
     public void setName(String name) {
         this.name = name.trim();
