@@ -1,6 +1,9 @@
 package com.project.hucemoney.views.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -47,17 +50,22 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     private void controlAction() {
-        binding.btnClose.setOnClickListener(v -> finish());
+        binding.btnClose.setOnClickListener(v -> {
+            Intent data = new Intent();
+            setResult(Activity.RESULT_CANCELED, data);
+            finish();
+        });
         binding.btnSave.setOnClickListener(v -> accountViewModel.editAccount(position));
     }
 
     private void observe() {
         accountViewModel.getResultEditAccount().observe(this, response -> {
-            if (response != null) {
-                //Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                    finish();
-                }
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                Intent data = new Intent();
+                data.putExtra("accountEdited", response.getData());
+                setResult(Activity.RESULT_OK, data);
+                finish();
             }
         });
     }

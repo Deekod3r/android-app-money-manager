@@ -4,23 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
-            name="categoryViewModel"
-            type="com.project.hucemoney.viewmodels.CategoryViewModel" />
+            name="goalViewModel"
+            type="com.project.hucemoney.viewmodels.GoalViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".views.activities.CategoryActivity">
+        tools:context=".views.activities.GoalActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutCategory"
+            android:id="@+id/appBarLayoutGoal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:background="@drawable/custom_round_bottom_blue_bg"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +38,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="close"
+                    android:contentDescription="search"
                     android:src="@drawable/baseline_close_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
@@ -48,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Danh mục"
+                    android:text="Mục tiêu"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -69,36 +68,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/custom_round_bottom_blue_bg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutCategory"
-            app:tabIndicatorColor="@color/yellow"
-            app:tabSelectedTextColor="@color/yellow"
-            app:tabTextAppearance="@style/font_tab_item"
-            app:tabTextColor="@color/white">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Chi" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thu" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vay/nợ" />
-
-        </com.google.android.material.tabs.TabLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -107,22 +76,19 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutGoal">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="2dp"
-                android:background="@drawable/edt_primary"
-                android:iconifiedByDefault="false"
-                android:theme="@style/font_search_view"
-                app:iconifiedByDefault="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-                app:queryHint="Tìm kiếm danh mục..."
-                app:searchIcon="@drawable/baseline_search_blue_24" />
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/custom_round_top_grey_bg"
+                android:paddingVertical="5dp"
+                android:text="Thống kê"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvNotifyNoData"
@@ -136,18 +102,20 @@
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategory"
+                    android:id="@+id/rvGoal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="80dp"
                 android:background="@drawable/custom_round_bottom_blue_bg"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_category" />
+                tools:listitem="@layout/item_goal" />
+
 
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAddCategory"
+            android:id="@+id/btnAddGoal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="320dp"

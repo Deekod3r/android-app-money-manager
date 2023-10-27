@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,6 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.AccountAdapter;
 import com.project.hucemoney.adapters.entities.CategoryAdapter;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.databinding.ActivityCategoryBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
@@ -31,6 +34,8 @@ public class CategoryActivity extends AppCompatActivity {
     private CategoryAdapter categoryAdapter;
     private CategoryViewModel categoryViewModel;
     private RecyclerView recyclerView;
+    private ActivityResultLauncher<Intent> mLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,46 @@ public class CategoryActivity extends AppCompatActivity {
         categoryViewModel.loadCategories(binding.tabLayout.getSelectedTabPosition() != 0,null);
         binding.setCategoryViewModel(categoryViewModel);
         binding.setLifecycleOwner(this);
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String action = data.getStringExtra("action");
+                            if (action == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            switch (action) {
+                                case Constants.ACTION_ADD: {
+                                    Category category = data.getParcelableExtra("categoryAdded");
+                                    categoryViewModel.addCategoryLiveData(category);
+                                    break;
+                                }
+                                case Constants.ACTION_EDIT: {
+                                    Category category = data.getParcelableExtra("categoryEdited");
+                                    int position = data.getIntExtra("position", -1);
+                                    categoryViewModel.editCategoryLiveData(category, position);
+                                    break;
+                                }
+                                case Constants.ACTION_DELETE: {
+                                    int position = data.getIntExtra("position", -1);
+                                    categories.remove(position);
+                                    categoryViewModel.deleteCategoryLiveData(position);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void initTabLayout() {
@@ -73,7 +118,7 @@ public class CategoryActivity extends AppCompatActivity {
                         break;
                     case 2:
                         binding.searchView.setQuery("", false);
-                        categoryViewModel.clearCategories();
+                        //categoryViewModel.clearCategories();
                         break;
                 }
             }
@@ -118,17 +163,18 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
-        categoryAdapter.setOnItemClickListener(category -> {
+        categoryAdapter.setOnItemClickListener((category, position) -> {
             Intent intent = new Intent(CategoryActivity.this, EditCategoryActivity.class);
             intent.putExtra("category", category);
+            intent.putExtra("position", position);
             intent.putExtra("type", binding.tabLayout.getSelectedTabPosition());
-            startActivity(intent);
+            mLauncher.launch(intent);
         });
 
         binding.btnAddCategory.setOnClickListener(v -> {
             Intent intent = new Intent(CategoryActivity.this, AddCategoryActivity.class);
             intent.putExtra("type", binding.tabLayout.getSelectedTabPosition());
-            startActivity(intent);
+            mLauncher.launch(intent);
         });
     }
 

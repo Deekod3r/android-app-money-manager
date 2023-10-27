@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.ResponseCode;
@@ -56,11 +57,14 @@ public class CategoryViewModel extends AndroidViewModel {
                 response.setStatus(ResponseCode.SUCCESS);
                 response.setMessage("Thêm danh mục thành công");
                 response.setData(category);
+//                List<Category> c = categoriesLiveData.getValue();
+//                c.add(category);
+//                categoriesLiveData.setValue(c);
             } else {
                 response.setMessage("Thêm danh mục thất bại");
             }
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("CategoryViewModel", e.getMessage());
         }
         resultAddCategory.setValue(response);
     }
@@ -107,13 +111,38 @@ public class CategoryViewModel extends AndroidViewModel {
     public void loadCategories(boolean type, @Nullable String name) {
         try {
             LiveData<List<Category>> categories = categoryRepository.getAll(sessionManager.getUUID(), type, name);
-            categories.observeForever(ctg -> {
-                categoriesLiveData.setValue(ctg);
-                //accounts.removeObservers(this);
-            });
+            Observer<List<Category>> observer = new Observer<List<Category>>() {
+                @Override
+                public void onChanged(List<Category> ctg) {
+                    categoriesLiveData.setValue(ctg);
+                    categories.removeObserver(this);
+                }
+            };
+            categories.observeForever(observer);
         } catch (Exception e) {
             Log.e("CategoryViewModel", e.getMessage());
         }
+    }
+
+    public void addCategoryLiveData(Category category) {
+        List<Category> c = categoriesLiveData.getValue();
+        assert c != null;
+        c.add(category);
+        categoriesLiveData.setValue(c);
+    }
+
+    public void editCategoryLiveData(Category category, int position) {
+        List<Category> c = categoriesLiveData.getValue();
+        assert c != null;
+        c.set(position, category);
+        categoriesLiveData.setValue(c);
+    }
+
+    public void deleteCategoryLiveData(int position) {
+        List<Category> c = categoriesLiveData.getValue();
+        assert c != null;
+        c.remove(position);
+        categoriesLiveData.setValue(c);
     }
 
     public void clearCategories() {
@@ -135,7 +164,6 @@ public class CategoryViewModel extends AndroidViewModel {
     public CategoryAddRequest getCategoryAddRequest() {
         return categoryAddRequest;
     }
-
     public CategoryEditRequest getCategoryEditRequest() {
         return categoryEditRequest;
     }

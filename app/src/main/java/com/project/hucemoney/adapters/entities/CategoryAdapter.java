@@ -49,7 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.name.setText(category.getName());
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(category);
+                onItemClickListener.onItemClick(category, position);
             }
         });
     }
@@ -79,7 +79,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     }
     public interface OnItemClickListener {
-        void onItemClick(Category category);
+        void onItemClick(Category category, int position);
     }
     public void setOnItemClickListener(CategoryAdapter.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;

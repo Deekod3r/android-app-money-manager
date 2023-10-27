@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.CategoryAdapter;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.CategoryType;
 import com.project.hucemoney.common.enums.DialogType;
@@ -24,6 +26,7 @@ public class EditCategoryActivity extends AppCompatActivity {
     private ActivityEditCategoryBinding binding;
     private CategoryViewModel categoryViewModel;
     private Category category;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,12 @@ public class EditCategoryActivity extends AppCompatActivity {
             binding.tvTitleAddCategory.setText("Sửa danh mục vay/nợ");
         } else {
             Toast.makeText(this, "Lỗi", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        position = intent.getIntExtra("position", -1);
+        if (position == -1) {
+            Toast.makeText(this, "Lỗi", Toast.LENGTH_SHORT).show();
+            finish();
         }
         category = intent.getParcelableExtra("category");
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
@@ -83,12 +92,21 @@ public class EditCategoryActivity extends AppCompatActivity {
         categoryViewModel.getResultEditCategory().observe(this, response -> {
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
             if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                Intent data = new Intent();
+                data.putExtra("categoryEdited", response.getData());
+                data.putExtra("position", position);
+                data.putExtra("action", Constants.ACTION_EDIT);
+                setResult(Activity.RESULT_OK, data);
                 finish();
             }
         });
         categoryViewModel.getResultDeleteCategory().observe(this, response -> {
             Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
             if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                Intent data = new Intent();
+                data.putExtra("position", position);
+                data.putExtra("action", Constants.ACTION_DELETE);
+                setResult(Activity.RESULT_OK, data);
                 finish();
             }
         });

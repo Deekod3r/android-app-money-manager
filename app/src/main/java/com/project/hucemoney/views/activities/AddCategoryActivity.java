@@ -1,5 +1,6 @@
 package com.project.hucemoney.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.CategoryType;
 import com.project.hucemoney.databinding.ActivityAddCategoryBinding;
@@ -38,7 +40,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     private void init() {
         Intent intent = getIntent();
-        type = intent.getIntExtra("type",-1);
+        type = intent.getIntExtra("type", -1);
         if (CategoryType.values()[type] == CategoryType.INCOME) {
             binding.tvTitleAddCategory.setText("Thêm danh mục chi");
         } else if (CategoryType.values()[type] == CategoryType.EXPENSE) {
@@ -71,11 +73,13 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     private void observe() {
         categoryViewModel.getResultAddCategory().observe(this, response -> {
-            if (response != null) {
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                    finish();
-                }
+            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                Intent data = new Intent();
+                data.putExtra("categoryAdded", response.getData());
+                data.putExtra("action", Constants.ACTION_ADD);
+                setResult(Activity.RESULT_OK, data);
+                finish();
             }
         });
     }

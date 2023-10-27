@@ -50,16 +50,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.amount.setText(String.format("%s %s", format.format(account.getAmount()), context.getString(R.string.vi_currency)));
         holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(account);
-            }
         });
         holder.more.setOnClickListener(v -> {
-            BottomSheetAccountFragment bottomSheetFragment = new BottomSheetAccountFragment(account, position);
-            if (context instanceof AppCompatActivity) {
-                AppCompatActivity appCompatActivity = (AppCompatActivity) context;
-                FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(account, position);
             }
         });
 
@@ -94,11 +88,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Account account);
+        void onItemClick(Account account, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
 
 }

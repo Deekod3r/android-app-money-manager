@@ -10,4 +10,7 @@ public class Constants {
     public static final BigInteger MAX_MONEY = new BigInteger("10000000000");
     public static final Boolean TYPE_EXPENSE = false;
     public static final Boolean TYPE_INCOME = true;
+    public static final String ACTION_ADD = "00";
+    public static final String ACTION_EDIT = "01";
+    public static final String ACTION_DELETE = "02";
 }

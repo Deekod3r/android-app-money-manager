@@ -20,16 +20,16 @@ public class CategoryRepository {
         this.categoryDAO = appDatabase.categoryDAO();
     }
 
-    public Category create(CategoryAddRequest CategoryAddRequest) {
+    public Category create(CategoryAddRequest categoryAddRequest) {
         try {
             Category category = new Category();
             category.setUUID(java.util.UUID.randomUUID().toString());
             category.setId("category" + System.currentTimeMillis());
-            category.setName(CategoryAddRequest.getName());
-            category.setNote(CategoryAddRequest.getNote());
-            category.setUser(CategoryAddRequest.getUser());
-            category.setParent(CategoryAddRequest.getParent() == null ? "0" : CategoryAddRequest.getParent());
-            category.setType(CategoryAddRequest.isType());
+            category.setName(categoryAddRequest.getName());
+            category.setNote(categoryAddRequest.getNote());
+            category.setUser(categoryAddRequest.getUser());
+            category.setParent(categoryAddRequest.getParent() == null ? "0" : categoryAddRequest.getParent());
+            category.setType(categoryAddRequest.isType());
             long rowID = categoryDAO.save(category);
             if (rowID <= 0) {
                 throw new RuntimeException("Thêm danh mục thất bại");
@@ -61,11 +61,11 @@ public class CategoryRepository {
 
     public boolean delete(String uuid) {
         try {
-            if (!categoryDAO.isExists(uuid)) {
+            Category category = categoryDAO.findByUuid(uuid);
+            if (category == null) {
                 throw new RuntimeException("Danh mục không tồn tại");
             }
-            Category Category = categoryDAO.findByUuid(uuid);
-            return categoryDAO.delete(Category) > 0;
+            return categoryDAO.delete(category) > 0;
         } catch (Exception e) {
             throw e;
         }
@@ -79,14 +79,14 @@ public class CategoryRepository {
         }
     }
 
-    public Category update(CategoryEditRequest CategoryEditRequest) {
+    public Category update(CategoryEditRequest categoryEditRequest) {
         try {
-            Category category = categoryDAO.findByUuid(CategoryEditRequest.getUUID());
+            Category category = categoryDAO.findByUuid(categoryEditRequest.getUUID());
             if (category == null) {
                 throw new RuntimeException("Danh mục không tồn tại");
             }
-            category.setName(CategoryEditRequest.getName());
-            category.setNote(CategoryEditRequest.getNote());
+            category.setName(categoryEditRequest.getName());
+            category.setNote(categoryEditRequest.getNote());
             long rowID = categoryDAO.update(category);
             if (rowID <= 0) {
                 throw new RuntimeException("Cập nhật danh mục thất bại");

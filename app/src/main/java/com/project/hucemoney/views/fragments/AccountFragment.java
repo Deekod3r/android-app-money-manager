@@ -1,5 +1,7 @@
 package com.project.hucemoney.views.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +51,24 @@ public class AccountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(getContext(), "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Account account = data.getParcelableExtra("accountAdded");
+                            accountViewModel.addAccountLiveData(account);
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     @Override
@@ -70,7 +93,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void init() {
-        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        accountViewModel = new ViewModelProvider(requireActivity()).get(AccountViewModel.class);
         accountAdapter = new AccountAdapter(getContext(), accounts);
         accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
@@ -92,13 +115,18 @@ public class AccountFragment extends Fragment {
                 Toast.makeText(getContext(), "Số lượng tài khoản đã đạt giới hạn", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(getContext(), AddAccountActivity.class);
-                startActivity(intent);
+                mLauncher.launch(intent);
             }
         });
 
-    }
-
-    private void fillData() {
+        accountAdapter.setOnItemClickListener((account, position) -> {
+            BottomSheetAccountFragment bottomSheetFragment = new BottomSheetAccountFragment(account, position);
+            if (getContext() instanceof AppCompatActivity) {
+                AppCompatActivity appCompatActivity = (AppCompatActivity) getContext();
+                FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
+                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
+            }
+        });
     }
 
     private void observe() {
@@ -110,12 +138,7 @@ public class AccountFragment extends Fragment {
                 binding.tvNotifyNoData.setVisibility(View.GONE);
             }
         });
-        accountViewModel.getResultEditAccount().observe(getViewLifecycleOwner(), response -> {
-//            if (response != null) {
-//                Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-        });
-        accountViewModel.getAmountTotal().observe(getViewLifecycleOwner(), s -> binding.tvTotalAmount.setText("Tổng tiền: " + s));
+        accountViewModel.getAmountTotal().observe(getViewLifecycleOwner(), s -> binding.tvTotalAmount.setText(String.format("Tổng tiền: %s", s)));
     }
 
 }
