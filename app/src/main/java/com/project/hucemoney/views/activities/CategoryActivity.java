@@ -89,7 +89,6 @@ public class CategoryActivity extends AppCompatActivity {
                                 }
                                 case Constants.ACTION_DELETE: {
                                     int position = data.getIntExtra("position", -1);
-                                    categories.remove(position);
                                     categoryViewModel.deleteCategoryLiveData(position);
                                     break;
                                 }

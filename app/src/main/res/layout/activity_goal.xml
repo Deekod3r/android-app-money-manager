@@ -38,7 +38,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="search"
+                    android:contentDescription="close"
                     android:src="@drawable/baseline_close_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
@@ -53,15 +53,15 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnFilter"
+                    android:id="@+id/btnAddGoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="filter"
-                    android:src="@drawable/baseline_filter_white_24"
+                    android:contentDescription="addGoal"
+                    android:src="@drawable/baseline_add_circle_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
@@ -78,17 +78,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayoutGoal">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:background="@drawable/custom_round_top_grey_bg"
-                android:paddingVertical="5dp"
-                android:text="Thống kê"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="10dp"
+                android:paddingVertical="7dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvOngoingCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Đang thực hiện: xxx"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCompletedCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hoàn thành: xxx"
+                    android:layout_marginVertical="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvOverdueCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Quá hạn: xxx"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvNotifyNoData"
@@ -102,33 +131,16 @@
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvGoal"
+                android:id="@+id/rvGoal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="80dp"
-                android:background="@drawable/custom_round_bottom_blue_bg"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_goal" />
 
 
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAddGoal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="320dp"
-            android:layout_marginBottom="30dp"
-            android:backgroundTint="@color/blue"
-            android:clickable="true"
-            android:contentDescription="@string/non"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@android:drawable/ic_input_add"
-            app:tint="@color/white"
-            tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

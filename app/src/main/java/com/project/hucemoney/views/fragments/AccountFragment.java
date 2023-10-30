@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.hucemoney.adapters.entities.AccountAdapter;
+import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.databinding.FragmentAccountBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.viewmodels.AccountViewModel;
@@ -120,12 +121,8 @@ public class AccountFragment extends Fragment {
         });
 
         accountAdapter.setOnItemClickListener((account, position) -> {
-            BottomSheetAccountFragment bottomSheetFragment = new BottomSheetAccountFragment(account, position);
-            if (getContext() instanceof AppCompatActivity) {
-                AppCompatActivity appCompatActivity = (AppCompatActivity) getContext();
-                FragmentManager fragmentManager = appCompatActivity.getSupportFragmentManager();
-                bottomSheetFragment.show(fragmentManager, bottomSheetFragment.getTag());
-            }
+            BottomSheetAccountFragment fragment = BottomSheetAccountFragment.newInstance(account, position);
+            fragment.show(getParentFragmentManager(), fragment.getTag());
         });
     }
 

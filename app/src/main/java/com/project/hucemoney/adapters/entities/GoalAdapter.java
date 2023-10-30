@@ -1,5 +1,7 @@
 package com.project.hucemoney.adapters.entities;
 
+import static com.project.hucemoney.views.activities.GoalActivity.isGoalOverdue;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
@@ -51,7 +53,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.name.setText(goal.getName());
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.target.setText(String.format("%s %s", format.format(goal.getTargetAmount()), context.getString(R.string.vi_currency)));
-        holder.current.setText(String.format("%s %s", format.format(goal.getCurrentAmount()), context.getString(R.string.vi_currency)));
+        holder.current.setText(String.format("Đã đạt: %s %s", format.format(goal.getCurrentAmount()), context.getString(R.string.vi_currency)));
         int progress = (int) (goal.getCurrentAmount() * 100 / goal.getTargetAmount());
         holder.progressBar.setProgress(progress);
         if (progress >= 50 && progress < 80) {
@@ -61,10 +63,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         }
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(goal);
+                onItemClickListener.onItemClick(goal, position);
             }
-        });
-        holder.more.setOnClickListener(v -> {
         });
 
     }
@@ -87,7 +87,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView name, target, current;
         ProgressBar progressBar;
-        ImageView more;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,13 +94,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             target = itemView.findViewById(R.id.tvGoalTarget);
             current = itemView.findViewById(R.id.tvGoalCurrent);
             progressBar = itemView.findViewById(R.id.progressBarGoal);
-            more = itemView.findViewById(R.id.imgMoreActionGoal);
         }
 
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Goal goal);
+        void onItemClick(Goal goal, int position);
     }
 
     public void setOnItemClickListener(GoalAdapter.OnItemClickListener onItemClickListener) {

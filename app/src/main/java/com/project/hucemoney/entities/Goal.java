@@ -10,8 +10,10 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.project.hucemoney.database.FieldData;
+import com.project.hucemoney.utils.AnnotationUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +34,7 @@ import lombok.Setter;
                 childColumns = "user",
                 onDelete = ForeignKey.CASCADE),
         indices = {@Index("user")})
+@TypeConverters(AnnotationUtils.class)
 public class Goal implements Parcelable {
     @PrimaryKey
     @ColumnInfo(name = FieldData.FIELD_UUID)
@@ -47,10 +50,8 @@ public class Goal implements Parcelable {
     @NonNull
     private String name;
     @ColumnInfo(name = FieldData.GOAL_FIELD_TARGET_AMOUNT)
-    @NonNull
     private long targetAmount;
     @ColumnInfo(name = FieldData.GOAL_FIELD_CURRENT_AMOUNT)
-    @NonNull
     private long currentAmount;
     @ColumnInfo(name = FieldData.GOAL_FIELD_START_DATE)
     @NonNull

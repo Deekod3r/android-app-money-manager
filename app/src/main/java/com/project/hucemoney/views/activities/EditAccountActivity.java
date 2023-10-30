@@ -3,6 +3,8 @@ package com.project.hucemoney.views.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.databinding.ActivityEditAccountBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.models.requests.AccountEditRequest;
+import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 
 public class EditAccountActivity extends AppCompatActivity {
@@ -21,7 +24,6 @@ public class EditAccountActivity extends AppCompatActivity {
     private ActivityEditAccountBinding binding;
     private AccountViewModel accountViewModel;
     private Account account;
-    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,6 @@ public class EditAccountActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_account);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -40,11 +41,10 @@ public class EditAccountActivity extends AppCompatActivity {
 
     private void init() {
         account = getIntent().getParcelableExtra("account");
-        position = getIntent().getIntExtra("position", -1);
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         AccountEditRequest accountEditRequest = AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote());
         accountViewModel.setAccountEditRequest(accountEditRequest);
-        accountViewModel.setAmountAsString(String.valueOf(account.getAmount()));
+        binding.edtAmount.setText(String.valueOf(account.getAmount()));
         binding.setLifecycleOwner(this);
         binding.setAccountViewModel(accountViewModel);
     }
@@ -55,18 +55,43 @@ public class EditAccountActivity extends AppCompatActivity {
             setResult(Activity.RESULT_CANCELED, data);
             finish();
         });
-        binding.btnSave.setOnClickListener(v -> accountViewModel.editAccount(position));
-    }
+        binding.edtAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-    private void observe() {
-        accountViewModel.getResultEditAccount().observe(this, response -> {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                Intent data = new Intent();
-                data.putExtra("accountEdited", response.getData());
-                setResult(Activity.RESULT_OK, data);
-                finish();
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    binding.edtAmount.setText("0");
+                } else {
+                    if (s.length() > 1 && s.charAt(0) == '0') {
+                        binding.edtAmount.setText(s.subSequence(1, s.length()));
+                    }
+                    if (!s.toString().isEmpty()) {
+                        accountViewModel.getAccountEditRequest().setAmount(Long.parseLong(s.toString()));
+                    }
+                }
+                binding.edtAmount.setSelection(binding.edtAmount.getText().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
+        binding.btnSave.setOnClickListener(v -> {
+            accountViewModel.editAccount();
+            accountViewModel.getResultEditAccount().observe(this, response -> {
+                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                    FunctionUtils.hideKeyboard(this,v);
+                    Intent data = new Intent();
+                    data.putExtra("accountEdited", response.getData());
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
+                }
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        });
     }
+
 }

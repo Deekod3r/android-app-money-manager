@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Account.class, Goal.class, Category.class},
-        version = 11, exportSchema = false)
+        version = 12, exportSchema = false)
 @TypeConverters(AnnotationUtils.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();

@@ -52,9 +52,6 @@ public interface GoalDAO {
             "LIMIT :limit OFFSET (:page - 1) * :limit")
     List<Goal> findAllPaginated(int page, int limit);
 
-    @Query("SELECT * FROM "+ FieldData.TABLE_GOALS)
-    LiveData<List<Goal>> findAll();
-
     @Query("SELECT EXISTS (SELECT 1 " +
             "FROM " + FieldData.TABLE_GOALS + " " +
             "WHERE " + FieldData.FIELD_UUID + " = :uuid)")
@@ -67,7 +64,7 @@ public interface GoalDAO {
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_GOALS + " " +
             "WHERE " + FieldData.GOAL_FIELD_USER + " = :user")
-    LiveData<List<Goal>> findAllByUser(String user);
+    LiveData<List<Goal>> findAll(String user);
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_GOALS + " " +

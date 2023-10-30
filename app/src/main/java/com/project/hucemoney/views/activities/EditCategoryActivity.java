@@ -34,7 +34,6 @@ public class EditCategoryActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_category);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -47,11 +46,11 @@ public class EditCategoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int type = intent.getIntExtra("type",-1);
         if (CategoryType.values()[type] == CategoryType.INCOME) {
-            binding.tvTitleAddCategory.setText("Sửa danh mục chi");
+            binding.tvTitleAddCategory.setText("Chỉnh sửa danh mục chi");
         } else if (CategoryType.values()[type] == CategoryType.EXPENSE) {
-            binding.tvTitleAddCategory.setText("Sửa danh mục thu");
+            binding.tvTitleAddCategory.setText("Chỉnh sửa danh mục thu");
         } else if (CategoryType.values()[type] == CategoryType.DEBT) {
-            binding.tvTitleAddCategory.setText("Sửa danh mục vay/nợ");
+            binding.tvTitleAddCategory.setText("Chỉnh sửa danh mục vay/nợ");
         } else {
             Toast.makeText(this, "Lỗi", Toast.LENGTH_SHORT).show();
             finish();
@@ -76,39 +75,37 @@ public class EditCategoryActivity extends AppCompatActivity {
         });
         binding.btnSave.setOnClickListener(v -> {
             categoryViewModel.editCategory();
+            categoryViewModel.getResultEditCategory().observe(this, response -> {
+                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                    FunctionUtils.hideKeyboard(this,v);
+                    Intent data = new Intent();
+                    data.putExtra("categoryEdited", response.getData());
+                    data.putExtra("position", position);
+                    data.putExtra("action", Constants.ACTION_EDIT);
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
+                }
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         });
         binding.btnDelete.setOnClickListener(v -> {
             FunctionUtils.showDialogConfirm(this, "", "Bạn có chắc chắn muốn xóa danh mục này không?", DialogType.WARNING,
                     (dialog, which) -> {
                         categoryViewModel.deleteCategory();
-                        dialog.dismiss();
+                        categoryViewModel.getResultDeleteCategory().observe(this, response -> {
+                            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                                FunctionUtils.hideKeyboard(this,v);
+                                Intent data = new Intent();
+                                data.putExtra("position", position);
+                                data.putExtra("action", Constants.ACTION_DELETE);
+                                setResult(Activity.RESULT_OK, data);
+                                finish();
+                            }
+                            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
                     }, (dialog, which) -> {
-                        dialog.dismiss();
                     });
         });
     }
 
-    private void observe() {
-        categoryViewModel.getResultEditCategory().observe(this, response -> {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                Intent data = new Intent();
-                data.putExtra("categoryEdited", response.getData());
-                data.putExtra("position", position);
-                data.putExtra("action", Constants.ACTION_EDIT);
-                setResult(Activity.RESULT_OK, data);
-                finish();
-            }
-        });
-        categoryViewModel.getResultDeleteCategory().observe(this, response -> {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                Intent data = new Intent();
-                data.putExtra("position", position);
-                data.putExtra("action", Constants.ACTION_DELETE);
-                setResult(Activity.RESULT_OK, data);
-                finish();
-            }
-        });
-    }
 }

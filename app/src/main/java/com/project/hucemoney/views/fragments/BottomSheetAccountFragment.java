@@ -13,14 +13,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.project.hucemoney.common.Constants;
+import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.FragmentBottomSheetAccountBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
+import com.project.hucemoney.models.Response;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 import com.project.hucemoney.views.activities.EditAccountActivity;
@@ -39,15 +42,11 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
         // Required empty public constructor
     }
 
-    public BottomSheetAccountFragment(Account account, int position) {
-        this.account = account;
-        this.position = position;
-    }
-
-
-    public static BottomSheetAccountFragment newInstance(String param1, String param2) {
+    public static BottomSheetAccountFragment newInstance(Account account, int position) {
         BottomSheetAccountFragment fragment = new BottomSheetAccountFragment();
         Bundle args = new Bundle();
+        args.putParcelable("account", account);
+        args.putInt("position", position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +54,10 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            account = getArguments().getParcelable("account");
+            position = getArguments().getInt("position");
+        }
         mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -88,7 +91,6 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -113,21 +115,25 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
             FunctionUtils.showDialogConfirm(getContext(), "", "Bạn có chắc chắn muốn xóa tài khoản này không?", DialogType.WARNING,
                     (dialog, which) -> {
                         accountViewModel.deleteAccount(account);
-                        dialog.dismiss();
-                        this.dismiss();
+                        Observer<Response<Boolean>> observer = new Observer<Response<Boolean>>() {
+                            @Override
+                            public void onChanged(Response<Boolean> response) {
+                                if (response != null) {
+                                    if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                                        Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                                        accountViewModel.deleteAccountLiveData(position);
+                                    }
+                                    dismiss();
+                                }
+                                accountViewModel.getResultDeleteAccount().removeObserver(this);
+                            }
+                        };
+                        accountViewModel.getResultDeleteAccount().observe(getViewLifecycleOwner(), observer);
+
                     }, (dialog, which) -> {
-                        dialog.dismiss();
-                        this.dismiss();
+                        dismiss();
                     });
             Objects.requireNonNull(getDialog()).hide();
-        });
-    }
-
-    private void observe() {
-        accountViewModel.getResultDeleteAccount().observe(getViewLifecycleOwner(), response -> {
-            Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
-            accountViewModel.deleteAccountLiveData(position);
-            dismiss();
         });
     }
 }

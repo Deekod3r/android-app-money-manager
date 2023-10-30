@@ -29,7 +29,6 @@ public class RegisterActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -54,6 +53,17 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 if (NetworkUtils.isNetworkAvailable(this)) {
                     userViewModel.register();
+                    userViewModel.getRegisterResult().observe(this, response -> {
+                        if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
+                            Intent intent = new Intent(this, VerifyActivity.class);
+                            intent.putExtra("typeVerify", "register");
+                            intent.putExtra("UUID", response.getData());
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 } else {
                     FunctionUtils.showDialogNotify(this, "", "Vui lòng kết nối mạng để thực hiện", DialogType.WARNING);
                 }
@@ -66,20 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-        });
-    }
-
-    private void observe() {
-        userViewModel.getRegisterResult().observe(this, response -> {
-            if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
-                Intent intent = new Intent(this, VerifyActivity.class);
-                intent.putExtra("typeVerify", "register");
-                intent.putExtra("UUID", response.getData());
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

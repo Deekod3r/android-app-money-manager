@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -65,6 +64,21 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(v -> {
             if (NetworkUtils.isNetworkAvailable(this)) {
                 userViewModel.login();
+                userViewModel.getLoginResult().observe(this, response -> {
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                    if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
+                        SessionManager sessionManager = new SessionManager(this);
+                        sessionManager.setLoggedIn();
+                        sessionManager.setUUID(response.getData().get("UUID"));
+                        sessionManager.setUsername(response.getData().get("username"));
+                        sessionManager.setEmail(response.getData().get("email"));
+                        Intent intent = new Intent(this, AppActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
+                    }
+                });
             } else {
                 FunctionUtils.showDialogNotify(this, "", "Vui lòng kết nối mạng để thực hiện", DialogType.WARNING);
             }
@@ -77,23 +91,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void observe() {
-
-        userViewModel.getLoginResult().observe(this, response -> {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
-                SessionManager sessionManager = new SessionManager(this);
-                sessionManager.setLoggedIn();
-                sessionManager.setUUID(response.getData().get("UUID"));
-                sessionManager.setUsername(response.getData().get("username"));
-                sessionManager.setEmail(response.getData().get("email"));
-                Intent intent = new Intent(this, AppActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
-            }
-        });
-
-    }
 }

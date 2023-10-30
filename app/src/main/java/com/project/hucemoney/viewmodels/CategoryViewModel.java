@@ -57,9 +57,6 @@ public class CategoryViewModel extends AndroidViewModel {
                 response.setStatus(ResponseCode.SUCCESS);
                 response.setMessage("Thêm danh mục thành công");
                 response.setData(category);
-//                List<Category> c = categoriesLiveData.getValue();
-//                c.add(category);
-//                categoriesLiveData.setValue(c);
             } else {
                 response.setMessage("Thêm danh mục thất bại");
             }

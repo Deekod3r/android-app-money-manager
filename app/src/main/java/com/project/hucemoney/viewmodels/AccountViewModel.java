@@ -49,18 +49,11 @@ public class AccountViewModel extends AndroidViewModel {
     public void addAccount() {
         Response<Account> response = new Response<>();
         try {
-            if (isNullOrEmpty(amountAsString)) {
-                response.setMessage("Số tiền không được để trống");
-                resultAddAccount.setValue(response);
-                return;
-            }
             if (isNullOrEmpty(accountAddRequest.getName())) {
                 response.setMessage("Tên tài khoản không được để trống");
                 resultAddAccount.setValue(response);
                 return;
             }
-            long amount = Long.parseLong(amountAsString);
-            accountAddRequest.setAmount(amount);
             accountAddRequest.setUser(sessionManager.getUUID());
             Account account = accountRepository.create(accountAddRequest);
             if (account == null) {
@@ -85,20 +78,14 @@ public class AccountViewModel extends AndroidViewModel {
         loadAmountTotal();
     }
 
-    public void editAccount(int position) {
+    public void editAccount() {
         Response<Account> response = new Response<>();
         try {
-            if (isNullOrEmpty(amountAsString)) {
-                response.setMessage("Số tiền không được để trống");
-                resultEditAccount.setValue(response);
-                return;
-            }
             if (isNullOrEmpty(accountEditRequest.getName())) {
                 response.setMessage("Tên tài khoản không được để trống");
                 resultEditAccount.setValue(response);
                 return;
             }
-            accountEditRequest.setAmount(Long.parseLong(amountAsString));
             Account account = accountRepository.update(accountEditRequest);
             if (account == null) {
                 response.setMessage("Cập nhật tài khoản thất bại");
@@ -196,16 +183,9 @@ public class AccountViewModel extends AndroidViewModel {
         return accountEditRequest;
     }
 
-    public void setAmountAsString(String amountAsString) {
-        this.amountAsString = amountAsString.trim();
-    }
 
     public void setAccountEditRequest(AccountEditRequest accountEditRequest) {
         this.accountEditRequest = accountEditRequest;
-    }
-
-    public String getAmountAsString() {
-        return amountAsString;
     }
 
     public LiveData<String> getAmountTotal() {

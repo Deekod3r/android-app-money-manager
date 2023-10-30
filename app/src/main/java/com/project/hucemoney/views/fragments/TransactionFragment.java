@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -111,13 +112,13 @@ public class TransactionFragment extends Fragment {
                 switch (position) {
                     case 0:
                         type = Constants.TYPE_EXPENSE;
-                        //binding.edtName.setHint("Tên khoản chi");
-                        //binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                        binding.edtName.setHint("Tên khoản chi");
+                        binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
                         break;
                     case 1:
                         type = Constants.TYPE_INCOME;
-                        //binding.edtName.setHint("Tên khoản thu");
-                        //binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                        binding.edtName.setHint("Tên khoản thu");
+                        binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                     default:
                         break;
                 }

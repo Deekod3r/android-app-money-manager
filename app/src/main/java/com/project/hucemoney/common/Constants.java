@@ -1,6 +1,7 @@
 package com.project.hucemoney.common;
 
 import java.math.BigInteger;
+import java.time.format.DateTimeFormatter;
 
 public class Constants {
     public static final String REGEX_USERNAME = "^[a-zA-Z0-9]+$";
@@ -13,4 +14,7 @@ public class Constants {
     public static final String ACTION_ADD = "00";
     public static final String ACTION_EDIT = "01";
     public static final String ACTION_DELETE = "02";
+    public static final String[] DAY_OF_WEEK = new String[]{"Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"};
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 }

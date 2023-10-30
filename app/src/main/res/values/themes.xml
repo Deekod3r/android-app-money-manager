@@ -16,4 +16,8 @@
         <item name="bottomNavigationStyle">@color/red</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
+
+    <style name="DatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue</item>
+    </style>
 </resources>

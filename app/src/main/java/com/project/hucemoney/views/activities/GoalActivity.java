@@ -1,15 +1,21 @@
 package com.project.hucemoney.views.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.GoalAdapter;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.databinding.ActivityGoalBinding;
 import com.project.hucemoney.entities.Goal;
 import com.project.hucemoney.viewmodels.GoalViewModel;
@@ -25,6 +31,8 @@ public class GoalActivity extends AppCompatActivity {
     private GoalAdapter goalAdapter;
     private RecyclerView recyclerView;
     private List<Goal> goals = new ArrayList<>();
+    private ActivityResultLauncher<Intent> mLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +52,49 @@ public class GoalActivity extends AppCompatActivity {
 
     private void init() {
         goalViewModel = new ViewModelProvider(this).get(GoalViewModel.class);
-        goals.add(new Goal("1","1","1","Goal 1", Long.parseLong("5000000000"), Long.parseLong("1000000000"), LocalDate.now(),LocalDate.now(),""));
-        goals.add(new Goal("2","2","2","Goal 2", Long.parseLong("4000000000"), Long.parseLong("1000000000"), LocalDate.now(),LocalDate.now(),""));
-        goals.add(new Goal("3","3","3","Goal 3", Long.parseLong("3000000000"), Long.parseLong("1000000000"), LocalDate.now(),LocalDate.now(),""));
-        goals.add(new Goal("4","4","4","Goal 4", Long.parseLong("2000000000"), Long.parseLong("1000000000"), LocalDate.now(),LocalDate.now(),""));
-        goals.add(new Goal("5","5","5","Goal 5", Long.parseLong("1000000000"), Long.parseLong("1000000000"), LocalDate.now(),LocalDate.now(),""));
         goalAdapter = new GoalAdapter(this, goals);
+        goalViewModel.loadGoals();
         binding.setGoalViewModel(goalViewModel);
         binding.setLifecycleOwner(this);
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            String action = data.getStringExtra("action");
+                            if (action == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            switch (action) {
+                                case Constants.ACTION_ADD: {
+                                    Goal goal = data.getParcelableExtra("goalAdded");
+                                    goalViewModel.addGoalLiveData(goal);
+                                    break;
+                                }
+                                case Constants.ACTION_EDIT: {
+                                    Goal goal = data.getParcelableExtra("goalEdited");
+                                    int position = data.getIntExtra("position", -1);
+                                    goalViewModel.editGoalLiveData(goal, position);
+                                    break;
+                                }
+                                case Constants.ACTION_DELETE: {
+                                    int position = data.getIntExtra("position", -1);
+                                    goalViewModel.deleteGoalLiveData(position);
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void initRecyclerView() {
@@ -64,8 +107,46 @@ public class GoalActivity extends AppCompatActivity {
 
     private void controlAction() {
         binding.btnClose.setOnClickListener(v -> finish());
+        binding.btnAddGoal.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AddGoalActivity.class);
+            mLauncher.launch(intent);
+        });
+        goalAdapter.setOnItemClickListener((goal, position) -> {
+            Intent intent = new Intent(this, EditGoalActivity.class);
+            intent.putExtra("goal", goal);
+            intent.putExtra("position", position);
+            mLauncher.launch(intent);
+        });
     }
 
     private void observe() {
+        goalViewModel.getGoals().observe(this, goals -> {
+            goalAdapter.setData(goals);
+            int ongoingCount = 0;
+            int completedCount = 0;
+            int overdueCount = 0;
+            if (goals == null || goals.size() == 0) {
+                binding.tvNotifyNoData.setVisibility(View.VISIBLE);
+            } else {
+                binding.tvNotifyNoData.setVisibility(View.GONE);
+                for (Goal goal : goals) {
+                    if (goal.getCurrentAmount() == goal.getTargetAmount()) {
+                        completedCount++;
+                    } else if (isGoalOverdue(goal)) {
+                        overdueCount++;
+                    } else {
+                        ongoingCount++;
+                    }
+                }
+            }
+            binding.tvOngoingCount.setText("Đang thực hiện: " + String.valueOf(ongoingCount));
+            binding.tvCompletedCount.setText("Hoàn thành: " + String.valueOf(completedCount));
+            binding.tvOverdueCount.setText("Quá hạn: " + String.valueOf(overdueCount));
+        });
+    }
+
+    public static boolean isGoalOverdue(Goal goal) {
+        LocalDate currentDate = LocalDate.now();
+        return currentDate.isAfter(goal.getEndDate());
     }
 }

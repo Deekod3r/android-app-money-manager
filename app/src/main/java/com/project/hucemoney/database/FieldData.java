@@ -7,6 +7,7 @@ public class FieldData {
     public static final String TABLE_ACCOUNTS = "accounts";
     public static final String TABLE_CATEGORIES = "categories";
     public static final String TABLE_GOALS = "goals";
+    public static final String TABLE_TRANSACTIONS = "transactions";
 
     // Field names common to all tables
     public static final String FIELD_UUID = "UUID";
@@ -54,6 +55,14 @@ public class FieldData {
     public static final String GOAL_FIELD_END_DATE = "endDate";
     public static final String GOAL_FIELD_NOTE = "note";
 
+    // Transaction table fields
+    public static final String TRANSACTION_FIELD_ACCOUNT = "account";
+    public static final String TRANSACTION_FIELD_DATE = "date";
+    public static final String TRANSACTION_FIELD_TYPE = "type";
+    public static final String TRANSACTION_FIELD_CATEGORY = "category";
+    public static final String TRANSACTION_FIELD_AMOUNT = "amount";
+    public static final String TRANSACTION_FIELD_GOAL = "goal";
+    public static final String TRANSACTION_FIELD_NOTE = "note";
 
 
 }

@@ -100,14 +100,14 @@
                     android:orientation="horizontal">
 
                     <EditText
-                        android:id="@+id/edtMoney"
+                        android:id="@+id/edtAmount"
                         android:paddingHorizontal="6dp"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="0.9"
                         android:background="@drawable/edt_primary"
                         android:ems="10"
-                        android:text="@={accountViewModel.amountAsString}"
+                        android:text="0"
                         android:inputType="number"
                         android:maxLength="13"
                         android:textStyle="bold"
@@ -138,7 +138,7 @@
                 android:background="@color/grey" />
 
             <EditText
-                android:id="@+id/edtBudgetName"
+                android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
@@ -159,6 +159,7 @@
                 android:id="@+id/edtNote"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="5dp"
                 android:autofillHints=""
                 android:background="@drawable/edt_primary"
                 android:drawableStart="@drawable/baseline_sticky_note_blue_24"

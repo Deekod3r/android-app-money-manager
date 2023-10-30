@@ -1,10 +1,12 @@
 package com.project.hucemoney.utils;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -12,19 +14,30 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.project.hucemoney.R;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.enums.DialogType;
 
+import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
 
 public class FunctionUtils {
+
+    public static void hideKeyboard(Context context, View v) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
 
     public static String md5(String text) {
         try {
@@ -150,6 +163,32 @@ public class FunctionUtils {
         });
 
         dialog.show();
+    }
+
+    public static void showDialogDate(Context context, EditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                context,
+                R.style.DatePickerDialog,
+                (view, year1, month1, dayOfMonth) -> {
+                    String formattedDay = (dayOfMonth < 10) ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
+                    String formattedMonth = ((month1 + 1) < 10) ? "0" + (month1 + 1) : String.valueOf(month1 + 1);
+
+                    editText.setTag(String.format("%s/%s/%d", formattedDay, formattedMonth, year1));
+                    editText.setText(String.format("%s, %s/%s/%d", Constants.DAY_OF_WEEK[dayOfWeek - 1], formattedDay, formattedMonth, year1));
+                },
+                year, month, day
+        );
+        datePickerDialog.show();
+        Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        Window window = datePickerDialog.getWindow();
     }
 
 

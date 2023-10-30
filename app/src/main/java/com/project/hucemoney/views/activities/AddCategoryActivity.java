@@ -14,6 +14,7 @@ import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.CategoryType;
 import com.project.hucemoney.databinding.ActivityAddCategoryBinding;
+import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 import com.project.hucemoney.viewmodels.CategoryViewModel;
 
@@ -29,7 +30,6 @@ public class AddCategoryActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_category);
         init();
         controlAction();
-        observe();
     }
 
     @Override
@@ -68,20 +68,19 @@ public class AddCategoryActivity extends AppCompatActivity {
             categoryViewModel.getCategoryAddRequest().setType(type != 0);
             categoryViewModel.getCategoryAddRequest().setParent(null);
             categoryViewModel.addCategory();
+            categoryViewModel.getResultAddCategory().observe(this, response -> {
+                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                    FunctionUtils.hideKeyboard(this,v);
+                    Intent data = new Intent();
+                    data.putExtra("categoryAdded", response.getData());
+                    data.putExtra("action", Constants.ACTION_ADD);
+                    setResult(Activity.RESULT_OK, data);
+                    finish();
+                }
+                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+            });
         });
     }
 
-    private void observe() {
-        categoryViewModel.getResultAddCategory().observe(this, response -> {
-            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                Intent data = new Intent();
-                data.putExtra("categoryAdded", response.getData());
-                data.putExtra("action", Constants.ACTION_ADD);
-                setResult(Activity.RESULT_OK, data);
-                finish();
-            }
-        });
-    }
 
 }
