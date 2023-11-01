@@ -8,12 +8,13 @@ public class FieldData {
     public static final String TABLE_CATEGORIES = "categories";
     public static final String TABLE_GOALS = "goals";
     public static final String TABLE_TRANSACTIONS = "transactions";
+    public static final String TABLE_BUDGETS = "budgets";
+
 
     // Field names common to all tables
     public static final String FIELD_UUID = "UUID";
     public static final String FIELD_ID = "id";
     public static final String FIELD_LOCAL_ID = "localID";
-
     public static final String FIELD_CREATED_AT = "createdAt";
     public static final String FIELD_UPDATED_AT = "updatedAt";
     public static final String FIELD_DELETED_AT = "deletedAt";
@@ -61,8 +62,17 @@ public class FieldData {
     public static final String TRANSACTION_FIELD_TYPE = "type";
     public static final String TRANSACTION_FIELD_CATEGORY = "category";
     public static final String TRANSACTION_FIELD_AMOUNT = "amount";
-    public static final String TRANSACTION_FIELD_GOAL = "goal";
     public static final String TRANSACTION_FIELD_NOTE = "note";
 
+
+    // Budgets table fields
+    public static final String BUDGET_FIELD_USER = "user";
+    public static final String BUDGET_FIELD_NAME = "name";
+    public static final String BUDGET_FIELD_START_DATE = "startDate";
+    public static final String BUDGET_FIELD_END_DATE = "endDate";
+    public static final String BUDGET_FIELD_INITIAL_LIMIT = "initialLimit";
+    public static final String BUDGET_FIELD_CURRENT_BALANCE = "currentBalance";
+    public static final String BUDGET_FIELD_CATEGORY = "category";
+    public static final String BUDGET_FIELD_NOTE = "note";
 
 }

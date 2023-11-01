@@ -9,15 +9,19 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
+import androidx.room.Junction;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 import androidx.room.TypeConverters;
 
 import com.project.hucemoney.database.FieldData;
+import com.project.hucemoney.entities.crossref.TransactionGoal;
 import com.project.hucemoney.utils.AnnotationUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -29,25 +33,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity(tableName = FieldData.TABLE_TRANSACTIONS,
         foreignKeys = {
-        @ForeignKey(
-                entity = Account.class,
-                parentColumns = FieldData.FIELD_UUID,
-                childColumns = "account",
-                onDelete = ForeignKey.CASCADE),
-        @ForeignKey(
-                entity = Category.class,
-                parentColumns = FieldData.FIELD_UUID,
-                childColumns = "category",
-                onDelete = ForeignKey.CASCADE),
-        @ForeignKey(
-                entity = Goal.class,
-                parentColumns = FieldData.FIELD_UUID,
-                childColumns = "goal",
-                onDelete = ForeignKey.CASCADE)},
+                @ForeignKey(
+                        entity = Account.class,
+                        parentColumns = FieldData.FIELD_UUID,
+                        childColumns = FieldData.TRANSACTION_FIELD_ACCOUNT,
+                        onDelete = ForeignKey.CASCADE),
+                @ForeignKey(
+                        entity = Category.class,
+                        parentColumns = FieldData.FIELD_UUID,
+                        childColumns = FieldData.TRANSACTION_FIELD_CATEGORY,
+                        onDelete = ForeignKey.CASCADE)},
         indices = {
-                @Index("account"),
-                @Index("category"),
-                @Index("goal")
+                @Index(FieldData.TRANSACTION_FIELD_ACCOUNT),
+                @Index(FieldData.TRANSACTION_FIELD_CATEGORY)
         })
 @TypeConverters(AnnotationUtils.class)
 public class Transaction implements Parcelable {
@@ -71,17 +69,13 @@ public class Transaction implements Parcelable {
         @NonNull
         private String category;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_AMOUNT)
-        @NonNull
         private long amount ;
-        @ColumnInfo(name = FieldData.TRANSACTION_FIELD_GOAL)
-        @NonNull
-        private String goal;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_NOTE)
         @NonNull
         private String note;
 
         @Ignore
-        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, @NonNull String goal, @NonNull String note) {
+        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, @NonNull String note) {
                 this.UUID = UUID;
                 this.id = id;
                 this.account = account;
@@ -89,9 +83,9 @@ public class Transaction implements Parcelable {
                 this.type = type;
                 this.category = category;
                 this.amount = amount;
-                this.goal = goal;
                 this.note = note;
         }
+
         @Ignore
         protected Transaction(@NotNull Parcel in) {
                 UUID = Objects.requireNonNull(in.readString());
@@ -101,7 +95,6 @@ public class Transaction implements Parcelable {
                 type = in.readByte() != 0;
                 category = Objects.requireNonNull(in.readString());
                 amount = in.readLong();
-                goal = Objects.requireNonNull(in.readString());
                 note = Objects.requireNonNull(in.readString());
         }
         public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
@@ -130,12 +123,7 @@ public class Transaction implements Parcelable {
                 dest.writeByte((byte) (type ? 1 : 0));
                 dest.writeString(category);
                 dest.writeLong(amount);
-                dest.writeString(goal);
                 dest.writeString(note);
         }
-
-
-
-
 
 }

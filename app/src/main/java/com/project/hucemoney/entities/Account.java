@@ -27,10 +27,10 @@ import lombok.Setter;
 @Entity(tableName = FieldData.TABLE_ACCOUNTS,
         foreignKeys = @ForeignKey(
                 entity = User.class,
-                parentColumns = "UUID",
-                childColumns = "user",
+                parentColumns = FieldData.FIELD_UUID,
+                childColumns = FieldData.ACCOUNT_FIELD_USER,
                 onDelete = ForeignKey.CASCADE),
-        indices = {@Index("user")})
+        indices = {@Index(FieldData.ACCOUNT_FIELD_USER)})
 public class Account implements Parcelable {
     @PrimaryKey
     @NonNull

@@ -15,6 +15,7 @@ import com.project.hucemoney.R;
 import com.project.hucemoney.databinding.FragmentHomeBinding;
 import com.project.hucemoney.utils.SessionManager;
 import com.project.hucemoney.viewmodels.AccountViewModel;
+import com.project.hucemoney.views.activities.BudgetActivity;
 import com.project.hucemoney.views.activities.CategoryActivity;
 import com.project.hucemoney.views.activities.GoalActivity;
 
@@ -89,7 +90,12 @@ public class HomeFragment extends Fragment {
         });
 
         binding.btnAddTransaction.setOnClickListener(v -> {
+            
+        });
 
+        binding.btnBudget.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), BudgetActivity.class);
+            startActivity(intent);
         });
 
         binding.btnGoal.setOnClickListener(v -> {

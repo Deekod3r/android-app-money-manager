@@ -15,8 +15,10 @@ import java.util.List;
 
 public class CategoryRepository {
     private CategoryDAO categoryDAO;
-    public CategoryRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getDatabase(application);
+    private AppDatabase appDatabase;
+
+    public CategoryRepository(AppDatabase appDatabase) {
+        this.appDatabase = appDatabase;
         this.categoryDAO = appDatabase.categoryDAO();
     }
 

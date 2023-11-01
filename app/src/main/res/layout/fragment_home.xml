@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="accountViewModel"
             type="com.project.hucemoney.viewmodels.AccountViewModel" />
@@ -103,7 +102,7 @@
                             android:layout_height="36dp"
                             android:layout_weight="0.9"
                             android:paddingHorizontal="20dp"
-                            android:text="@string/non"
+                            android:text="0 đ"
                             android:textColor="@color/blue"
                             android:textSize="26sp"
                             android:textStyle="bold" />
@@ -116,7 +115,7 @@
                             android:layout_weight="0.1"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:layout_marginEnd="20dp"
+                            android:layout_marginEnd="15dp"
                             android:contentDescription="preview"
                             android:foregroundGravity="center"
                             android:padding="5dp"

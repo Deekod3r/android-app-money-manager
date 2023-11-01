@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.ResponseMessage;
+import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.User;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.UserLoginRequest;
@@ -33,32 +34,29 @@ public class UserViewModel extends AndroidViewModel{
 
     public UserViewModel(Application application) {
         super(application);
-        this.userRepository = new UserRepository(application);
+        this.userRepository = new UserRepository(AppDatabase.getDatabase(application));
     }
 
     public void login() {
-        // request to server
         Response<Map<String, String>> response = new Response<>();
-        //
         try {
             if (isNullOrEmpty(userLoginRequest.getUsername()) || isNullOrEmpty(userLoginRequest.getPassword())) {
                 response.setStatus(ResponseCode.FAIL);
                 response.setMessage("Vui lòng nhập đầy đủ thông tin");
-                loginResult.setValue(response);
-                return;
-            }
-            User user = userRepository.login(userLoginRequest);
-            if (user != null) {
-                Map<String, String> data = new HashMap<>();
-                data.put("UUID", user.getUUID());
-                data.put("username", user.getUsername());
-                data.put("email", user.getEmail());
-                response.setData(data);
-                response.setStatus(ResponseCode.SUCCESS);
-                response.setMessage(String.format(ResponseMessage.SUCCESS, "Đăng nhập"));
             } else {
-                response.setStatus(ResponseCode.FAIL);
-                response.setMessage(String.format(ResponseMessage.FAIL, "Đăng nhập"));
+                User user = userRepository.login(userLoginRequest);
+                if (user != null) {
+                    Map<String, String> data = new HashMap<>();
+                    data.put("UUID", user.getUUID());
+                    data.put("username", user.getUsername());
+                    data.put("email", user.getEmail());
+                    response.setData(data);
+                    response.setStatus(ResponseCode.SUCCESS);
+                    response.setMessage(String.format(ResponseMessage.SUCCESS, "Đăng nhập"));
+                } else {
+                    response.setStatus(ResponseCode.FAIL);
+                    response.setMessage(String.format(ResponseMessage.FAIL, "Đăng nhập"));
+                }
             }
         } catch (Exception e) {
             response.setStatus(ResponseCode.FAIL);
@@ -76,7 +74,7 @@ public class UserViewModel extends AndroidViewModel{
                     || isNullOrEmpty(userRegisterRequest.getPassword())
                     || isNullOrEmpty(userRegisterRequest.getEmail())
                     || isNullOrEmpty(userRegisterRequest.getConfirmPassword())) {
-                response.setMessage("Vui lòng nhập đầy đủ thông tin");
+                response.setMessage("Vui lòng nhập đầy đủ thông tin đăng ký");
                 registerResult.setValue(response);
                 return;
             }
@@ -86,7 +84,7 @@ public class UserViewModel extends AndroidViewModel{
                 return;
             }
             if (!isValidEmail(userRegisterRequest.getEmail())) {
-                response.setMessage("Email không hợp lệ");
+                response.setMessage("Định dạng email không hợp lệ");
                 registerResult.setValue(response);
                 return;
             }

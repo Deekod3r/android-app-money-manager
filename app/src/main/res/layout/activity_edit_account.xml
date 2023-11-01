@@ -140,8 +140,7 @@
             <EditText
                 android:id="@+id/edtBudgetName"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="55dp"
                 android:autofillHints=""
                 android:background="@drawable/edt_primary"
                 android:drawableStart="@drawable/baseline_wallet_blue_24"
@@ -158,8 +157,7 @@
             <EditText
                 android:id="@+id/edtNote"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="55dp"
                 android:autofillHints=""
                 android:background="@drawable/edt_primary"
                 android:drawableStart="@drawable/baseline_sticky_note_blue_24"

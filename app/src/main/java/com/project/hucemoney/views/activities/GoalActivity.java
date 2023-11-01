@@ -132,21 +132,17 @@ public class GoalActivity extends AppCompatActivity {
                 for (Goal goal : goals) {
                     if (goal.getCurrentAmount() == goal.getTargetAmount()) {
                         completedCount++;
-                    } else if (isGoalOverdue(goal)) {
+                    } else if (LocalDate.now().isAfter(goal.getEndDate())) {
                         overdueCount++;
                     } else {
                         ongoingCount++;
                     }
                 }
             }
-            binding.tvOngoingCount.setText("Đang thực hiện: " + String.valueOf(ongoingCount));
-            binding.tvCompletedCount.setText("Hoàn thành: " + String.valueOf(completedCount));
-            binding.tvOverdueCount.setText("Quá hạn: " + String.valueOf(overdueCount));
+            binding.tvOngoingCount.setText(String.valueOf(ongoingCount));
+            binding.tvCompletedCount.setText(String.valueOf(completedCount));
+            binding.tvOverdueCount.setText(String.valueOf(overdueCount));
         });
     }
 
-    public static boolean isGoalOverdue(Goal goal) {
-        LocalDate currentDate = LocalDate.now();
-        return currentDate.isAfter(goal.getEndDate());
-    }
 }

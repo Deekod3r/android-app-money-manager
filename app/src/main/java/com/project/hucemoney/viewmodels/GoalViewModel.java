@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.entities.Goal;
 import com.project.hucemoney.models.Response;
@@ -36,7 +37,7 @@ public class GoalViewModel extends AndroidViewModel {
 
     public GoalViewModel(@NonNull Application application) {
         super(application);
-        this.goalRepository = new GoalRepository(application);
+        this.goalRepository = new GoalRepository(AppDatabase.getDatabase(application));
         sessionManager = new SessionManager(application);
     }
 

@@ -52,9 +52,6 @@ public interface AccountDAO {
             "LIMIT :limit OFFSET (:page - 1) * :limit")
     List<Account> findAllPaginated(int page, int limit);
 
-    @Query("SELECT * FROM "+ FieldData.TABLE_ACCOUNTS)
-    LiveData<List<Account>> findAll();
-
     @Query("SELECT EXISTS (SELECT 1 " +
             "FROM " + FieldData.TABLE_ACCOUNTS + " " +
             "WHERE " + FieldData.FIELD_UUID + " = :uuid)")
@@ -67,7 +64,7 @@ public interface AccountDAO {
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_ACCOUNTS + " " +
             "WHERE " + FieldData.ACCOUNT_FIELD_USER + " = :user")
-    LiveData<List<Account>> findAllByUser(String user);
+    LiveData<List<Account>> findAll(String user);
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_ACCOUNTS + " " +

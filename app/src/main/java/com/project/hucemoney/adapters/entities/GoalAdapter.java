@@ -1,26 +1,23 @@
 package com.project.hucemoney.adapters.entities;
 
-import static com.project.hucemoney.views.activities.GoalActivity.isGoalOverdue;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.hucemoney.R;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.entities.Goal;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,12 +51,20 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.target.setText(String.format("%s %s", format.format(goal.getTargetAmount()), context.getString(R.string.vi_currency)));
         holder.current.setText(String.format("Đã đạt: %s %s", format.format(goal.getCurrentAmount()), context.getString(R.string.vi_currency)));
+        holder.time.setText(String.format("%s - %s", goal.getStartDate().format(Constants.DATE_FORMATTER), goal.getEndDate().format(Constants.DATE_FORMATTER)));
+        long daysDifference = ChronoUnit.DAYS.between(LocalDate.now(), goal.getEndDate());
+        if (daysDifference < 0) {
+            holder.timeRemaining.setText("Đã kết thúc");
+            holder.timeRemaining.setTextColor(context.getColor(R.color.red));
+        } else {
+            holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifference));
+        }
         int progress = (int) (goal.getCurrentAmount() * 100 / goal.getTargetAmount());
         holder.progressBar.setProgress(progress);
-        if (progress >= 50 && progress < 80) {
-            holder.progressBar.setProgressTintList(ColorStateList.valueOf(context.getColor(R.color.yellow)));
-        } else if (progress < 50) {
+        if (LocalDate.now().isAfter(goal.getEndDate()) && progress < 100) {
             holder.progressBar.setProgressTintList(ColorStateList.valueOf(context.getColor(R.color.red)));
+        } else if (progress < 100) {
+            holder.progressBar.setProgressTintList(ColorStateList.valueOf(context.getColor(R.color.blue)));
         }
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
@@ -85,7 +90,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView name, target, current;
+        TextView name, target, current, time, timeRemaining;
         ProgressBar progressBar;
 
         public ViewHolder(@NonNull View itemView) {
@@ -93,6 +98,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
             name = itemView.findViewById(R.id.tvGoalName);
             target = itemView.findViewById(R.id.tvGoalTarget);
             current = itemView.findViewById(R.id.tvGoalCurrent);
+            time = itemView.findViewById(R.id.tvGoalTime);
+            timeRemaining = itemView.findViewById(R.id.tvGoalRemaining);
             progressBar = itemView.findViewById(R.id.progressBarGoal);
         }
 

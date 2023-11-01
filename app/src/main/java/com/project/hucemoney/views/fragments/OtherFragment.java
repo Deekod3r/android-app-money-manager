@@ -17,35 +17,15 @@ import com.project.hucemoney.views.activities.LauncherActivity;
 public class OtherFragment extends Fragment {
 
     private FragmentOtherBinding binding;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    SessionManager sessionManager;
 
     public OtherFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OtherFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OtherFragment newInstance(String param1, String param2) {
+    public static OtherFragment newInstance() {
         OtherFragment fragment = new OtherFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,8 +34,6 @@ public class OtherFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -81,6 +59,7 @@ public class OtherFragment extends Fragment {
     }
 
     private void init(){
+        sessionManager = new SessionManager(getContext());
     }
 
     private void controlAction() {
@@ -103,18 +82,22 @@ public class OtherFragment extends Fragment {
                 binding.radioLgEnglish.setChecked(false);
             }
         });
+
+        binding.btnSync.setOnClickListener(v -> {
+            sessionManager.setSyncDate();
+            fillData();
+        });
     }
 
     private void fillData() {
-        SessionManager sessionManager = new SessionManager(getContext());
         String username = sessionManager.getUsername();
         binding.tvUsername.setText(username);
         String email = sessionManager.getEmail();
         binding.tvEmail.setText(email);
-//        String dateSync = prefs.getString("dateSync", null);
-//        if (dateSync != null) {
-//            binding.tvDateSync.setText(String.format("Đồng bộ lần cuối lúc: %s", dateSync));
-//        }
+        String dateSync = sessionManager.getSyncDate();
+        if (dateSync != null) {
+            binding.tvDateSync.setText(String.format("Đồng bộ lần cuối lúc: %s", dateSync));
+        }
         String versionName = FunctionUtils.getAppVersionName(getContext());
         binding.tvVersionName.setText(String.format("Phiên bản: %s", versionName));
     }

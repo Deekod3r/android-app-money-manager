@@ -28,7 +28,9 @@ import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.enums.DialogType;
 
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
@@ -167,7 +169,6 @@ public class FunctionUtils {
 
     public static void showDialogDate(Context context, EditText editText) {
         Calendar calendar = Calendar.getInstance();
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -177,9 +178,7 @@ public class FunctionUtils {
                 (view, year1, month1, dayOfMonth) -> {
                     String formattedDay = (dayOfMonth < 10) ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
                     String formattedMonth = ((month1 + 1) < 10) ? "0" + (month1 + 1) : String.valueOf(month1 + 1);
-
-                    editText.setTag(String.format("%s/%s/%d", formattedDay, formattedMonth, year1));
-                    editText.setText(String.format("%s, %s/%s/%d", Constants.DAY_OF_WEEK[dayOfWeek - 1], formattedDay, formattedMonth, year1));
+                    editText.setText(String.format("%s/%s/%d", formattedDay, formattedMonth, year1));
                 },
                 year, month, day
         );

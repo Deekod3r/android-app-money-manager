@@ -16,8 +16,10 @@ import java.util.List;
 
 public class GoalRepository {
     private GoalDAO goalDAO;
-    public GoalRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getDatabase(application);
+    private AppDatabase appDatabase;
+
+    public GoalRepository(AppDatabase appDatabase) {
+        this.appDatabase = appDatabase;
         this.goalDAO = appDatabase.goalDAO();
     }
 

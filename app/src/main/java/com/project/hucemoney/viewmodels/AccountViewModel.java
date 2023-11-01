@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.models.Response;
@@ -38,7 +39,7 @@ public class AccountViewModel extends AndroidViewModel {
 
     public AccountViewModel(@NonNull Application application) {
         super(application);
-        this.accountRepository = new AccountRepository(application);
+        this.accountRepository = new AccountRepository(AppDatabase.getDatabase(application));
         sessionManager = new SessionManager(application);
     }
 

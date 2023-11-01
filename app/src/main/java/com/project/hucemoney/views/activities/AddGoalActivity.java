@@ -118,8 +118,7 @@ public class AddGoalActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String startDate = binding.edtStartDate.getTag().toString();
-                LocalDate localDate = LocalDate.parse(startDate, Constants.DATE_FORMATTER);
+                LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
                 goalViewModel.getGoalAddRequest().setStartDate(localDate);
             }
 
@@ -138,8 +137,7 @@ public class AddGoalActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String endDate = binding.edtEndDate.getTag().toString();
-                LocalDate localDate = LocalDate.parse(endDate, Constants.DATE_FORMATTER);
+                LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
                 goalViewModel.getGoalAddRequest().setEndDate(localDate);
             }
 

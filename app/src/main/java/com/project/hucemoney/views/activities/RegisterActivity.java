@@ -6,12 +6,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityRegisterBinding;
+import com.project.hucemoney.models.Response;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.utils.NetworkUtils;
 import com.project.hucemoney.viewmodels.UserViewModel;
@@ -29,12 +32,14 @@ public class RegisterActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         init();
         controlAction();
+        observer();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+        userViewModel.getRegisterResult().removeObservers(this);
     }
 
     private void init() {
@@ -50,25 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         binding.btnRegister.setOnClickListener(v -> {
-            try {
-                if (NetworkUtils.isNetworkAvailable(this)) {
-                    userViewModel.register();
-                    userViewModel.getRegisterResult().observe(this, response -> {
-                        if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
-                            Intent intent = new Intent(this, VerifyActivity.class);
-                            intent.putExtra("typeVerify", "register");
-                            intent.putExtra("UUID", response.getData());
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    FunctionUtils.showDialogNotify(this, "", "Vui lòng kết nối mạng để thực hiện", DialogType.WARNING);
-                }
-            } catch (Exception e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            if (NetworkUtils.isNetworkAvailable(this)) {
+                userViewModel.register();
+            } else {
+                FunctionUtils.showDialogNotify(this, "", "Vui lòng kết nối mạng để thực hiện", DialogType.WARNING);
             }
         });
 
@@ -79,4 +69,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    private void observer() {
+        Observer<Response<String>> registerObserver = response -> {
+            if (Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
+                Intent intent = new Intent(RegisterActivity.this, VerifyActivity.class);
+                intent.putExtra("typeVerify", Constants.TYPE_VERIFY_REGISTER);
+                intent.putExtra("UUID", response.getData());
+                startActivity(intent);
+                finish();
+            } else {
+                FunctionUtils.showDialogNotify(RegisterActivity.this, "", response.getMessage(), DialogType.ERROR);
+            }
+        };
+        userViewModel.getRegisterResult().observe(this, registerObserver);
+    }
 }

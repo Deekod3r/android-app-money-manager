@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityForgotPasswordBinding;
 import com.project.hucemoney.utils.FunctionUtils;
@@ -43,6 +44,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             if (NetworkUtils.isNetworkAvailable(this)) {
                 // request to server
                 Intent intent = new Intent(this, VerifyActivity.class);
+                intent.putExtra("typeVerify", Constants.TYPE_VERIFY_FORGOT_PASSWORD);
                 startActivity(intent);
                 finish();
             } else {

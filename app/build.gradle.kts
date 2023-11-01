@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core:1.10.0")
+    implementation("com.google.guava:guava:30.1-jre")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("com.google.android.material:material:1.9.0")

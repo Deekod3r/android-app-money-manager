@@ -42,7 +42,7 @@ public class AccountFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AccountFragment newInstance(String param1, String param2) {
+    public static AccountFragment newInstance() {
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

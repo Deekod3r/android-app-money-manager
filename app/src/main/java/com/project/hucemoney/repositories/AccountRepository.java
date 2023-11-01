@@ -14,9 +14,10 @@ import java.util.List;
 
 public class AccountRepository {
     private final AccountDAO accountDAO;
+    private AppDatabase appDatabase;
 
-    public AccountRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getDatabase(application);
+    public AccountRepository(AppDatabase appDatabase) {
+        this.appDatabase = appDatabase;
         this.accountDAO = appDatabase.accountDAO();
     }
 
@@ -50,10 +51,7 @@ public class AccountRepository {
 
     public LiveData<List<Account>> getAll(String user) {
         try {
-            if (user == null) {
-                return accountDAO.findAll();
-            }
-            return accountDAO.findAllByUser(user);
+            return accountDAO.findAll(user);
         } catch (Exception e) {
             throw e;
         }
@@ -108,7 +106,7 @@ public class AccountRepository {
 
     public Long getSumMoney(String user) {
         try {
-            LiveData<List<Account>> accounts = accountDAO.findAllByUser(user);
+            LiveData<List<Account>> accounts = accountDAO.findAll (user);
             List<Account> acs = accounts.getValue();
             if (acs == null) {
                 return 0L;

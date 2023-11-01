@@ -9,15 +9,19 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
+import androidx.room.Junction;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 import androidx.room.TypeConverters;
 
 import com.project.hucemoney.database.FieldData;
+import com.project.hucemoney.entities.crossref.TransactionGoal;
 import com.project.hucemoney.utils.AnnotationUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -31,9 +35,9 @@ import lombok.Setter;
         foreignKeys = @ForeignKey(
                 entity = User.class,
                 parentColumns = FieldData.FIELD_UUID,
-                childColumns = "user",
+                childColumns = FieldData.GOAL_FIELD_USER,
                 onDelete = ForeignKey.CASCADE),
-        indices = {@Index("user")})
+        indices = {@Index(FieldData.GOAL_FIELD_USER)})
 @TypeConverters(AnnotationUtils.class)
 public class Goal implements Parcelable {
     @PrimaryKey

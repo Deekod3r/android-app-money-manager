@@ -9,10 +9,14 @@ import com.project.hucemoney.models.requests.UserLoginRequest;
 import com.project.hucemoney.models.requests.UserRegisterRequest;
 import com.project.hucemoney.utils.FunctionUtils;
 
+import java.util.concurrent.Future;
+
 public class UserRepository {
     private UserDAO userDAO;
-    public UserRepository(Application application) {
-        AppDatabase appDatabase = AppDatabase.getDatabase(application);
+    private AppDatabase appDatabase;
+
+    public UserRepository(AppDatabase appDatabase) {
+        this.appDatabase = appDatabase;
         this.userDAO = appDatabase.userDAO();
     }
 
@@ -30,6 +34,7 @@ public class UserRepository {
             throw e;
         }
     }
+
 
     public User register(UserRegisterRequest registerRequest){
         try {

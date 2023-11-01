@@ -9,12 +9,15 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.databinding.ActivityVerifyBinding;
 import com.project.hucemoney.utils.FunctionUtils;
@@ -48,22 +51,20 @@ public class VerifyActivity extends AppCompatActivity {
     }
 
     private void init() {
-        AppDatabase appDatabase = AppDatabase.getDatabase(this);
+        //AppDatabase appDatabase = AppDatabase.getDatabase(this);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         Intent intent = getIntent();
         String typeVerify = intent.getStringExtra("typeVerify");
-        String UUID = intent.getStringExtra("UUID");
-        //Toast.makeText(this, UUID, Toast.LENGTH_SHORT).show();
-        if (typeVerify.equals("register")) {
+        if (Objects.equals(typeVerify, Constants.TYPE_VERIFY_REGISTER)) {
             binding.tvTitleVerify.setText("Xác thực đăng ký");
             this.typeVerify = "register";
-        } else if (typeVerify.equals("forgotPassword")) {
+        } else if (Objects.equals(typeVerify, Constants.TYPE_VERIFY_FORGOT_PASSWORD)) {
             binding.tvTitleVerify.setText("Xác thực quên mật khẩu");
             this.typeVerify = "forgotPassword";
         } else {
-            binding.tvTitleVerify.setText("Xác thực");
-            this.typeVerify = "verify";
+            Toast.makeText(this, "Lỗi xác thực", Toast.LENGTH_SHORT).show();
+            finish();
         }
         this.codeVerify = FunctionUtils.randomCodeVerify();
         NotificationUtils.showNotification(this, "Mã xác thực", this.codeVerify);
@@ -78,13 +79,13 @@ public class VerifyActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 changeModeButtonVerify();
+                if ((s.length() == 1)) {
+                    binding.number2.requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if ((s.length() == 1)) {
-                    binding.number2.requestFocus();
-                }
             }
         });
 
@@ -96,13 +97,13 @@ public class VerifyActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 changeModeButtonVerify();
+                if ((s.length() == 1)) {
+                    binding.number3.requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if ((s.length() == 1)) {
-                    binding.number3.requestFocus();
-                }
             }
         });
 
@@ -114,13 +115,13 @@ public class VerifyActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 changeModeButtonVerify();
+                if ((s.length() == 1)) {
+                    binding.number4.requestFocus();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if ((s.length() == 1)) {
-                    binding.number4.requestFocus();
-                }
             }
         });
 
@@ -138,6 +139,7 @@ public class VerifyActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
 
         binding.resend.setOnClickListener(v -> {
             if (countResend < 3) {
@@ -208,9 +210,8 @@ public class VerifyActivity extends AppCompatActivity {
                     finish();
                 }
             } else {
-                Toast.makeText(this, "Mã xác thực không đúng", Toast.LENGTH_SHORT).show();
+                FunctionUtils.showDialogNotify(this, "", "Mã xác thực không đúng", DialogType.ERROR);
             }
-            finish();
         });
     }
 

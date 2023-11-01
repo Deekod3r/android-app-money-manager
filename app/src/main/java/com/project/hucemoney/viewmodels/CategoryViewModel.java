@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.models.Response;
@@ -39,7 +40,7 @@ public class CategoryViewModel extends AndroidViewModel {
 
     public CategoryViewModel(@NonNull Application application) {
         super(application);
-        this.categoryRepository = new CategoryRepository(application);
+        this.categoryRepository = new CategoryRepository(AppDatabase.getDatabase(application));
         sessionManager = new SessionManager(application);
     }
 
