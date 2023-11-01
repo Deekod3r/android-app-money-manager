@@ -84,7 +84,7 @@ public class AccountFragment extends Fragment {
         init();
         initRecyclerView();
         controlAction();
-        observe();
+        observer();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    private void observe() {
+    private void observer() {
         accountViewModel.getAccounts().observe(getViewLifecycleOwner(), accounts -> {
             accountAdapter.setData(accounts);
             if (accounts == null || accounts.size() == 0) {

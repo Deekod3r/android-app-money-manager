@@ -529,13 +529,33 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btnDeleteDatabase"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="3dp"
+                    android:clickable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="10dp"></LinearLayout>
+                    android:padding="10dp">
+
+                    <ImageButton
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:background="@drawable/custom_circle_blur_blue_bg"
+                        android:clickable="false"
+                        android:contentDescription="Xoá DTB"
+                        android:src="@drawable/baseline_delete_outline_blue_40" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="Xoá DTB"
+                        android:textAlignment="center"
+                        android:textColor="@color/black" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"

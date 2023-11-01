@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="goalViewModel"
+            name="budgetViewModel"
             type="com.project.hucemoney.viewmodels.BudgetViewModel" />
     </data>
 
@@ -16,7 +16,7 @@
         tools:context=".views.activities.BudgetActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutGoal"
+            android:id="@+id/appBarLayoutBudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_round_bottom_blue_bg"
@@ -53,20 +53,45 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnAddGoal"
+                    android:id="@+id/btnAddBudget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="addGoal"
+                    android:contentDescription="addBudget"
                     android:src="@drawable/baseline_add_circle_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+
+        <TextView
+            android:id="@+id/tvNotifyNoData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Không có dữ liệu..."
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBudget"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget"
+            tools:listitem="@layout/item_budget" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

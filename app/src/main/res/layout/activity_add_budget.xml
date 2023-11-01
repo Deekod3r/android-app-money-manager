@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="categoryViewModel"
-            type="com.project.hucemoney.viewmodels.CategoryViewModel" />
+            name="budgetViewModel"
+            type="com.project.hucemoney.viewmodels.BudgetViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.activities.AddCategoryActivity">
+        android:background="@color/white"
+        tools:context=".views.activities.AddBudgetActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutAddCategory"
+            android:id="@+id/appBarLayoutBudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_round_bottom_blue_bg"
@@ -44,11 +44,10 @@
                     tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
-                    android:id="@+id/tvTitleAddCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Thêm danh mục"
+                    android:text="Thêm hạn mức"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -71,64 +70,146 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutAddCategory">
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:padding="6dp"
+                    android:text="Số tiền"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtInitialLimit"
+                        android:paddingHorizontal="6dp"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/edt_primary"
+                        android:ems="10"
+                        android:text="0"
+                        android:inputType="number"
+                        android:maxLength="13"
+                        android:textStyle="bold"
+                        android:textColor="@color/blue"
+                        android:textColorHint="@color/blue"
+                        android:textSize="35sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:text="@string/vi_currency"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/horizontalLine1"
+                android:layout_width="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_height="5dp"
+                android:background="@color/grey" />
 
             <EditText
-                android:id="@+id/iconCategory"
+                android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:autofillHints=""
-                android:drawableEnd="@drawable/baseline_next_grey_24"
                 android:background="@drawable/edt_primary"
-                android:drawableStart="@drawable/baseline_emoticon_blue_24"
+                android:drawableStart="@drawable/baseline_gps_fixed_blue_24"
                 android:drawablePadding="5dp"
-                android:ems="10"
-                android:hint="Chọn icon"
-                android:enabled="false"
-                android:inputType="text"
                 android:paddingHorizontal="16dp"
-                android:textColor="@color/blue"
-                android:textColorHint="@color/grey"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/edtCategoryName"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:autofillHints=""
-                android:background="@drawable/edt_primary"
-                android:drawableStart="@drawable/baseline_list_blue_24"
-                android:drawablePadding="5dp"
                 android:ems="10"
-                android:hint="Tên danh mục"
-                android:text="@={categoryViewModel.categoryAddRequest.name}"
+                android:text=""
+                android:hint="Tên mục tiêu"
                 android:inputType="text"
-                android:paddingHorizontal="16dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/edtParent"
+                android:id="@+id/edtCategory"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:autofillHints=""
-                android:drawableEnd="@drawable/baseline_next_grey_24"
                 android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
                 android:drawableStart="@drawable/baseline_category_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
                 android:drawablePadding="5dp"
-                android:ems="10"
-                android:hint="Danh mục cha"
-                android:enabled="false"
-                android:inputType="text"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
-                android:textSize="16sp" />
+                android:hint="Danh mục"
+                android:textSize="16sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/edtStartDate"
+                android:layout_width="match_parent"
+                android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:inputType="date"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/baseline_date_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:drawablePadding="5dp"
+                android:textColorHint="@color/grey"
+                android:hint="Ngày bắt đầu"
+                android:textSize="16sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/edtEndDate"
+                android:layout_width="match_parent"
+                android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:inputType="date"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/baseline_date_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:drawablePadding="5dp"
+                android:textColorHint="@color/grey"
+                android:hint="Ngày kết thúc"
+                android:textSize="16sp"
+                android:autofillHints="" />
 
             <EditText
                 android:id="@+id/edtNote"
@@ -139,13 +220,13 @@
                 android:drawableStart="@drawable/baseline_sticky_note_blue_24"
                 android:drawablePadding="5dp"
                 android:ems="10"
+                android:text=""
                 android:hint="Ghi chú"
-                android:text="@={categoryViewModel.categoryAddRequest.note}"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSave"

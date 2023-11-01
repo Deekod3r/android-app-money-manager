@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.FragmentHomeBinding;
+import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.utils.SessionManager;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 import com.project.hucemoney.views.activities.BudgetActivity;
@@ -106,6 +108,16 @@ public class HomeFragment extends Fragment {
         binding.btnCategory.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), CategoryActivity.class);
             startActivity(intent);
+        });
+
+        binding.btnDeleteDatabase.setOnClickListener(v -> {
+            boolean isDeleted = getContext().deleteDatabase("huce.money");
+            if (isDeleted) {
+                FunctionUtils.showDialogNotify(getContext(), "", "Xóa CSDL thành công", DialogType.INFO);
+                getActivity().finish();
+            } else {
+                FunctionUtils.showDialogNotify(getContext(), "", "Xóa CSDL thất bại", DialogType.ERROR);
+            }
         });
     }
 

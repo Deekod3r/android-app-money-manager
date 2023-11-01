@@ -27,17 +27,12 @@ import lombok.Setter;
 @Entity(tableName = FieldData.TABLE_BUDGETS,
         foreignKeys = {
                 @ForeignKey(
-                        entity = User.class,
-                        parentColumns = FieldData.FIELD_UUID,
-                        childColumns = FieldData.BUDGET_FIELD_USER,
-                        onDelete = ForeignKey.CASCADE),
-                @ForeignKey(
                         entity = Category.class,
                         parentColumns = FieldData.FIELD_UUID,
                         childColumns = FieldData.BUDGET_FIELD_CATEGORY,
                         onDelete = ForeignKey.CASCADE)
         },
-        indices = {@Index(FieldData.BUDGET_FIELD_USER), @Index(FieldData.BUDGET_FIELD_CATEGORY)})
+        indices = {@Index(FieldData.BUDGET_FIELD_CATEGORY)})
 @TypeConverters(AnnotationUtils.class)
 public class Budget implements Parcelable {
     @PrimaryKey
@@ -48,9 +43,6 @@ public class Budget implements Parcelable {
     @ColumnInfo(name = FieldData.FIELD_ID)
     private String id;
     @NonNull
-    @ColumnInfo(name = FieldData.BUDGET_FIELD_USER)
-    private String user;
-    @NonNull
     @ColumnInfo(name = FieldData.BUDGET_FIELD_NAME)
     private String name;
     @ColumnInfo(name = FieldData.BUDGET_FIELD_START_DATE)
@@ -59,7 +51,7 @@ public class Budget implements Parcelable {
     private LocalDate endDate;
     @ColumnInfo(name = FieldData.BUDGET_FIELD_INITIAL_LIMIT)
     private long initialLimit;
-    @ColumnInfo(name = FieldData.BUDGET_FIELD_CURRENT_BALANCE)
+    @ColumnInfo(name = FieldData.BUDGET_FIELD_CURRENT_BALANCE, defaultValue = "0")
     private long currentBalance;
     @ColumnInfo(name = FieldData.BUDGET_FIELD_CATEGORY)
     private String category;
@@ -70,7 +62,6 @@ public class Budget implements Parcelable {
     public Budget(@NonNull String UUID, @NonNull String id, @NonNull String user, @NonNull String name, LocalDate startDate, LocalDate endDate, long initialLimit, long currentBalance, String category, String note) {
         this.UUID = UUID;
         this.id = id;
-        this.user = user;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -84,7 +75,6 @@ public class Budget implements Parcelable {
     protected Budget(Parcel in) {
         UUID = Objects.requireNonNull(in.readString());
         id = Objects.requireNonNull(in.readString());
-        user = Objects.requireNonNull(in.readString());
         name = Objects.requireNonNull(in.readString());
         startDate = LocalDate.parse(in.readString());
         endDate = LocalDate.parse(in.readString());
@@ -115,7 +105,6 @@ public class Budget implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(UUID);
         dest.writeString(id);
-        dest.writeString(user);
         dest.writeString(name);
         dest.writeString(startDate.toString());
         dest.writeString(endDate.toString());

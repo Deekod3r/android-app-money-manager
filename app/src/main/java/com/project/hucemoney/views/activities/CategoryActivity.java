@@ -45,7 +45,7 @@ public class CategoryActivity extends AppCompatActivity {
         initTabLayout();
         initRecyclerView();
         controlAction();
-        observe();
+        observer();
     }
 
     @Override
@@ -177,7 +177,7 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void observe() {
+    private void observer() {
         categoryViewModel.getCategories().observe(this, categories -> {
             categoryAdapter.setData(categories);
             if (categories == null || categories.size() == 0) {

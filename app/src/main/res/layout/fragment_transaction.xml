@@ -51,7 +51,7 @@
                     />
 
                 <ImageView
-                    android:id="@+id/btnCheck"
+                    android:id="@+id/btnCheckSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

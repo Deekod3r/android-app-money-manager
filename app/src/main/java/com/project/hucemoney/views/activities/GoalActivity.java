@@ -41,7 +41,7 @@ public class GoalActivity extends AppCompatActivity {
         init();
         initRecyclerView();
         controlAction();
-        observe();
+        observer();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class GoalActivity extends AppCompatActivity {
         });
     }
 
-    private void observe() {
+    private void observer() {
         goalViewModel.getGoals().observe(this, goals -> {
             goalAdapter.setData(goals);
             int ongoingCount = 0;

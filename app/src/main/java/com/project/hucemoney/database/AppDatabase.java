@@ -9,12 +9,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.project.hucemoney.DAOs.AccountDAO;
+import com.project.hucemoney.DAOs.BudgetDAO;
 import com.project.hucemoney.DAOs.CategoryDAO;
 import com.project.hucemoney.DAOs.GoalDAO;
 import com.project.hucemoney.DAOs.TransactionDAO;
 import com.project.hucemoney.DAOs.TransactionGoalDAO;
 import com.project.hucemoney.DAOs.UserDAO;
 import com.project.hucemoney.entities.Account;
+import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.entities.Goal;
 import com.project.hucemoney.entities.Transaction;
@@ -25,14 +27,15 @@ import com.project.hucemoney.utils.AnnotationUtils;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {User.class, Account.class, Goal.class, Category.class, Transaction.class, TransactionGoal.class},
-        version = 14, exportSchema = false)
+@Database(entities = {User.class, Account.class, Goal.class, Category.class, Transaction.class, TransactionGoal.class, Budget.class},
+        version = 16, exportSchema = false)
 @TypeConverters(AnnotationUtils.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
     public abstract AccountDAO accountDAO();
     public abstract GoalDAO goalDAO();
     public abstract CategoryDAO categoryDAO();
+    public abstract BudgetDAO budgetDAO();
     public abstract TransactionDAO transactionDAO();
     public abstract TransactionGoalDAO transactionGoalCrossRefDAO();
 

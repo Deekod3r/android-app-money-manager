@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.hucemoney.common.enums.DialogType;
@@ -74,11 +75,11 @@ public class LauncherActivity extends AppCompatActivity {
         super.onBackPressed();
     }
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -90,6 +91,14 @@ public class LauncherActivity extends AppCompatActivity {
         binding.btnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
+        });
+        binding.btnDeleteDatabase.setOnClickListener(v -> {
+            boolean isDeleted = this.deleteDatabase("huce.money");
+            if (isDeleted) {
+                FunctionUtils.showDialogNotify(this, "", "Xóa CSDL thành công", DialogType.INFO);
+            } else {
+                FunctionUtils.showDialogNotify(this, "", "Xóa CSDL thất bại", DialogType.ERROR);
+            }
         });
     }
 }
