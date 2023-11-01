@@ -76,4 +76,9 @@ public class AppActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
+
+    public void setSelectedNavItem(int itemId) {
+        binding.navbarBottom.setSelectedItemId(itemId);
+    }
+
 }

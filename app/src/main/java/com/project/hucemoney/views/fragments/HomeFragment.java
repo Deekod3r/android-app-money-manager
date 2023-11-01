@@ -17,9 +17,11 @@ import com.project.hucemoney.databinding.FragmentHomeBinding;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.utils.SessionManager;
 import com.project.hucemoney.viewmodels.AccountViewModel;
+import com.project.hucemoney.views.activities.AppActivity;
 import com.project.hucemoney.views.activities.BudgetActivity;
 import com.project.hucemoney.views.activities.CategoryActivity;
 import com.project.hucemoney.views.activities.GoalActivity;
+import com.project.hucemoney.views.activities.LauncherActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -92,7 +94,17 @@ public class HomeFragment extends Fragment {
         });
 
         binding.btnAddTransaction.setOnClickListener(v -> {
-            
+            AppActivity appActivity = (AppActivity) getActivity();
+            if (appActivity != null) {
+                appActivity.setSelectedNavItem(R.id.nav_transaction);
+            }
+        });
+
+        binding.btnAccount.setOnClickListener(v -> {
+            AppActivity appActivity = (AppActivity) getActivity();
+            if (appActivity != null) {
+                appActivity.setSelectedNavItem(R.id.nav_account);
+            }
         });
 
         binding.btnBudget.setOnClickListener(v -> {
@@ -113,7 +125,10 @@ public class HomeFragment extends Fragment {
         binding.btnDeleteDatabase.setOnClickListener(v -> {
             boolean isDeleted = getContext().deleteDatabase("huce.money");
             if (isDeleted) {
-                FunctionUtils.showDialogNotify(getContext(), "", "Xóa CSDL thành công", DialogType.INFO);
+                SessionManager sessionManager = new SessionManager(getContext());
+                sessionManager.logoutUser();
+                Intent intent = new Intent(getContext(), LauncherActivity.class);
+                startActivity(intent);
                 getActivity().finish();
             } else {
                 FunctionUtils.showDialogNotify(getContext(), "", "Xóa CSDL thất bại", DialogType.ERROR);
