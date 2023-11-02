@@ -90,6 +90,7 @@ public class TransactionFragment extends Fragment {
                         type = Constants.TYPE_EXPENSE;
                         binding.edtName.setHint("Tên khoản chi");
                         binding.edtGoal.setEnabled(false);
+                        binding.edtGoal.setVisibility(View.GONE);
                         binding.edtGoal.setTag(null);
                         binding.edtGoal.setText(null);
                         binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
@@ -98,6 +99,7 @@ public class TransactionFragment extends Fragment {
                         type = Constants.TYPE_INCOME;
                         binding.edtName.setHint("Tên khoản thu");
                         binding.edtGoal.setEnabled(true);
+                        binding.edtGoal.setVisibility(View.VISIBLE);
                         binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                     default:
                         break;

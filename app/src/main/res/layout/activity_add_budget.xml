@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="budgetViewModel"
             type="com.project.hucemoney.viewmodels.BudgetViewModel" />
@@ -145,8 +144,8 @@
                 android:drawablePadding="5dp"
                 android:paddingHorizontal="16dp"
                 android:ems="10"
-                android:text=""
-                android:hint="Tên mục tiêu"
+                android:text="@={budgetViewModel.budgetAddRequest.name}"
+                android:hint="Tên hạn mức"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey"
@@ -167,7 +166,7 @@
                 android:drawableEnd="@drawable/baseline_next_grey_24"
                 android:drawablePadding="5dp"
                 android:textColorHint="@color/grey"
-                android:hint="Danh mục"
+                android:hint="Danh mục chi"
                 android:textSize="16sp"
                 android:autofillHints="" />
 
@@ -220,7 +219,7 @@
                 android:drawableStart="@drawable/baseline_sticky_note_blue_24"
                 android:drawablePadding="5dp"
                 android:ems="10"
-                android:text=""
+                android:text="@={budgetViewModel.budgetAddRequest.note}"
                 android:hint="Ghi chú"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"

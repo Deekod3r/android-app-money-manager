@@ -66,7 +66,6 @@ public class FieldData {
 
 
     // Budgets table fields
-    public static final String BUDGET_FIELD_USER = "user";
     public static final String BUDGET_FIELD_NAME = "name";
     public static final String BUDGET_FIELD_START_DATE = "startDate";
     public static final String BUDGET_FIELD_END_DATE = "endDate";

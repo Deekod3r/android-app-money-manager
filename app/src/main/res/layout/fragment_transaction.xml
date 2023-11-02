@@ -206,6 +206,23 @@
                 android:autofillHints="" />
 
             <EditText
+                android:id="@+id/edtNote"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:autofillHints=""
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_sticky_note_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:text=""
+                android:hint="Ghi chú"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <EditText
                 android:id="@+id/edtGoal"
                 android:layout_width="match_parent"
                 android:background="@drawable/edt_primary"
@@ -222,24 +239,9 @@
                 android:textColorHint="@color/grey"
                 android:textSize="16sp"
                 android:hint="Mục tiêu"
+                android:visibility="gone"
                 android:autofillHints="" />
 
-            <EditText
-                android:id="@+id/edtNote"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:autofillHints=""
-                android:background="@drawable/edt_primary"
-                android:drawableStart="@drawable/baseline_sticky_note_blue_24"
-                android:drawablePadding="5dp"
-                android:ems="10"
-                android:text=""
-                android:hint="Ghi chú"
-                android:inputType="text"
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/grey"
-                android:textSize="16sp" />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"

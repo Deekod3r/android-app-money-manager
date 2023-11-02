@@ -124,9 +124,9 @@ public class HomeFragment extends Fragment {
 
         binding.btnDeleteDatabase.setOnClickListener(v -> {
             boolean isDeleted = getContext().deleteDatabase("huce.money");
+            SessionManager sessionManager = new SessionManager(getContext());
+            sessionManager.logoutUser();
             if (isDeleted) {
-                SessionManager sessionManager = new SessionManager(getContext());
-                sessionManager.logoutUser();
                 Intent intent = new Intent(getContext(), LauncherActivity.class);
                 startActivity(intent);
                 getActivity().finish();

@@ -94,6 +94,8 @@ public class LauncherActivity extends AppCompatActivity {
         });
         binding.btnDeleteDatabase.setOnClickListener(v -> {
             boolean isDeleted = this.deleteDatabase("huce.money");
+            SessionManager sessionManager = new SessionManager(this);
+            sessionManager.logoutUser();
             if (isDeleted) {
                 FunctionUtils.showDialogNotify(this, "", "Xóa CSDL thành công", DialogType.INFO);
             } else {
