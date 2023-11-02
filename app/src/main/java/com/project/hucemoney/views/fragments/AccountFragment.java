@@ -113,7 +113,7 @@ public class AccountFragment extends Fragment {
 
         binding.btnAddAccount.setOnClickListener(v -> {
             if (accounts.size() > 4) {
-                Toast.makeText(getContext(), "Số lượng tài khoản đã đạt giới hạn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Số tài khoản đã đạt giới hạn", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(getContext(), AddAccountActivity.class);
                 mLauncher.launch(intent);
