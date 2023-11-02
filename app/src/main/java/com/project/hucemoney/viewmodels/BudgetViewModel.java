@@ -44,8 +44,33 @@ public class BudgetViewModel extends AndroidViewModel {
     public void addBudget() {
         Response<Budget> response = new Response<>();
         try {
+            if (budgetAddRequest.getInitialLimit() <= 0) {
+                response.setMessage("Hạn mức phải lớn hơn 0");
+                resultAddBudget.setValue(response);
+                return;
+            }
             if (isNullOrEmpty(budgetAddRequest.getName())) {
                 response.setMessage("Tên hạn mức không được để trống");
+                resultAddBudget.setValue(response);
+                return;
+            }
+            if (isNullOrEmpty(budgetAddRequest.getCategory())) {
+                response.setMessage("Danh mục không được để trống");
+                resultAddBudget.setValue(response);
+                return;
+            }
+            if (budgetAddRequest.getStartDate() == null) {
+                response.setMessage("Ngày bắt đầu không được để trống");
+                resultAddBudget.setValue(response);
+                return;
+            }
+            if (budgetAddRequest.getEndDate() == null) {
+                response.setMessage("Ngày kết thúc không được để trống");
+                resultAddBudget.setValue(response);
+                return;
+            }
+            if (budgetAddRequest.getStartDate().isAfter(budgetAddRequest.getEndDate())) {
+                response.setMessage("Ngày bắt đầu phải trước ngày kết thúc");
                 resultAddBudget.setValue(response);
                 return;
             }

@@ -21,6 +21,10 @@ public class BudgetRepository {
 
     public Budget create(BudgetAddRequest budgetAddRequest) {
         try {
+            Budget check = budgetDAO.GetCurrentBudgetForCategory(budgetAddRequest.getCategory());
+            if (check != null) {
+                throw new RuntimeException("Hạn mức cho danh mục này đang tồn tại trong thời hạn");
+            }
             Budget budget = new Budget();
             budget.setUUID(java.util.UUID.randomUUID().toString());
             budget.setId("budget" + System.currentTimeMillis());

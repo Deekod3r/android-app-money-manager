@@ -5,13 +5,14 @@
 
     <data>
         <variable
-            name="accountViewModel"
+            name="categoryViewModel"
             type="com.project.hucemoney.viewmodels.CategoryViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".views.activities.ListCategoryActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -67,8 +68,22 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <TextView
+            android:id="@+id/tvNotifyNoData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Không có dữ liệu..."
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutListCategory" />
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewCategory"
+            android:id="@+id/rvListCategory"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:padding="3dp"

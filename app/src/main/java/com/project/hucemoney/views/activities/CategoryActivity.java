@@ -109,15 +109,15 @@ public class CategoryActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         binding.searchView.setQuery("", false);
-                        categoryViewModel.loadCategories(false, null);
+                        categoryViewModel.loadCategories(Constants.TYPE_EXPENSE, null);
                         break;
                     case 1:
                         binding.searchView.setQuery("", false);
-                        categoryViewModel.loadCategories(true, null);
+                        categoryViewModel.loadCategories(Constants.TYPE_INCOME, null);
                         break;
                     case 2:
                         binding.searchView.setQuery("", false);
-                        //categoryViewModel.clearCategories();
+                        categoryViewModel.clearCategories();
                         break;
                 }
             }
