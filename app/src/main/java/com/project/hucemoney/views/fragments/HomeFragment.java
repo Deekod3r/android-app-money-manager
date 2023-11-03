@@ -22,6 +22,7 @@ import com.project.hucemoney.views.activities.BudgetActivity;
 import com.project.hucemoney.views.activities.CategoryActivity;
 import com.project.hucemoney.views.activities.GoalActivity;
 import com.project.hucemoney.views.activities.LauncherActivity;
+import com.project.hucemoney.views.activities.TransactionActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -98,6 +99,11 @@ public class HomeFragment extends Fragment {
             if (appActivity != null) {
                 appActivity.setSelectedNavItem(R.id.nav_transaction);
             }
+        });
+
+        binding.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TransactionActivity.class);
+            startActivity(intent);
         });
 
         binding.btnAccount.setOnClickListener(v -> {

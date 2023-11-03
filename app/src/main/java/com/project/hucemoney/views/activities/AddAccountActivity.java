@@ -70,6 +70,7 @@ public class AddAccountActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
         binding.btnSave.setOnClickListener(v -> {
             accountViewModel.addAccount();
             accountViewModel.getResultAddAccount().observe(this, response -> {

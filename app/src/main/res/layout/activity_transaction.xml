@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="budgetViewModel"
-            type="com.project.hucemoney.viewmodels.BudgetViewModel" />
+            name="transactionViewModel"
+            type="com.project.hucemoney.viewmodels.TransactionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".views.activities.BudgetActivity">
+        tools:context=".views.activities.TransactionActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutBudget"
+            android:id="@+id/appBarLayoutTransaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_round_bottom_blue_bg"
@@ -47,52 +48,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Hạn mức"
+                    android:text="Giao dịch"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnAddBudget"
+                    android:id="@+id/btnFilter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="addBudget"
-                    android:src="@drawable/baseline_add_circle_white_24"
+                    android:contentDescription="filter"
+                    android:src="@drawable/baseline_filter_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <TextView
-            android:id="@+id/tvNotifyNoData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Không có dữ liệu..."
-            android:textAlignment="center"
-            android:textColor="@color/grey"
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBudget"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginVertical="5dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/item_budget" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

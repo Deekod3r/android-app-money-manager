@@ -5,18 +5,18 @@
 
     <data>
         <variable
-            name="budgetViewModel"
-            type="com.project.hucemoney.viewmodels.BudgetViewModel" />
+            name="accountViewModel"
+            type="com.project.hucemoney.viewmodels.AccountViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".views.activities.BudgetActivity">
+        tools:context=".views.activities.ListAccountActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayoutBudget"
+            android:id="@+id/appBarLayoutListAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_round_bottom_blue_bg"
@@ -47,21 +47,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Hạn mức"
+                    android:text="Tài khoản"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnAddBudget"
+                    android:id="@+id/btnSaveCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="addBudget"
-                    android:src="@drawable/baseline_add_circle_white_24"
+                    android:contentDescription="save"
+                    android:src="@drawable/baseline_check_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
@@ -80,19 +80,21 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget" />
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutListAccount" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvBudget"
+            android:id="@+id/rvListAccount"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginVertical="5dp"
+            android:padding="3dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:listitem="@layout/item_budget" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutListAccount"
+            app:layout_constraintVertical_bias="1.0"
+            tools:listitem="@layout/item_account" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

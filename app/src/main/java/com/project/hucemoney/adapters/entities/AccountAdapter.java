@@ -49,13 +49,16 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         holder.name.setText(account.getName());
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.amount.setText(String.format("%s %s", format.format(account.getAmount()), context.getString(R.string.vi_currency)));
-
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(account, position);
+            }
+        });
         holder.more.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(account, position);
             }
         });
-
     }
 
     @Override
@@ -93,6 +96,5 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
-
 
 }

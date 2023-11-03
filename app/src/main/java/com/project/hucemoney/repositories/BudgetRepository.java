@@ -32,7 +32,6 @@ public class BudgetRepository {
             budget.setStartDate(budgetAddRequest.getStartDate());
             budget.setEndDate(budgetAddRequest.getEndDate());
             budget.setInitialLimit(budgetAddRequest.getInitialLimit());
-            budget.setCurrentBalance(budgetAddRequest.getInitialLimit());
             budget.setCategory(budgetAddRequest.getCategory());
             budget.setNote(budgetAddRequest.getNote());
             long rowID = budgetDAO.save(budget);

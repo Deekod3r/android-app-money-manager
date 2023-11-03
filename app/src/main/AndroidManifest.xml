@@ -20,6 +20,12 @@
         android:theme="@style/Theme.HUCEMoney"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".views.activities.ListAccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.TransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.AddBudgetActivity"
             android:exported="false" />
         <activity

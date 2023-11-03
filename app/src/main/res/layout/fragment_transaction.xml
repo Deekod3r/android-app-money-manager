@@ -111,7 +111,8 @@
                         android:textColor="@color/blue"
                         android:textColorHint="@color/blue"
                         android:textSize="35sp"
-                        tools:ignore="SpeakableTextPresentCheck" />
+                        android:autofillHints="" />
+
                     <TextView
                         android:id="@+id/tvCurrency"
                         android:layout_width="0dp"
@@ -161,7 +162,7 @@
                 android:inputType="none"
                 android:clickable="true"
                 android:focusable="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp"
                 android:hint="Danh mục" />
@@ -179,7 +180,7 @@
                 android:inputType="none"
                 android:clickable="true"
                 android:focusable="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textColorHint="@color/grey"
                 android:textSize="16sp"
                 android:hint="Tài khoản"

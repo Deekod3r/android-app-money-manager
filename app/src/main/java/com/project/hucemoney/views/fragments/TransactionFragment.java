@@ -1,7 +1,13 @@
 package com.project.hucemoney.views.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -17,11 +25,22 @@ import androidx.fragment.app.Fragment;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.databinding.FragmentTransactionBinding;
+import com.project.hucemoney.entities.Account;
+import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.Category;
+import com.project.hucemoney.utils.FunctionUtils;
+import com.project.hucemoney.views.activities.ListAccountActivity;
+import com.project.hucemoney.views.activities.ListCategoryActivity;
+import com.project.hucemoney.views.activities.TransactionActivity;
+
+import java.time.LocalDate;
 
 public class TransactionFragment extends Fragment {
 
     private FragmentTransactionBinding binding;
     private boolean type = Constants.TYPE_EXPENSE;
+    private ActivityResultLauncher<Intent> mLauncher;
+
 
     public TransactionFragment() {
     }
@@ -41,14 +60,14 @@ public class TransactionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTransactionBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getContext(), R.layout.item_spinner_transaction, getResources().getTextArray(R.array.spinner_transaction_items)) {
             @Override
@@ -79,9 +98,63 @@ public class TransactionFragment extends Fragment {
     }
 
     private void init() {
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(getContext(), "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (data.getBooleanExtra("isCategory",false)) {
+                                Category category = data.getParcelableExtra("categorySelected");
+                                binding.edtCategory.setText(category.getName());
+                            } else if (data.getBooleanExtra("isAccount",false)) {
+                                Account account = data.getParcelableExtra("accountSelected");
+                                binding.edtAccount.setText(account.getName());
+                            }
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void controlAction() {
+
+        binding.btnHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TransactionActivity.class);
+            startActivity(intent);
+        });
+
+        binding.edtAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0) {
+                    binding.edtAmount.setText("0");
+                } else {
+                    if (s.length() > 1 && s.charAt(0) == '0') {
+                        binding.edtAmount.setText(s.subSequence(1, s.length()));
+                    }
+                    if (!s.toString().isEmpty()) {
+                        //accountViewModel.getAccountAddRequest().setAmount(Long.parseLong(s.toString()));
+                    }
+                }
+                binding.edtAmount.setSelection(binding.edtAmount.getText().length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         binding.spinnerTransactionType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -111,7 +184,37 @@ public class TransactionFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        
+        binding.edtCategory.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ListCategoryActivity.class);
+            intent.putExtra("type", type);
+            mLauncher.launch(intent);
+        });
+        
+        binding.edtAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ListAccountActivity.class);
+            mLauncher.launch(intent);
+        });
+        
+        binding.edtDate.setInputType(InputType.TYPE_NULL);
+        binding.edtDate.setOnClickListener(v -> {
+            FunctionUtils.showDialogDate(getContext(), binding.edtDate);
+        });
+        binding.edtDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
+                //transactionViewModel.getTransactionAddRequest().setDate(localDate);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
 }
