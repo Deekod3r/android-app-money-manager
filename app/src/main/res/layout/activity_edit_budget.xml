@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="budgetViewModel"
+            type="com.project.hucemoney.viewmodels.BudgetViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".views.activities.EditBudgetActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayoutBudget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_round_bottom_blue_bg"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/btnClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="search"
+                    android:src="@drawable/baseline_close_white_24"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Chỉnh sửa hạn mức"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btnCheckSave"
+                    android:contentDescription="check save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_check_white_24"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayoutBudget">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:padding="6dp"
+                    android:text="Số tiền hạn mức"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtInitialLimit"
+                        android:paddingHorizontal="6dp"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/edt_primary"
+                        android:ems="10"
+                        android:text="0"
+                        android:inputType="number"
+                        android:maxLength="13"
+                        android:textStyle="bold"
+                        android:textColor="@color/blue"
+                        android:textColorHint="@color/blue"
+                        android:textSize="35sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:text="@string/vi_currency"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:padding="6dp"
+                    android:text="Đã chi"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtCurrentBalance"
+                        android:paddingHorizontal="6dp"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/edt_disable"
+                        android:ems="10"
+                        android:text="0"
+                        android:inputType="number"
+                        android:focusable="false"
+                        android:maxLength="13"
+                        android:textStyle="bold"
+                        android:textColor="@color/blue"
+                        android:textColorHint="@color/blue"
+                        android:textSize="35sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:text="@string/vi_currency"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/horizontalLine1"
+                android:layout_width="match_parent"
+                android:layout_marginTop="1dp"
+                android:layout_height="5dp"
+                android:background="@color/grey" />
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:autofillHints=""
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_gps_fixed_blue_24"
+                android:drawablePadding="5dp"
+                android:paddingHorizontal="16dp"
+                android:ems="10"
+                android:text="@={budgetViewModel.budgetEditRequest.name}"
+                android:hint="Tên hạn mức"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtCategory"
+                android:layout_width="match_parent"
+                android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/baseline_category_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:drawablePadding="5dp"
+                android:textColorHint="@color/grey"
+                android:hint="Danh mục chi"
+                android:textSize="16sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/edtStartDate"
+                android:layout_width="match_parent"
+                android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:inputType="date"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/baseline_date_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:drawablePadding="5dp"
+                android:textColorHint="@color/grey"
+                android:hint="Ngày bắt đầu"
+                android:textSize="16sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/edtEndDate"
+                android:layout_width="match_parent"
+                android:background="@drawable/edt_primary"
+                android:paddingHorizontal="16dp"
+                android:layout_height="55dp"
+                android:ems="10"
+                android:cursorVisible="false"
+                android:inputType="date"
+                android:clickable="true"
+                android:focusable="false"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/baseline_date_blue_24"
+                android:drawableEnd="@drawable/baseline_next_grey_24"
+                android:drawablePadding="5dp"
+                android:textColorHint="@color/grey"
+                android:hint="Ngày kết thúc"
+                android:textSize="16sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/edtNote"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:autofillHints=""
+                android:background="@drawable/edt_primary"
+                android:drawableStart="@drawable/baseline_sticky_note_blue_24"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:text="@={budgetViewModel.budgetEditRequest.note}"
+                android:hint="Ghi chú"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/delete"
+                    android:textAllCaps="false"
+                    android:background="@drawable/btn_outline_danger"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_weight="1"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:background="@drawable/btn_primary"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -15,11 +15,13 @@ import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.BudgetAddRequest;
 import com.project.hucemoney.models.requests.BudgetEditRequest;
 import com.project.hucemoney.repositories.AccountRepository;
 import com.project.hucemoney.repositories.BudgetRepository;
+import com.project.hucemoney.repositories.CategoryRepository;
 import com.project.hucemoney.utils.SessionManager;
 
 import java.util.List;
@@ -30,14 +32,17 @@ public class BudgetViewModel extends AndroidViewModel {
     private MutableLiveData<Response<Budget>> resultAddBudget = new MutableLiveData<>();
     private MutableLiveData<Response<Budget>> resultEditBudget = new MutableLiveData<>();
     private MutableLiveData<Response<Boolean>> resultDeleteBudget = new MutableLiveData<>();
+    private MutableLiveData<Category> categoryLiveData = new MutableLiveData<>();
     private BudgetAddRequest budgetAddRequest = new BudgetAddRequest();
     private BudgetEditRequest budgetEditRequest = new BudgetEditRequest();
     private BudgetRepository budgetRepository;
+    private CategoryRepository categoryRepository;
     private SessionManager sessionManager;
 
     public BudgetViewModel(@NonNull Application application) {
         super(application);
         budgetRepository = new BudgetRepository(AppDatabase.getDatabase(application));
+        categoryRepository = new CategoryRepository(AppDatabase.getDatabase(application));
         sessionManager = new SessionManager(application);
     }
 
@@ -85,8 +90,79 @@ public class BudgetViewModel extends AndroidViewModel {
             response.setData(budget);
             resultAddBudget.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("BudgetViewModel", "addBudget: " + e.getMessage());
+            response.setMessage("Except: Thêm hạn mức thất bại");
             resultAddBudget.setValue(response);
+        }
+    }
+
+    public void editBudget() {
+        Response<Budget> response = new Response<>();
+        try {
+            if (budgetEditRequest.getInitialLimit() <= 0) {
+                response.setMessage("Hạn mức phải lớn hơn 0");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            if (isNullOrEmpty(budgetEditRequest.getName())) {
+                response.setMessage("Tên hạn mức không được để trống");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            if (isNullOrEmpty(budgetEditRequest.getCategory())) {
+                response.setMessage("Danh mục không được để trống");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            if (budgetEditRequest.getStartDate() == null) {
+                response.setMessage("Ngày bắt đầu không được để trống");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            if (budgetEditRequest.getEndDate() == null) {
+                response.setMessage("Ngày kết thúc không được để trống");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            if (budgetEditRequest.getStartDate().isAfter(budgetEditRequest.getEndDate())) {
+                response.setMessage("Ngày bắt đầu phải trước ngày kết thúc");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            Budget budget = budgetRepository.update(budgetEditRequest);
+            if (budget == null) {
+                response.setMessage("Cập nhật hạn mức thất bại");
+                resultEditBudget.setValue(response);
+                return;
+            }
+            response.setStatus(ResponseCode.SUCCESS);
+            response.setMessage("Cập nhật hạn mức thành công");
+            response.setData(budget);
+            resultEditBudget.setValue(response);
+        } catch (Exception e) {
+            Log.e("BudgetViewModel", "editBudget: " + e.getMessage());
+            response.setMessage("Except: Cập nhật hạn mức thất bại");
+            resultEditBudget.setValue(response);
+        }
+    }
+
+    public void deleteBudget() {
+        Response<Boolean> response = new Response<>();
+        try {
+            boolean result = budgetRepository.delete(budgetEditRequest.getUUID());
+            if (!result) {
+                response.setMessage("Xóa hạn mức thất bại");
+                resultDeleteBudget.setValue(response);
+                return;
+            }
+            response.setStatus(ResponseCode.SUCCESS);
+            response.setMessage("Xóa hạn mức thành công");
+            response.setData(true);
+            resultDeleteBudget.setValue(response);
+        } catch (Exception e) {
+            Log.e("BudgetViewModel", "deleteBudget: " + e.getMessage());
+            response.setMessage("Except: Xóa hạn mức thất bại");
+            resultDeleteBudget.setValue(response);
         }
     }
 
@@ -94,6 +170,20 @@ public class BudgetViewModel extends AndroidViewModel {
         List<Budget> budgets = budgetsLiveData.getValue();
         assert budgets != null;
         budgets.add(budget);
+        budgetsLiveData.setValue(budgets);
+    }
+
+    public void editBudgetLiveData(Budget budget, int position) {
+        List<Budget> budgets = budgetsLiveData.getValue();
+        assert budgets != null;
+        budgets.set(position, budget);
+        budgetsLiveData.setValue(budgets);
+    }
+
+    public void deleteBudgetLiveData(int position) {
+        List<Budget> budgets = budgetsLiveData.getValue();
+        assert budgets != null;
+        budgets.remove(position);
         budgetsLiveData.setValue(budgets);
     }
 
@@ -125,8 +215,21 @@ public class BudgetViewModel extends AndroidViewModel {
             };
             budgets.observeForever(observer);
         } catch (Exception e) {
-            Log.e("BudgetViewModel", e.getMessage());
+            Log.e("BudgetViewModel", "loadBudgets: " + e.getMessage());
         }
+    }
+
+    public void loadCategory(String UUID) {
+        try {
+            Category c = categoryRepository.findByUUID(UUID);
+            categoryLiveData.setValue(c);
+        } catch (Exception e) {
+            Log.e("BudgetViewModel", "loadCategory: " + e.getMessage());
+        }
+    }
+
+    public LiveData<Category> getCategory() {
+        return categoryLiveData;
     }
 
     public BudgetAddRequest getBudgetAddRequest() {

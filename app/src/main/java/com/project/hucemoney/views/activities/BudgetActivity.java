@@ -51,7 +51,8 @@ public class BudgetActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
+        budgetViewModel.getBudgets().removeObservers(this);
     }
 
     private void init() {
@@ -84,12 +85,12 @@ public class BudgetActivity extends AppCompatActivity {
                                 case Constants.ACTION_EDIT: {
                                     Budget budget = data.getParcelableExtra("budgetEdited");
                                     int position = data.getIntExtra("position", -1);
-                                    //budgetViewModel.editBudgetLiveData(budget, position);
+                                    budgetViewModel.editBudgetLiveData(budget, position);
                                     break;
                                 }
                                 case Constants.ACTION_DELETE: {
                                     int position = data.getIntExtra("position", -1);
-                                    //budgetViewModel.deleteBudgetLiveData(position);
+                                    budgetViewModel.deleteBudgetLiveData(position);
                                     break;
                                 }
                             }
@@ -113,6 +114,12 @@ public class BudgetActivity extends AppCompatActivity {
         binding.btnClose.setOnClickListener(v -> finish());
         binding.btnAddBudget.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddBudgetActivity.class);
+            mLauncher.launch(intent);
+        });
+        budgetAdapter.setOnItemClickListener((budget, position) -> {
+            Intent intent = new Intent(this, EditBudgetActivity.class);
+            intent.putExtra("budget", budget);
+            intent.putExtra("position", position);
             mLauncher.launch(intent);
         });
     }

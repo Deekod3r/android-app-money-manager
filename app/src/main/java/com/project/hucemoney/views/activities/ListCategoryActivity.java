@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.CategoryAdapter;
 import com.project.hucemoney.databinding.ActivityListCategoryBinding;
+import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.viewmodels.CategoryViewModel;
 
@@ -27,6 +28,7 @@ public class ListCategoryActivity extends AppCompatActivity {
     private CategoryAdapter categoryAdapter;
     private RecyclerView recyclerView;
     private List<Category> categories = new ArrayList<>();
+    private Category categorySelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class ListCategoryActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
         categoryViewModel.getCategories().removeObservers(this);
     }
 
@@ -85,6 +87,18 @@ public class ListCategoryActivity extends AppCompatActivity {
             if (categories == null || categories.size() == 0) {
                 binding.tvNotifyNoData.setVisibility(View.VISIBLE);
             } else {
+                Intent intent = getIntent();
+                if (intent != null) {
+                    categorySelected = intent.getParcelableExtra("categorySelected");
+                    if (categorySelected != null) {
+                        for (Category category : categories) {
+                            if (category.getUUID().equals(categorySelected.getUUID())) {
+                                categoryAdapter.setPositionSelected(categories.indexOf(category));
+                                break;
+                            }
+                        }
+                    }
+                }
                 binding.tvNotifyNoData.setVisibility(View.GONE);
             }
         });

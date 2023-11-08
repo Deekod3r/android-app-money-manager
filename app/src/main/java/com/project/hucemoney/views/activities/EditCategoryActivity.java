@@ -39,7 +39,7 @@ public class EditCategoryActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -86,6 +86,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                     finish();
                 }
                 Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                categoryViewModel.getResultEditCategory().removeObservers(this);
             });
         });
         binding.btnDelete.setOnClickListener(v -> {
@@ -99,9 +100,12 @@ public class EditCategoryActivity extends AppCompatActivity {
                                 data.putExtra("position", position);
                                 data.putExtra("action", Constants.ACTION_DELETE);
                                 setResult(Activity.RESULT_OK, data);
+                                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                                 finish();
+                            } else {
+                                FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                             }
-                            Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                            categoryViewModel.getResultDeleteCategory().removeObservers(this);
                         });
                     }, (dialog, which) -> {
                     });

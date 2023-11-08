@@ -42,7 +42,7 @@ import lombok.Setter;
                         entity = Category.class,
                         parentColumns = FieldData.FIELD_UUID,
                         childColumns = FieldData.TRANSACTION_FIELD_CATEGORY,
-                        onDelete = ForeignKey.CASCADE)},
+                        onDelete = ForeignKey.SET_NULL)},
         indices = {
                 @Index(FieldData.TRANSACTION_FIELD_ACCOUNT),
                 @Index(FieldData.TRANSACTION_FIELD_CATEGORY)

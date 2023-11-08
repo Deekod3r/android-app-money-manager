@@ -96,7 +96,7 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {

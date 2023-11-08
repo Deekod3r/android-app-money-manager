@@ -51,7 +51,8 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
+        categoryViewModel.getCategories().removeObservers(this);
     }
 
     private void init() {

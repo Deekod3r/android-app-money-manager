@@ -53,7 +53,7 @@ public class GoalViewModel extends AndroidViewModel {
             };
             categories.observeForever(observer);
         } catch (Exception e) {
-            Log.e("GoalViewModel", e.getMessage());
+            Log.e("GoalViewModel", "loadGoals: " + e.getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ public class GoalViewModel extends AndroidViewModel {
             response.setData(goal);
             resultAddGoal.setValue(response);
         } catch (Exception e) {
-            Log.e("GoalViewModel", "addGoal: ", e);
+            Log.e("GoalViewModel", "addGoal: " + e.getMessage());
             response.setMessage("Except: Thêm mục tiêu thất bại");
             resultAddGoal.setValue(response);
         }
@@ -196,7 +196,7 @@ public class GoalViewModel extends AndroidViewModel {
             response.setData(goal);
             resultEditGoal.setValue(response);
         } catch (Exception e) {
-            Log.e("GoalViewModel", "editGoal: ", e);
+            Log.e("GoalViewModel", "editGoal: " + e.getMessage());
             response.setMessage("Except: Sửa mục tiêu thất bại");
             resultEditGoal.setValue(response);
         }
@@ -216,7 +216,7 @@ public class GoalViewModel extends AndroidViewModel {
             response.setData(true);
             resultDeleteGoal.setValue(response);
         } catch (Exception e) {
-            Log.e("GoalViewModel", "deleteGoal: ", e);
+            Log.e("GoalViewModel", "deleteGoal: " + e.getMessage());
             response.setMessage("Except: Xóa mục tiêu thất bại");
             resultDeleteGoal.setValue(response);
         }

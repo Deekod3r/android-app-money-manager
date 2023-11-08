@@ -27,7 +27,7 @@ public class TransactionActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {

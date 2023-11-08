@@ -62,12 +62,12 @@ public class Account implements Parcelable {
 
     @Ignore
     protected Account(@NotNull Parcel in) {
-        UUID = Objects.requireNonNull(in.readString());
-        id = Objects.requireNonNull(in.readString());
-        name = Objects.requireNonNull(in.readString());
+        UUID = in.readString();
+        id = in.readString();
+        name = in.readString();
         amount = in.readLong();
         note = in.readString();
-        user = Objects.requireNonNull(in.readString());
+        user = in.readString();
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {

@@ -1,5 +1,7 @@
 package com.project.hucemoney.views.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,28 +17,28 @@ import android.widget.Toast;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
-import com.project.hucemoney.common.enums.CategoryType;
 import com.project.hucemoney.common.enums.DialogType;
-import com.project.hucemoney.databinding.ActivityEditCategoryBinding;
-import com.project.hucemoney.databinding.ActivityEditGoalBinding;
-import com.project.hucemoney.entities.Goal;
+import com.project.hucemoney.databinding.ActivityEditBudgetBinding;
+import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.utils.FunctionUtils;
-import com.project.hucemoney.viewmodels.CategoryViewModel;
-import com.project.hucemoney.viewmodels.GoalViewModel;
+import com.project.hucemoney.viewmodels.BudgetViewModel;
 
 import java.time.LocalDate;
 
-public class EditGoalActivity extends AppCompatActivity {
+public class EditBudgetActivity extends AppCompatActivity {
 
-    private ActivityEditGoalBinding binding;
-    private GoalViewModel goalViewModel;
+    private ActivityEditBudgetBinding binding;
+    private BudgetViewModel budgetViewModel;
     private int position;
-    private Goal goal;
+    private Budget budget;
+    private Category category;
+    private ActivityResultLauncher<Intent> mLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_goal);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_budget);
         init();
         controlAction();
     }
@@ -50,75 +52,84 @@ public class EditGoalActivity extends AppCompatActivity {
     private void init() {
         Intent intent = getIntent();
         position = intent.getIntExtra("position", -1);
-        goal = intent.getParcelableExtra("goal");
-        goalViewModel = new ViewModelProvider(this).get(GoalViewModel.class);
-        goalViewModel.getGoalEditRequest().setUUID(goal.getUUID());
-        goalViewModel.getGoalEditRequest().setName(goal.getName());
-        goalViewModel.getGoalEditRequest().setNote(goal.getNote());
-        goalViewModel.getGoalEditRequest().setCurrentAmount(goal.getCurrentAmount());
-        goalViewModel.getGoalEditRequest().setTargetAmount(goal.getTargetAmount());
-        goalViewModel.getGoalEditRequest().setStartDate(goal.getStartDate());
-        goalViewModel.getGoalEditRequest().setEndDate(goal.getEndDate());
-        binding.edtTargetAmount.setText(String.valueOf(goal.getTargetAmount()));
-        binding.edtCurrentAmount.setText(String.valueOf(goal.getCurrentAmount()));
-        binding.edtStartDate.setText(goal.getStartDate().format(Constants.DATE_FORMATTER));
-        binding.edtEndDate.setText(goal.getEndDate().format(Constants.DATE_FORMATTER));
-        binding.setGoalViewModel(goalViewModel);
+        budget = intent.getParcelableExtra("budget");
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        budgetViewModel.getBudgetEditRequest().setUUID(budget.getUUID());
+        budgetViewModel.getBudgetEditRequest().setName(budget.getName());
+        budgetViewModel.getBudgetEditRequest().setCategory(budget.getCategory());
+        budgetViewModel.getBudgetEditRequest().setInitialLimit(budget.getInitialLimit());
+        budgetViewModel.getBudgetEditRequest().setStartDate(budget.getStartDate());
+        budgetViewModel.getBudgetEditRequest().setEndDate(budget.getEndDate());
+        budgetViewModel.getBudgetEditRequest().setNote(budget.getNote());
+        binding.edtInitialLimit.setText(String.valueOf(budget.getInitialLimit()));
+        binding.edtCurrentBalance.setText(String.valueOf(budget.getCurrentBalance()));
+        budgetViewModel.loadCategory(budget.getCategory());
+        budgetViewModel.getCategory().observe(this, category -> {
+            this.category = category;
+            binding.edtCategory.setText(category.getName());
+            budgetViewModel.getCategory().removeObservers(this);
+        });
+        binding.edtStartDate.setText(budget.getStartDate().format(Constants.DATE_FORMATTER));
+        binding.edtEndDate.setText(budget.getEndDate().format(Constants.DATE_FORMATTER));
+        binding.setBudgetViewModel(budgetViewModel);
         binding.setLifecycleOwner(this);
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            category = data.getParcelableExtra("categorySelected");
+                            budgetViewModel.getBudgetEditRequest().setCategory(category.getUUID());
+                            binding.edtCategory.setText(category.getName());
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void controlAction() {
-        binding.btnClose.setOnClickListener(v -> {
-            finish();
-        });
-        binding.edtCurrentAmount.addTextChangedListener(new TextWatcher() {
+        binding.btnClose.setOnClickListener(v -> finish());
+        binding.edtInitialLimit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    binding.edtCurrentAmount.setText("0");
+                    binding.edtInitialLimit.setText("0");
                 } else {
                     if (s.length() > 1 && s.charAt(0) == '0') {
-                        binding.edtCurrentAmount.setText(s.subSequence(1, s.length()));
+                        binding.edtInitialLimit.setText(s.subSequence(1, s.length()));
                     }
                     if (!s.toString().isEmpty()) {
-                        goalViewModel.getGoalEditRequest().setCurrentAmount(Long.parseLong(s.toString()));
+                        budgetViewModel.getBudgetEditRequest().setInitialLimit(Long.parseLong(s.toString()));
                     }
                 }
-                binding.edtCurrentAmount.setSelection(binding.edtCurrentAmount.getText().length());
+                binding.edtInitialLimit.setSelection(binding.edtInitialLimit.getText().length());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+
             }
         });
-        binding.edtTargetAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    binding.edtTargetAmount.setText("0");
-                } else {
-                    if (s.length() > 1 && s.charAt(0) == '0') {
-                        binding.edtTargetAmount.setText(s.subSequence(1, s.length()));
-                    }
-                    if (!s.toString().isEmpty()) {
-                        goalViewModel.getGoalEditRequest().setTargetAmount(Long.parseLong(s.toString()));
-                    }
-                }
-                binding.edtTargetAmount.setSelection(binding.edtTargetAmount.getText().length());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+        binding.edtCategory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ListCategoryActivity.class);
+            intent.putExtra("type", Constants.TYPE_EXPENSE);
+            intent.putExtra("categorySelected", category);
+            mLauncher.launch(intent);
         });
+
         binding.edtStartDate.setInputType(InputType.TYPE_NULL);
         binding.edtStartDate.setOnClickListener(v -> {
             FunctionUtils.showDialogDate(this, binding.edtStartDate);
@@ -131,7 +142,7 @@ public class EditGoalActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
-                goalViewModel.getGoalEditRequest().setStartDate(localDate);
+                budgetViewModel.getBudgetEditRequest().setStartDate(localDate);
             }
 
             @Override
@@ -150,34 +161,36 @@ public class EditGoalActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
-                goalViewModel.getGoalEditRequest().setEndDate(localDate);
+                budgetViewModel.getBudgetEditRequest().setEndDate(localDate);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
+
         binding.btnSave.setOnClickListener(v -> {
-            goalViewModel.editGoal();
-            goalViewModel.getResultEditGoal().observe(this, response -> {
+            budgetViewModel.editBudget();
+            budgetViewModel.getResultEditBudget().observe(this, response -> {
                 if (response.getStatus().equals(ResponseCode.SUCCESS)) {
                     FunctionUtils.hideKeyboard(this,v);
                     Intent data = new Intent();
-                    data.putExtra("goalEdited", response.getData());
+                    data.putExtra("budgetEdited", response.getData());
                     data.putExtra("position", position);
                     data.putExtra("action", Constants.ACTION_EDIT);
                     setResult(Activity.RESULT_OK, data);
                     finish();
                 }
                 Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
-                goalViewModel.getResultEditGoal().removeObservers(this);
+                budgetViewModel.getResultEditBudget().removeObservers(this);
             });
         });
+
         binding.btnDelete.setOnClickListener(v -> {
-            FunctionUtils.showDialogConfirm(this, "", "Bạn có chắc chắn muốn xóa mục tiêu này không?", DialogType.WARNING,
+            FunctionUtils.showDialogConfirm(this, "", "Bạn có chắc chắn muốn xóa hạn mức này không?", DialogType.WARNING,
                     (dialog, which) -> {
-                        goalViewModel.deleteGoal();
-                        goalViewModel.getResultDeleteGoal().observe(this, response -> {
+                        budgetViewModel.deleteBudget();
+                        budgetViewModel.getResultDeleteBudget().observe(this, response -> {
                             if (response.getStatus().equals(ResponseCode.SUCCESS)) {
                                 FunctionUtils.hideKeyboard(this,v);
                                 Intent data = new Intent();
@@ -189,7 +202,7 @@ public class EditGoalActivity extends AppCompatActivity {
                             } else {
                                 FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                             }
-                            goalViewModel.getResultDeleteGoal().removeObservers(this);
+                            budgetViewModel.getResultDeleteBudget().removeObservers(this);
                         });
                     }, (dialog, which) -> {
                     });

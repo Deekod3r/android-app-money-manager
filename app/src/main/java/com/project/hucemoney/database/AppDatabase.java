@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Account.class, Goal.class, Category.class, Transaction.class, TransactionGoal.class, Budget.class},
-        version = 16, exportSchema = false)
+        version = 19 , exportSchema = false)
 @TypeConverters(AnnotationUtils.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();

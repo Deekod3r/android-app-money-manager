@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,10 +26,13 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     private final List<Account> accounts;
     private Context context;
     private OnItemClickListener onItemClickListener;
+    private boolean isMoreActive;
+    private int positionSelected = -1;
 
-    public AccountAdapter(Context context, List<Account> accounts) {
+    public AccountAdapter(Context context, List<Account> accounts, boolean isMoreActive) {
         this.accounts = accounts;
         this.context = context;
+        this.isMoreActive = isMoreActive;
     }
 
     public AccountAdapter(List<Account> accounts, OnItemClickListener onItemClickListener) {
@@ -46,19 +50,28 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Account account = accounts.get(position);
-        holder.name.setText(account.getName());
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
+        holder.name.setText(account.getName());
         holder.amount.setText(String.format("%s %s", format.format(account.getAmount()), context.getString(R.string.vi_currency)));
-        holder.itemView.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(account, position);
-            }
-        });
+        if(isMoreActive) {
+            holder.more.setVisibility(View.VISIBLE);
+        }
+        if (positionSelected == position) {
+            holder.more.setVisibility(View.VISIBLE);
+            holder.more.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_check_circle_blue_24));
+        }
         holder.more.setOnClickListener(v -> {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(account, position);
             }
         });
+        if (!isMoreActive) {
+            holder.itemView.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(account, position);
+                }
+            });
+        }
     }
 
     @Override
@@ -74,6 +87,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         this.accounts.clear();
         this.accounts.addAll(accounts);
         notifyDataSetChanged();
+    }
+
+    public void setPositionSelected(int positionSelected) {
+        this.positionSelected = positionSelected;
+        notifyItemChanged(positionSelected);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

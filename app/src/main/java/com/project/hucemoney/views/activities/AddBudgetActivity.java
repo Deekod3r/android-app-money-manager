@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityAddBudgetBinding;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.utils.FunctionUtils;
@@ -29,6 +30,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     private ActivityAddBudgetBinding binding;
     private BudgetViewModel budgetViewModel;
     private ActivityResultLauncher<Intent> mLauncher;
+    private Category categorySelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -58,10 +60,9 @@ public class AddBudgetActivity extends AppCompatActivity {
                                 Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            Category category = data.getParcelableExtra("categorySelected");
-                            assert category != null;
-                            budgetViewModel.getBudgetAddRequest().setCategory(category.getUUID());
-                            binding.edtCategory.setText(category.getName());
+                            categorySelected = data.getParcelableExtra("categorySelected");
+                            budgetViewModel.getBudgetAddRequest().setCategory(categorySelected.getUUID());
+                            binding.edtCategory.setText(categorySelected.getName());
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -102,6 +103,7 @@ public class AddBudgetActivity extends AppCompatActivity {
         binding.edtCategory.setOnClickListener(v -> {
             Intent intent = new Intent(this, ListCategoryActivity.class);
             intent.putExtra("type", Constants.TYPE_EXPENSE);
+            intent.putExtra("categorySelected", categorySelected);
             mLauncher.launch(intent);
         });
 
@@ -153,14 +155,13 @@ public class AddBudgetActivity extends AppCompatActivity {
                     data.putExtra("budgetAdded", response.getData());
                     data.putExtra("action", Constants.ACTION_ADD);
                     setResult(Activity.RESULT_OK, data);
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
+                } else {
+                    FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                 }
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                budgetViewModel.getResultAddBudget().removeObservers(this);
             });
-            budgetViewModel.getResultAddBudget().removeObservers(this);
         });
-    }
-
-    private void observer() {
     }
 }

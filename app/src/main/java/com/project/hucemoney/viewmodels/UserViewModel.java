@@ -6,6 +6,7 @@ import static com.project.hucemoney.utils.ValidationUtils.isValidEmail;
 import static com.project.hucemoney.utils.ValidationUtils.isValidPassword;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -57,18 +58,17 @@ public class UserViewModel extends AndroidViewModel{
                     response.setStatus(ResponseCode.FAIL);
                     response.setMessage(String.format(ResponseMessage.FAIL, "Đăng nhập"));
                 }
+                loginResult.setValue(response);
             }
         } catch (Exception e) {
-            response.setStatus(ResponseCode.FAIL);
-            response.setMessage(e.getMessage());
+            Log.e("UserViewModel", "login: " + e.getMessage());
+            response.setMessage("Except: Đăng nhập thất bại");
+            loginResult.setValue(response);
         }
-        loginResult.setValue(response);
     }
 
     public void register() {
-        // request to server
         Response<String> response = new Response<>();
-        //
         try {
             if (isNullOrEmpty(userRegisterRequest.getUsername())
                     || isNullOrEmpty(userRegisterRequest.getPassword())
@@ -106,16 +106,16 @@ public class UserViewModel extends AndroidViewModel{
             } else {
                 response.setMessage(String.format(ResponseMessage.FAIL, "Đăng ký"));
             }
+            registerResult.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("UserViewModel", "register" + e.getMessage());
+            response.setMessage("Except: Đăng ký thất bại");
+            registerResult.setValue(response);
         }
-        registerResult.setValue(response);
     }
 
     public void verifyRegister(String UUID) {
-        // request to server
         Response<String> response = new Response<>();
-        //
         try {
             boolean verify = userRepository.verifyRegister(UUID);
             if (verify) {
@@ -125,11 +125,12 @@ public class UserViewModel extends AndroidViewModel{
                 response.setStatus(ResponseCode.FAIL);
                 response.setMessage(String.format(ResponseMessage.FAIL, "Xác thực tài khoản"));
             }
+            verifyRegisterResult.setValue(response);
         } catch (Exception e) {
-            response.setStatus(ResponseCode.FAIL);
-            response.setMessage(e.getMessage());
+            Log.e("UserViewModel", "verify: " + e.getMessage());
+            response.setMessage("Except: Xác thực thất bại");
+            verifyRegisterResult.setValue(response);
         }
-        verifyRegisterResult.setValue(response);
     }
 
     public LiveData<Response<String>> getVerifyRegisterResult() {

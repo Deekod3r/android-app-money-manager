@@ -90,12 +90,12 @@ public class AccountFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
         accountViewModel = new ViewModelProvider(requireActivity()).get(AccountViewModel.class);
-        accountAdapter = new AccountAdapter(getContext(), accounts);
+        accountAdapter = new AccountAdapter(getContext(), accounts, true);
         accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
         binding.setLifecycleOwner(this);

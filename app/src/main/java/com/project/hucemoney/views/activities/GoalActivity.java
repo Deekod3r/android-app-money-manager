@@ -47,7 +47,8 @@ public class GoalActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
+        goalViewModel.getGoals().removeObservers(this);
     }
 
     private void init() {

@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
         userViewModel.getRegisterResult().removeObservers(this);
     }
 

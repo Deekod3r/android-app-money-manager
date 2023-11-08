@@ -35,7 +35,7 @@ public class AddAccountActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -75,16 +75,17 @@ public class AddAccountActivity extends AppCompatActivity {
             accountViewModel.addAccount();
             accountViewModel.getResultAddAccount().observe(this, response -> {
                 if (response.getStatus().equals(ResponseCode.SUCCESS)) {
-                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     FunctionUtils.hideKeyboard(this,v);
                     Intent data = new Intent();
                     data.putExtra("accountAdded", response.getData());
                     data.putExtra("action", Constants.ACTION_ADD);
                     setResult(Activity.RESULT_OK, data);
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                 }
+                accountViewModel.getResultAddAccount().removeObservers(this);
             });
         });
     }

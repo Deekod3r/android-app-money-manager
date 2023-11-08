@@ -20,6 +20,7 @@ import com.project.hucemoney.views.fragments.TransactionFragment;
 public class AppActivity extends AppCompatActivity {
     private ActivityAppBinding binding;
     private boolean doubleBackToExitPressedOnce = false;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +56,39 @@ public class AppActivity extends AppCompatActivity {
     private void controlAction() {
         binding.navbarBottom.setOnItemSelectedListener(item -> {
             int i = item.getItemId();
-            if (i  == R.id.nav_home) {
-                replaceFragment(new HomeFragment());
-            } else if (i  == R.id.nav_account) {
-                replaceFragment(new AccountFragment());
-            } else if (i  == R.id.nav_transaction) {
-                replaceFragment(new TransactionFragment());
-            } else if (i  == R.id.nav_statistic) {
-                replaceFragment(new StatisticFragment());
-            } else if (i  == R.id.nav_other) {
-                replaceFragment(new OtherFragment());
+            Fragment newFragment = null;
+
+            if (currentFragment != null) {
+                if (i == R.id.nav_home && currentFragment instanceof HomeFragment) {
+                    return true;
+                } else if (i == R.id.nav_account && currentFragment instanceof AccountFragment) {
+                    return true;
+                } else if (i == R.id.nav_transaction && currentFragment instanceof TransactionFragment) {
+                    return true;
+                } else if (i == R.id.nav_statistic && currentFragment instanceof StatisticFragment) {
+                    return true;
+                } else if (i == R.id.nav_other && currentFragment instanceof OtherFragment) {
+                    return true;
+                }
             }
+
+            if (i == R.id.nav_home) {
+                newFragment = new HomeFragment();
+            } else if (i == R.id.nav_account) {
+                newFragment = new AccountFragment();
+            } else if (i == R.id.nav_transaction) {
+                newFragment = new TransactionFragment();
+            } else if (i == R.id.nav_statistic) {
+                newFragment = new StatisticFragment();
+            } else if (i == R.id.nav_other) {
+                newFragment = new OtherFragment();
+            }
+
+            if (newFragment != null) {
+                replaceFragment(newFragment);
+                currentFragment = newFragment;
+            }
+
             return true;
         });
     }

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityEditAccountBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.models.requests.AccountEditRequest;
@@ -36,7 +37,7 @@ public class EditAccountActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -87,9 +88,12 @@ public class EditAccountActivity extends AppCompatActivity {
                     Intent data = new Intent();
                     data.putExtra("accountEdited", response.getData());
                     setResult(Activity.RESULT_OK, data);
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
+                } else {
+                    FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                 }
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                accountViewModel.getResultEditAccount().removeObservers(this);
             });
         });
     }

@@ -172,29 +172,42 @@ public class FunctionUtils {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String editTextDate = editText.getText().toString();
+        if (!editTextDate.isEmpty()) {
+            String[] parts = editTextDate.split("/");
+            if (parts.length == 3) {
+                day = Integer.parseInt(parts[0]);
+                month = Integer.parseInt(parts[1]) - 1;
+                year = Integer.parseInt(parts[2]);
+            }
+        }
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 context,
                 R.style.DatePickerDialog,
                 (view, year1, month1, dayOfMonth) -> {
-                    String formattedDay = (dayOfMonth < 10) ? "0" + dayOfMonth : String.valueOf(dayOfMonth);
-                    String formattedMonth = ((month1 + 1) < 10) ? "0" + (month1 + 1) : String.valueOf(month1 + 1);
-                    editText.setText(String.format("%s/%s/%d", formattedDay, formattedMonth, year1));
+                    String formattedDay = (dayOfMonth < 10) ? String.format(Locale.US, "0%d", dayOfMonth) : String.valueOf(dayOfMonth);
+                    String formattedMonth = ((month1 + 1) < 10) ? String.format(Locale.US, "0%d", month1 + 1) : String.valueOf(month1 + 1);
+                    editText.setText(String.format(Locale.US, "%s/%s/%d", formattedDay, formattedMonth, year1));
                 },
                 year, month, day
         );
+
+
         datePickerDialog.show();
         Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
         negativeButton.setTextColor(ContextCompat.getColor(context, R.color.blue));
         Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
         positiveButton.setTextColor(ContextCompat.getColor(context, R.color.blue));
-        Window window = datePickerDialog.getWindow();
     }
+
 
 
     public static String randomCodeVerify() {
         Random random = new Random();
         int randomNumber = random.nextInt(10000);
-        return String.format("%04d", randomNumber);
+        return String.format(Locale.US,"%04d", randomNumber);
     }
 
     public static String getAppVersionName(Context context) {

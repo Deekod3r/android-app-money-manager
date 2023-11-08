@@ -76,5 +76,5 @@ public interface BudgetDAO {
     @Query(
             "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate > date('now') LIMIT 1"
     )
-    Budget GetCurrentBudgetForCategory(String categoryUUID);
+    Budget getCurrentBudgetForCategory(String categoryUUID);
 }

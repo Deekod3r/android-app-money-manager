@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        binding.unbind();
     }
 
     private void init() {

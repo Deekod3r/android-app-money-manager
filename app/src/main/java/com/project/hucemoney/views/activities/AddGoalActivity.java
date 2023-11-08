@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityAddGoalBinding;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.GoalViewModel;
@@ -46,7 +47,7 @@ public class AddGoalActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -154,9 +155,12 @@ public class AddGoalActivity extends AppCompatActivity {
                     data.putExtra("goalAdded", response.getData());
                     data.putExtra("action", Constants.ACTION_ADD);
                     setResult(Activity.RESULT_OK, data);
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
+                } else {
+                    FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
                 }
-                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                goalViewModel.getResultAddGoal().removeObservers(this);
             });
         });
     }

@@ -40,7 +40,8 @@ public class TransactionFragment extends Fragment {
     private FragmentTransactionBinding binding;
     private boolean type = Constants.TYPE_EXPENSE;
     private ActivityResultLauncher<Intent> mLauncher;
-
+    private Category categorySelected;
+    private Account accountSelected;
 
     public TransactionFragment() {
     }
@@ -94,7 +95,7 @@ public class TransactionFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        binding.unbind();
     }
 
     private void init() {
@@ -109,11 +110,11 @@ public class TransactionFragment extends Fragment {
                                 return;
                             }
                             if (data.getBooleanExtra("isCategory",false)) {
-                                Category category = data.getParcelableExtra("categorySelected");
-                                binding.edtCategory.setText(category.getName());
+                                categorySelected = data.getParcelableExtra("categorySelected");
+                                binding.edtCategory.setText(categorySelected.getName());
                             } else if (data.getBooleanExtra("isAccount",false)) {
-                                Account account = data.getParcelableExtra("accountSelected");
-                                binding.edtAccount.setText(account.getName());
+                                accountSelected = data.getParcelableExtra("accountSelected");
+                                binding.edtAccount.setText(accountSelected.getName());
                             }
                         }
                     } catch (Exception e) {
@@ -188,11 +189,13 @@ public class TransactionFragment extends Fragment {
         binding.edtCategory.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ListCategoryActivity.class);
             intent.putExtra("type", type);
+            intent.putExtra("categorySelected", categorySelected);
             mLauncher.launch(intent);
         });
         
         binding.edtAccount.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ListAccountActivity.class);
+            intent.putExtra("accountSelected", accountSelected);
             mLauncher.launch(intent);
         });
         

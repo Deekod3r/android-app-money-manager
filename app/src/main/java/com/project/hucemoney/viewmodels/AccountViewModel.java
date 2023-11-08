@@ -65,10 +65,12 @@ public class AccountViewModel extends AndroidViewModel {
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Thêm tài khoản thành công");
             response.setData(account);
+            resultAddAccount.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("AccountViewModel", "addAccount: " + e.getMessage());
+            response.setMessage("Except: Thêm tài khoản thất bại");
+            resultAddAccount.setValue(response);
         }
-        resultAddAccount.setValue(response);
     }
 
     public void addAccountLiveData(Account account) {
@@ -96,10 +98,12 @@ public class AccountViewModel extends AndroidViewModel {
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Cập nhật tài khoản thành công");
             response.setData(account);
+            resultEditAccount.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("AccountViewModel", "editAccount: " + e.getMessage());
+            response.setMessage("Except: Cập nhật tài khoản thất bại");
+            resultEditAccount.setValue(response);
         }
-        resultEditAccount.setValue(response);
     }
 
     public void editAccountLiveData(Account account, int position) {
@@ -121,10 +125,12 @@ public class AccountViewModel extends AndroidViewModel {
             }
             response.setStatus(ResponseCode.SUCCESS);
             response.setMessage("Xóa tài khoản thành công");
+            resultDeleteAccount.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("AccountViewModel", "deleteAccount: " + e.getMessage());
+            response.setMessage("Except: Xóa tài khoản thất bại");
+            resultDeleteAccount.setValue(response);
         }
-        resultDeleteAccount.setValue(response);
     }
 
     public void deleteAccountLiveData(int position) {
@@ -148,7 +154,7 @@ public class AccountViewModel extends AndroidViewModel {
             };
             accounts.observeForever(observer);
         } catch (Exception e) {
-            Log.e("AccountViewModel", e.getMessage());
+            Log.e("AccountViewModel", "loadAccounts: " + e.getMessage());
         }
     }
 

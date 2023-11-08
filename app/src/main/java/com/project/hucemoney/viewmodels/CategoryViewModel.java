@@ -61,10 +61,12 @@ public class CategoryViewModel extends AndroidViewModel {
             } else {
                 response.setMessage("Thêm danh mục thất bại");
             }
+            resultAddCategory.setValue(response);
         } catch (Exception e) {
-            Log.e("CategoryViewModel", e.getMessage());
+            Log.e("CategoryViewModel", "addCategory: " + e.getMessage());
+            response.setMessage("Except: Thêm danh mục thất bại");
+            resultAddCategory.setValue(response);
         }
-        resultAddCategory.setValue(response);
     }
 
     public void editCategory() {
@@ -83,10 +85,12 @@ public class CategoryViewModel extends AndroidViewModel {
             } else {
                 response.setMessage("Sửa danh mục thất bại");
             }
+            resultEditCategory.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("CategoryViewModel", "editCategory: " + e.getMessage());
+            response.setMessage("Except: Sửa danh mục thất bại");
+            resultEditCategory.setValue(response);
         }
-        resultEditCategory.setValue(response);
     }
 
     public void deleteCategory() {
@@ -100,10 +104,12 @@ public class CategoryViewModel extends AndroidViewModel {
             } else {
                 response.setMessage("Xóa danh mục thất bại");
             }
+            resultDeleteCategory.setValue(response);
         } catch (Exception e) {
-            response.setMessage(e.getMessage());
+            Log.e("CategoryViewModel", "deleteCategory: " + e.getMessage());
+            response.setMessage("Except: Xóa danh mục thất bại");
+            resultDeleteCategory.setValue(response);
         }
-        resultDeleteCategory.setValue(response);
     }
 
     public void loadCategories(boolean type, @Nullable String name) {
@@ -118,7 +124,7 @@ public class CategoryViewModel extends AndroidViewModel {
             };
             categories.observeForever(observer);
         } catch (Exception e) {
-            Log.e("CategoryViewModel", e.getMessage());
+            Log.e("CategoryViewModel", "loadCategories: " + e.getMessage());
         }
     }
 
@@ -146,7 +152,6 @@ public class CategoryViewModel extends AndroidViewModel {
     public void clearCategories() {
         categoriesLiveData.setValue(new ArrayList<>());
     }
-
     public LiveData<List<Category>> getCategories() {
         return categoriesLiveData;
     }

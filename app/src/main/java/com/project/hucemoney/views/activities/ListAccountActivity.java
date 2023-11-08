@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.project.hucemoney.R;
@@ -31,6 +33,7 @@ public class ListAccountActivity extends AppCompatActivity {
     private AccountAdapter accountAdapter;
     private RecyclerView recyclerView;
     private List<Account> accounts = new ArrayList<>();
+    private Account accountSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +48,13 @@ public class ListAccountActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+        binding.unbind();
         accountViewModel.getAccounts().removeObservers(this);
     }
 
     private void init() {
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
-        accountAdapter = new AccountAdapter(this, accounts);
+        accountAdapter = new AccountAdapter(this, accounts, false);
         accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
         binding.setLifecycleOwner(this);
@@ -75,7 +78,6 @@ public class ListAccountActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         });
-
     }
 
     private void observer() {
@@ -84,6 +86,18 @@ public class ListAccountActivity extends AppCompatActivity {
             if (accounts == null || accounts.size() == 0) {
                 binding.tvNotifyNoData.setVisibility(View.VISIBLE);
             } else {
+                Intent intent = getIntent();
+                if (intent != null) {
+                    accountSelected = intent.getParcelableExtra("accountSelected");
+                    if (accountSelected != null) {
+                        for (Account account : accounts) {
+                            if (account.getUUID().equals(accountSelected.getUUID())) {
+                                accountAdapter.setPositionSelected(accounts.indexOf(account));
+                                break;
+                            }
+                        }
+                    }
+                }
                 binding.tvNotifyNoData.setVisibility(View.GONE);
             }
         });

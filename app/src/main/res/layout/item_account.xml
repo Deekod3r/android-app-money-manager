@@ -59,6 +59,7 @@
             android:clickable="true"
             android:contentDescription="more"
             android:focusable="true"
+            android:visibility="gone"
             android:src="@drawable/baseline_more_vert_grey_24"
             tools:ignore="TouchTargetSizeCheck" />
 
