@@ -39,7 +39,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="search"
+                    android:contentDescription="close"
                     android:src="@drawable/baseline_close_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
@@ -53,15 +53,15 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnFilter"
+                    android:id="@+id/btnDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="filter"
-                    android:src="@drawable/baseline_check_white_24"
+                    android:contentDescription="detail"
+                    android:src="@drawable/baseline_details_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>

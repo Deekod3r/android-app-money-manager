@@ -51,7 +51,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="notify"
+                    android:contentDescription="back"
                     android:src="@drawable/baseline_back_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 

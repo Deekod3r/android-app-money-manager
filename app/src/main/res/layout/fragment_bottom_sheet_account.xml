@@ -40,6 +40,20 @@
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/custom_button_underline_bg"
+            android:drawableStart="@drawable/baseline_details_blue_24"
+            android:drawableEnd="@drawable/baseline_next_grey_24"
+            android:drawablePadding="10dp"
+            android:gravity="start|center_vertical"
+            android:paddingHorizontal="10dp"
+            android:text="Xem chi tiết"
+            android:textAllCaps="false"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEdit"
             android:layout_width="match_parent"
             android:layout_height="55dp"

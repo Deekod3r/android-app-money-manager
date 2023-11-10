@@ -16,6 +16,7 @@ import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Category;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.BudgetAddRequest;
 import com.project.hucemoney.models.requests.BudgetEditRequest;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class BudgetViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<Budget>> budgetsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<BudgetWithCategory>> budgetsLiveData = new MutableLiveData<>();
     private MutableLiveData<Response<Budget>> resultAddBudget = new MutableLiveData<>();
     private MutableLiveData<Response<Budget>> resultEditBudget = new MutableLiveData<>();
     private MutableLiveData<Response<Boolean>> resultDeleteBudget = new MutableLiveData<>();
@@ -36,13 +37,11 @@ public class BudgetViewModel extends AndroidViewModel {
     private BudgetAddRequest budgetAddRequest = new BudgetAddRequest();
     private BudgetEditRequest budgetEditRequest = new BudgetEditRequest();
     private BudgetRepository budgetRepository;
-    private CategoryRepository categoryRepository;
     private SessionManager sessionManager;
 
     public BudgetViewModel(@NonNull Application application) {
         super(application);
         budgetRepository = new BudgetRepository(AppDatabase.getDatabase(application));
-        categoryRepository = new CategoryRepository(AppDatabase.getDatabase(application));
         sessionManager = new SessionManager(application);
     }
 
@@ -166,28 +165,28 @@ public class BudgetViewModel extends AndroidViewModel {
         }
     }
 
-    public void addBudgetLiveData(Budget budget) {
-        List<Budget> budgets = budgetsLiveData.getValue();
+    public void addBudgetLiveData(BudgetWithCategory budgetWithCategory) {
+        List<BudgetWithCategory> budgets = budgetsLiveData.getValue();
         assert budgets != null;
-        budgets.add(budget);
+        budgets.add(budgetWithCategory);
         budgetsLiveData.setValue(budgets);
     }
 
-    public void editBudgetLiveData(Budget budget, int position) {
-        List<Budget> budgets = budgetsLiveData.getValue();
+    public void editBudgetLiveData(BudgetWithCategory budgetWithCategory, int position) {
+        List<BudgetWithCategory> budgets = budgetsLiveData.getValue();
         assert budgets != null;
-        budgets.set(position, budget);
+        budgets.set(position, budgetWithCategory);
         budgetsLiveData.setValue(budgets);
     }
 
     public void deleteBudgetLiveData(int position) {
-        List<Budget> budgets = budgetsLiveData.getValue();
+        List<BudgetWithCategory> budgets = budgetsLiveData.getValue();
         assert budgets != null;
         budgets.remove(position);
         budgetsLiveData.setValue(budgets);
     }
 
-    public LiveData<List<Budget>> getBudgets() {
+    public LiveData<List<BudgetWithCategory>> getBudgets() {
         return budgetsLiveData;
     }
 
@@ -205,10 +204,10 @@ public class BudgetViewModel extends AndroidViewModel {
 
     public void loadBudgets() {
         try {
-            LiveData<List<Budget>> budgets = budgetRepository.getAll(sessionManager.getUUID());
-            Observer<List<Budget>> observer = new Observer<List<Budget>>() {
+            LiveData<List<BudgetWithCategory>> budgets = budgetRepository.getAll(sessionManager.getUUID());
+            Observer<List<BudgetWithCategory>> observer = new Observer<List<BudgetWithCategory>>() {
                 @Override
-                public void onChanged(List<Budget> bg) {
+                public void onChanged(List<BudgetWithCategory> bg) {
                     budgetsLiveData.setValue(bg);
                     budgets.removeObserver(this);;
                 }
@@ -216,15 +215,6 @@ public class BudgetViewModel extends AndroidViewModel {
             budgets.observeForever(observer);
         } catch (Exception e) {
             Log.e("BudgetViewModel", "loadBudgets: " + e.getMessage());
-        }
-    }
-
-    public void loadCategory(String UUID) {
-        try {
-            Category c = categoryRepository.findByUUID(UUID);
-            categoryLiveData.setValue(c);
-        } catch (Exception e) {
-            Log.e("BudgetViewModel", "loadCategory: " + e.getMessage());
         }
     }
 

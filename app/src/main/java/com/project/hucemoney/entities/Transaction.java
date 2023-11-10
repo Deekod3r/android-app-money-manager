@@ -56,6 +56,9 @@ public class Transaction implements Parcelable {
         @ColumnInfo(name = FieldData.FIELD_ID)
         @NonNull
         private String id;
+        @ColumnInfo(name = FieldData.TRANSACTION_FIELD_NAME)
+        @NonNull
+        private String name;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_ACCOUNT)
         @NonNull
         private String account;
@@ -71,13 +74,13 @@ public class Transaction implements Parcelable {
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_AMOUNT)
         private long amount ;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_NOTE)
-        @NonNull
         private String note;
 
         @Ignore
-        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, @NonNull String note) {
+        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String name, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, String note) {
                 this.UUID = UUID;
                 this.id = id;
+                this.name = name;
                 this.account = account;
                 this.date = date;
                 this.type = type;
@@ -90,12 +93,13 @@ public class Transaction implements Parcelable {
         protected Transaction(@NotNull Parcel in) {
                 UUID = Objects.requireNonNull(in.readString());
                 id = Objects.requireNonNull(in.readString());
+                name = Objects.requireNonNull(in.readString());
                 account = Objects.requireNonNull(in.readString());
                 date = LocalDate.parse(in.readString());
                 type = in.readByte() != 0;
                 category = Objects.requireNonNull(in.readString());
                 amount = in.readLong();
-                note = Objects.requireNonNull(in.readString());
+                note = in.readString();
         }
         public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
                 @Override
@@ -118,6 +122,7 @@ public class Transaction implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
                 dest.writeString(UUID);
                 dest.writeString(id);
+                dest.writeString(name);
                 dest.writeString(account);
                 dest.writeString(date.toString());
                 dest.writeByte((byte) (type ? 1 : 0));

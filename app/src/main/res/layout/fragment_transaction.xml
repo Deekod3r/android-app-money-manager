@@ -4,6 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="transactionViewModel"
+            type="com.project.hucemoney.viewmodels.TransactionViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/transactionFragment"
@@ -49,18 +54,6 @@
                     android:textAlignment="center"
                     android:popupBackground="@drawable/custom_item_dropdown_bg"
                     />
-
-                <ImageView
-                    android:id="@+id/btnCheckSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginHorizontal="20dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="check"
-                    android:src="@drawable/baseline_check_white_24"
-                    tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -142,7 +135,7 @@
                 android:drawablePadding="5dp"
                 android:paddingHorizontal="16dp"
                 android:ems="10"
-                android:text=""
+                android:text="@={transactionViewModel.transactionAddRequest.name}"
                 android:hint="Tên giao dịch"
                 android:inputType="text"
                 android:textColor="@color/black"
@@ -215,7 +208,7 @@
                 android:drawableStart="@drawable/baseline_sticky_note_blue_24"
                 android:drawablePadding="5dp"
                 android:ems="10"
-                android:text=""
+                android:text="@={transactionViewModel.transactionAddRequest.note}"
                 android:hint="Ghi chú"
                 android:inputType="text"
                 android:paddingHorizontal="16dp"

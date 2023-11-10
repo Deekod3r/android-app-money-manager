@@ -2,6 +2,7 @@ package com.project.hucemoney.views.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,14 +22,18 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
+import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.FragmentTransactionBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.utils.FunctionUtils;
+import com.project.hucemoney.viewmodels.TransactionViewModel;
 import com.project.hucemoney.views.activities.ListAccountActivity;
 import com.project.hucemoney.views.activities.ListCategoryActivity;
 import com.project.hucemoney.views.activities.TransactionActivity;
@@ -38,10 +43,11 @@ import java.time.LocalDate;
 public class TransactionFragment extends Fragment {
 
     private FragmentTransactionBinding binding;
+    private TransactionViewModel transactionViewModel;
     private boolean type = Constants.TYPE_EXPENSE;
     private ActivityResultLauncher<Intent> mLauncher;
-    private Category categorySelected;
-    private Account accountSelected;
+    private Category category;
+    private Account account;
 
     public TransactionFragment() {
     }
@@ -99,22 +105,26 @@ public class TransactionFragment extends Fragment {
     }
 
     private void init() {
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        binding.setTransactionViewModel(transactionViewModel);
+        binding.setLifecycleOwner(this);
         mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     try {
                         if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
-                            if (data == null) {
-                                Toast.makeText(getContext(), "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                            assert data != null;
                             if (data.getBooleanExtra("isCategory",false)) {
-                                categorySelected = data.getParcelableExtra("categorySelected");
-                                binding.edtCategory.setText(categorySelected.getName());
+                                category = data.getParcelableExtra("categorySelected");
+                                assert category != null;
+                                binding.edtCategory.setText(category.getName());
+                                transactionViewModel.getTransactionAddRequest().setCategory(category.getUUID());
                             } else if (data.getBooleanExtra("isAccount",false)) {
-                                accountSelected = data.getParcelableExtra("accountSelected");
-                                binding.edtAccount.setText(accountSelected.getName());
+                                account = data.getParcelableExtra("accountSelected");
+                                assert account != null;
+                                binding.edtAccount.setText(account.getName());
+                                transactionViewModel.getTransactionAddRequest().setAccount(account.getUUID());
                             }
                         }
                     } catch (Exception e) {
@@ -127,6 +137,7 @@ public class TransactionFragment extends Fragment {
     private void controlAction() {
 
         binding.btnHistory.setOnClickListener(v -> {
+            binding.btnHistory.setColorFilter(ContextCompat.getColor(getContext(), R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
             Intent intent = new Intent(getContext(), TransactionActivity.class);
             startActivity(intent);
         });
@@ -145,7 +156,7 @@ public class TransactionFragment extends Fragment {
                         binding.edtAmount.setText(s.subSequence(1, s.length()));
                     }
                     if (!s.toString().isEmpty()) {
-                        //accountViewModel.getAccountAddRequest().setAmount(Long.parseLong(s.toString()));
+                        transactionViewModel.getTransactionAddRequest().setAmount(Long.parseLong(s.toString()));
                     }
                 }
                 binding.edtAmount.setSelection(binding.edtAmount.getText().length());
@@ -159,6 +170,7 @@ public class TransactionFragment extends Fragment {
         binding.spinnerTransactionType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                binding.edtCategory.setText(null);
                 switch (position) {
                     case 0:
                         type = Constants.TYPE_EXPENSE;
@@ -168,6 +180,7 @@ public class TransactionFragment extends Fragment {
                         binding.edtGoal.setTag(null);
                         binding.edtGoal.setText(null);
                         binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                        transactionViewModel.getTransactionAddRequest().setCategory("");
                         break;
                     case 1:
                         type = Constants.TYPE_INCOME;
@@ -175,11 +188,10 @@ public class TransactionFragment extends Fragment {
                         binding.edtGoal.setEnabled(true);
                         binding.edtGoal.setVisibility(View.VISIBLE);
                         binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                        transactionViewModel.getTransactionAddRequest().setCategory("");
                     default:
                         break;
                 }
-                //binding.edtCategory.setText(null);
-                //binding.edtCategory.setTag(null);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -189,13 +201,13 @@ public class TransactionFragment extends Fragment {
         binding.edtCategory.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ListCategoryActivity.class);
             intent.putExtra("type", type);
-            intent.putExtra("categorySelected", categorySelected);
+            intent.putExtra("categorySelected", category);
             mLauncher.launch(intent);
         });
         
         binding.edtAccount.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ListAccountActivity.class);
-            intent.putExtra("accountSelected", accountSelected);
+            intent.putExtra("accountSelected", account);
             mLauncher.launch(intent);
         });
         
@@ -210,13 +222,37 @@ public class TransactionFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
-                //transactionViewModel.getTransactionAddRequest().setDate(localDate);
+                if (!s.toString().isEmpty()) {
+                    LocalDate localDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
+                    transactionViewModel.getTransactionAddRequest().setDate(localDate);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+
+        binding.btnSave.setOnClickListener(v -> {
+            transactionViewModel.getTransactionAddRequest().setType(type);
+            transactionViewModel.addTransaction();
+            transactionViewModel.getResultAddTransaction().observe(getViewLifecycleOwner(), response -> {
+                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                    FunctionUtils.hideKeyboard(getContext(),v);
+                    binding.btnHistory.setColorFilter(ContextCompat.getColor(getContext(), R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
+                    category = null;
+                    binding.edtCategory.setText("");
+                    binding.edtAccount.setText("");
+                    binding.edtAmount.setText("0");
+                    binding.edtDate.setText("");
+                    binding.edtName.setText("");
+                    binding.edtNote.setText("");
+                    Toast.makeText(getContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    FunctionUtils.showDialogNotify(getContext(), "", response.getMessage(), DialogType.ERROR);
+                }
+                transactionViewModel.getResultAddTransaction().removeObservers(this);
+            });
         });
     }
 

@@ -50,7 +50,7 @@ public class UserRepository {
             user.setUsername(registerRequest.getUsername());
             user.setPassword(FunctionUtils.md5(registerRequest.getPassword()));
             user.setEmail(registerRequest.getEmail());
-            user.setDeleted(true);
+            user.setIsDeleted(true);
             long rowID = userDAO.save(user);
             if (rowID <= 0) {
                 throw new RuntimeException("Đăng ký thất bại");
@@ -67,7 +67,7 @@ public class UserRepository {
             if (user == null) {
                 throw new RuntimeException("User không tồn tại");
             }
-            user.setDeleted(false);
+            user.setIsDeleted(false);
             return userDAO.update(user) > 0;
         } catch (Exception e) {
             throw e;

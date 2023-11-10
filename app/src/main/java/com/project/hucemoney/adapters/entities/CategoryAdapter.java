@@ -49,7 +49,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
         Category category = categories.get(position);
         String type;
-        if (category.isType() == Constants.TYPE_EXPENSE) {
+        if (category.getType() == Constants.TYPE_EXPENSE) {
             type = "Danh mục chi";
         } else {
             type = "Danh mục thu";

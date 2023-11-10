@@ -14,7 +14,7 @@ import lombok.Setter;
 public class CategoryAddRequest {
     @NonNull
     private String name;
-    private boolean type;
+    private Boolean type;
     private String note;
     @NonNull
     private String user;

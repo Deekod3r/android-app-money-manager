@@ -35,10 +35,10 @@ public class User {
     @NonNull
     private String password;
     @ColumnInfo(name = FieldData.FIELD_IS_DELETED, defaultValue = "false")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Ignore
-    public User(@NonNull String UUID, @NonNull String id, @NonNull String username, @NonNull String email, @NonNull String password, boolean isDeleted) {
+    public User(@NonNull String UUID, @NonNull String id, @NonNull String username, @NonNull String email, @NonNull String password, Boolean isDeleted) {
         this.UUID = UUID;
         this.id = id;
         this.username = username;

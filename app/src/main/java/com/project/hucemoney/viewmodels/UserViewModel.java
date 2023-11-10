@@ -108,7 +108,7 @@ public class UserViewModel extends AndroidViewModel{
             }
             registerResult.setValue(response);
         } catch (Exception e) {
-            Log.e("UserViewModel", "register" + e.getMessage());
+            Log.e("UserViewModel", "register: " + e.getMessage());
             response.setMessage("Except: Đăng ký thất bại");
             registerResult.setValue(response);
         }

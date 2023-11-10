@@ -6,10 +6,12 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.project.hucemoney.database.FieldData;
 import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 
 import java.util.List;
 
@@ -61,20 +63,19 @@ public interface BudgetDAO {
             "FROM " + FieldData.TABLE_BUDGETS)
     long count();
 
+    @Transaction
     @Query("SELECT " + FieldData.TABLE_BUDGETS +".* " +
             "FROM " + FieldData.TABLE_BUDGETS + " " +
             "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
             "ON " + FieldData.TABLE_BUDGETS + "." + FieldData.BUDGET_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
             "WHERE " + FieldData.TABLE_CATEGORIES + "." + FieldData.CATEGORY_FIELD_USER + " = :user")
-    LiveData<List<Budget>> findAll(String user);
+    LiveData<List<BudgetWithCategory>> findAll(String user);
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_BUDGETS + " " +
             "WHERE " + FieldData.BUDGET_FIELD_NAME + " = :name LIMIT 1")
     Budget findByName(String name);
 
-    @Query(
-            "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate > date('now') LIMIT 1"
-    )
-    Budget getCurrentBudgetForCategory(String categoryUUID);
+    @Query( "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate >= date('now') LIMIT 1")
+    Budget findCurrentBudgetForCategory(String categoryUUID);
 }

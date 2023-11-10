@@ -31,7 +31,7 @@ public class CategoryRepository {
             category.setNote(categoryAddRequest.getNote());
             category.setUser(categoryAddRequest.getUser());
             category.setParent(categoryAddRequest.getParent() == null ? "0" : categoryAddRequest.getParent());
-            category.setType(categoryAddRequest.isType());
+            category.setType(categoryAddRequest.getType());
             long rowID = categoryDAO.save(category);
             if (rowID <= 0) {
                 throw new RuntimeException("Thêm danh mục thất bại");

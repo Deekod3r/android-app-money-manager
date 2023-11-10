@@ -25,6 +25,8 @@ public class BudgetEditRequest {
     @NonNull
     private long initialLimit;
     @NonNull
+    private long currentBalance;
+    @NonNull
     private String category;
     private String note;
 

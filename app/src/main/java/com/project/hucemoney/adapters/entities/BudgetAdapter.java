@@ -14,22 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Locale;
 
 public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder>{
 
-    private final List<Budget> budgets;
+    private final List<BudgetWithCategory> budgets;
     private Context context;
     private BudgetAdapter.OnItemClickListener onItemClickListener;
 
-    public BudgetAdapter(Context context, List<Budget> budgets) {
+    public BudgetAdapter(Context context, List<BudgetWithCategory> budgets) {
         this.budgets = budgets;
         this.context = context;
     }
-    public BudgetAdapter(List<Budget> budgets, BudgetAdapter.OnItemClickListener onItemClickListener) {
+    public BudgetAdapter(List<BudgetWithCategory> budgets, BudgetAdapter.OnItemClickListener onItemClickListener) {
         this.budgets = budgets;
         this.onItemClickListener = onItemClickListener;
     }
@@ -42,17 +45,19 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BudgetAdapter.ViewHolder holder, int position) {
-        Budget budget = budgets.get(position);
+        BudgetWithCategory budgetWithCategory = budgets.get(position);
+        Budget budget = budgetWithCategory.budget;
+        NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.name.setText(budget.getName());
         holder.time.setText(String.format("%s - %s", budget.getStartDate().format(Constants.DATE_FORMATTER), budget.getEndDate().format(Constants.DATE_FORMATTER)));
-        holder.limit.setText(String.format("%s %s", budget.getInitialLimit(), context.getString(R.string.vi_currency)));
+        holder.limit.setText(String.format("%s %s", format.format(budget.getInitialLimit()), context.getString(R.string.vi_currency)));
         long budgetRemaining = budget.getInitialLimit() - budget.getCurrentBalance();
         if (budgetRemaining < 0) {
             holder.budgetRemaining.setTextColor(context.getColor(R.color.red));
             holder.notifyBudget.setVisibility(View.VISIBLE);
             holder.notifyBudget.setTextColor(context.getColor(R.color.red));
         }
-        holder.budgetRemaining.setText(String.format("Còn lại: %s %s", budgetRemaining, context.getString(R.string.vi_currency)));
+        holder.budgetRemaining.setText(String.format("Còn lại: %s %s", format.format(budgetRemaining), context.getString(R.string.vi_currency)));
         long daysDifference = ChronoUnit.DAYS.between(LocalDate.now(), budget.getEndDate());
         if (daysDifference < 0) {
             holder.timeRemaining.setText("Đã kết thúc");
@@ -67,7 +72,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
         }
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(budget, position);
+                onItemClickListener.onItemClick(budgetWithCategory, position);
             }
         });
     }
@@ -81,7 +86,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
         }
     }
 
-    public void setData(List<Budget> budgets) {
+    public void setData(List<BudgetWithCategory> budgets) {
         this.budgets.clear();
         this.budgets.addAll(budgets);
         notifyDataSetChanged();
@@ -104,7 +109,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
 
     }
     public interface OnItemClickListener {
-        void onItemClick(Budget Budget, int position);
+        void onItemClick(BudgetWithCategory budgetWithCategory, int position);
     }
     public void setOnItemClickListener(BudgetAdapter.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;

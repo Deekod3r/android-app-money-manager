@@ -58,6 +58,7 @@ public class FieldData {
 
     // Transaction table fields
     public static final String TRANSACTION_FIELD_ACCOUNT = "account";
+    public static final String TRANSACTION_FIELD_NAME = "name";
     public static final String TRANSACTION_FIELD_DATE = "date";
     public static final String TRANSACTION_FIELD_TYPE = "type";
     public static final String TRANSACTION_FIELD_CATEGORY = "category";

@@ -20,6 +20,7 @@ import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityAddBudgetBinding;
 import com.project.hucemoney.entities.Category;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.BudgetViewModel;
 
@@ -30,7 +31,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     private ActivityAddBudgetBinding binding;
     private BudgetViewModel budgetViewModel;
     private ActivityResultLauncher<Intent> mLauncher;
-    private Category categorySelected;
+    private Category category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,9 @@ public class AddBudgetActivity extends AppCompatActivity {
                                 Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            categorySelected = data.getParcelableExtra("categorySelected");
-                            budgetViewModel.getBudgetAddRequest().setCategory(categorySelected.getUUID());
-                            binding.edtCategory.setText(categorySelected.getName());
+                            category = data.getParcelableExtra("categorySelected");
+                            budgetViewModel.getBudgetAddRequest().setCategory(category.getUUID());
+                            binding.edtCategory.setText(category.getName());
                         }
                     } catch (Exception e) {
                         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,7 +104,7 @@ public class AddBudgetActivity extends AppCompatActivity {
         binding.edtCategory.setOnClickListener(v -> {
             Intent intent = new Intent(this, ListCategoryActivity.class);
             intent.putExtra("type", Constants.TYPE_EXPENSE);
-            intent.putExtra("categorySelected", categorySelected);
+            intent.putExtra("categorySelected", category);
             mLauncher.launch(intent);
         });
 
@@ -153,6 +154,7 @@ public class AddBudgetActivity extends AppCompatActivity {
                     FunctionUtils.hideKeyboard(this,v);
                     Intent data = new Intent();
                     data.putExtra("budgetAdded", response.getData());
+                    data.putExtra("category", category);
                     data.putExtra("action", Constants.ACTION_ADD);
                     setResult(Activity.RESULT_OK, data);
                     Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();

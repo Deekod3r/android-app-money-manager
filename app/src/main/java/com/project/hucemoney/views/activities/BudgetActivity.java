@@ -22,12 +22,14 @@ import com.project.hucemoney.databinding.ActivityBudgetBinding;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.entities.Goal;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 import com.project.hucemoney.viewmodels.BudgetViewModel;
 import com.project.hucemoney.viewmodels.GoalViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BudgetActivity extends AppCompatActivity {
 
@@ -35,7 +37,7 @@ public class BudgetActivity extends AppCompatActivity {
     private BudgetViewModel budgetViewModel;
     private BudgetAdapter budgetAdapter;
     private RecyclerView recyclerView;
-    private List<Budget> budgets = new ArrayList<>();
+    private List<BudgetWithCategory> budgets = new ArrayList<>();
     private ActivityResultLauncher<Intent> mLauncher;
 
     @Override
@@ -67,25 +69,20 @@ public class BudgetActivity extends AppCompatActivity {
                     try {
                         if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
-                            if (data == null) {
-                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                            assert data != null;
                             String action = data.getStringExtra("action");
-                            if (action == null) {
-                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            switch (action) {
+                            switch (Objects.requireNonNull(action)) {
                                 case Constants.ACTION_ADD: {
                                     Budget budget = data.getParcelableExtra("budgetAdded");
-                                    budgetViewModel.addBudgetLiveData(budget);
+                                    Category category = data.getParcelableExtra("category");
+                                    budgetViewModel.addBudgetLiveData(BudgetWithCategory.of(budget, category));
                                     break;
                                 }
                                 case Constants.ACTION_EDIT: {
                                     Budget budget = data.getParcelableExtra("budgetEdited");
+                                    Category category = data.getParcelableExtra("category");
                                     int position = data.getIntExtra("position", -1);
-                                    budgetViewModel.editBudgetLiveData(budget, position);
+                                    budgetViewModel.editBudgetLiveData(BudgetWithCategory.of(budget, category), position);
                                     break;
                                 }
                                 case Constants.ACTION_DELETE: {
@@ -116,9 +113,10 @@ public class BudgetActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AddBudgetActivity.class);
             mLauncher.launch(intent);
         });
-        budgetAdapter.setOnItemClickListener((budget, position) -> {
+        budgetAdapter.setOnItemClickListener((budgetWithCategory, position) -> {
             Intent intent = new Intent(this, EditBudgetActivity.class);
-            intent.putExtra("budget", budget);
+            intent.putExtra("budget", budgetWithCategory.budget);
+            intent.putExtra("category", budgetWithCategory.category);
             intent.putExtra("position", position);
             mLauncher.launch(intent);
         });

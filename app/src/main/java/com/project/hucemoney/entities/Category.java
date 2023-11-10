@@ -46,16 +46,14 @@ public class Category implements Parcelable {
     @NonNull
     private String name;
     @ColumnInfo(name = FieldData.CATEGORY_FIELD_TYPE)
-    private boolean type;
-//    @ColumnInfo(name = "icon")
-//    private String icon;
+    private Boolean type;
     @ColumnInfo(name = FieldData.CATEGORY_FIELD_PARENT, defaultValue = "0")
     private String parent;
     @ColumnInfo(name = FieldData.CATEGORY_FIELD_NOTE)
     private String note;
 
     @Ignore
-    public Category(@NonNull String UUID, @NonNull String id, @NonNull String user, @NonNull String name, boolean type, String parent, String note) {
+    public Category(@NonNull String UUID, @NonNull String id, @NonNull String user, @NonNull String name, Boolean type, String parent, String note) {
         this.UUID = UUID;
         this.id = id;
         this.user = user;

@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Account.class, Goal.class, Category.class, Transaction.class, TransactionGoal.class, Budget.class},
-        version = 19 , exportSchema = false)
+        version = 21 , exportSchema = false)
 @TypeConverters(AnnotationUtils.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
@@ -37,7 +37,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CategoryDAO categoryDAO();
     public abstract BudgetDAO budgetDAO();
     public abstract TransactionDAO transactionDAO();
-    public abstract TransactionGoalDAO transactionGoalCrossRefDAO();
+    public abstract TransactionGoalDAO transactionGoalDAO();
 
     private static final String DATABASE_NAME = "huce.money";
 

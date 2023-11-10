@@ -49,10 +49,6 @@ public class ListCategoryActivity extends AppCompatActivity {
 
     private void init() {
         Intent intent = getIntent();
-        if (intent == null) {
-            Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-            finish();
-        }
         boolean type = intent.getBooleanExtra("type", false);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         categoryAdapter = new CategoryAdapter(this, categories);

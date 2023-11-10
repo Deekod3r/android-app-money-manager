@@ -39,7 +39,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="search"
+                    android:contentDescription="close"
                     android:src="@drawable/baseline_close_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
@@ -53,15 +53,15 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnCheckSave"
-                    android:contentDescription="check save"
+                    android:id="@+id/btnDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginHorizontal="20dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:src="@drawable/baseline_check_white_24"
+                    android:contentDescription="detail"
+                    android:src="@drawable/baseline_details_white_24"
                     tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
@@ -90,7 +90,7 @@
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:padding="6dp"
-                    android:text="Số tiền hạn mức"/>
+                    android:text="Hạn mức chi"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -154,7 +154,9 @@
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="0.9"
-                        android:background="@drawable/edt_disable"
+                        android:drawableStart="@drawable/baseline_lock_blue_24"
+                        android:drawablePadding="10dp"
+                        android:background="@drawable/edt_primary"
                         android:ems="10"
                         android:text="0"
                         android:inputType="number"

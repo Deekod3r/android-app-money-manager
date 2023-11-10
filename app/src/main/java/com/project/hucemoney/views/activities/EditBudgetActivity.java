@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -31,7 +32,6 @@ public class EditBudgetActivity extends AppCompatActivity {
     private ActivityEditBudgetBinding binding;
     private BudgetViewModel budgetViewModel;
     private int position;
-    private Budget budget;
     private Category category;
     private ActivityResultLauncher<Intent> mLauncher;
 
@@ -52,23 +52,20 @@ public class EditBudgetActivity extends AppCompatActivity {
     private void init() {
         Intent intent = getIntent();
         position = intent.getIntExtra("position", -1);
-        budget = intent.getParcelableExtra("budget");
+        Budget budget = intent.getParcelableExtra("budget");
+        category = intent.getParcelableExtra("category");
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
         budgetViewModel.getBudgetEditRequest().setUUID(budget.getUUID());
         budgetViewModel.getBudgetEditRequest().setName(budget.getName());
         budgetViewModel.getBudgetEditRequest().setCategory(budget.getCategory());
         budgetViewModel.getBudgetEditRequest().setInitialLimit(budget.getInitialLimit());
+        budgetViewModel.getBudgetEditRequest().setCurrentBalance(budget.getCurrentBalance());
         budgetViewModel.getBudgetEditRequest().setStartDate(budget.getStartDate());
         budgetViewModel.getBudgetEditRequest().setEndDate(budget.getEndDate());
         budgetViewModel.getBudgetEditRequest().setNote(budget.getNote());
+        binding.edtCategory.setText(category.getName());
         binding.edtInitialLimit.setText(String.valueOf(budget.getInitialLimit()));
         binding.edtCurrentBalance.setText(String.valueOf(budget.getCurrentBalance()));
-        budgetViewModel.loadCategory(budget.getCategory());
-        budgetViewModel.getCategory().observe(this, category -> {
-            this.category = category;
-            binding.edtCategory.setText(category.getName());
-            budgetViewModel.getCategory().removeObservers(this);
-        });
         binding.edtStartDate.setText(budget.getStartDate().format(Constants.DATE_FORMATTER));
         binding.edtEndDate.setText(budget.getEndDate().format(Constants.DATE_FORMATTER));
         binding.setBudgetViewModel(budgetViewModel);
@@ -79,10 +76,7 @@ public class EditBudgetActivity extends AppCompatActivity {
                     try {
                         if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
-                            if (data == null) {
-                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                            assert data != null;
                             category = data.getParcelableExtra("categorySelected");
                             budgetViewModel.getBudgetEditRequest().setCategory(category.getUUID());
                             binding.edtCategory.setText(category.getName());
@@ -176,6 +170,7 @@ public class EditBudgetActivity extends AppCompatActivity {
                     FunctionUtils.hideKeyboard(this,v);
                     Intent data = new Intent();
                     data.putExtra("budgetEdited", response.getData());
+                    data.putExtra("category", category);
                     data.putExtra("position", position);
                     data.putExtra("action", Constants.ACTION_EDIT);
                     setResult(Activity.RESULT_OK, data);

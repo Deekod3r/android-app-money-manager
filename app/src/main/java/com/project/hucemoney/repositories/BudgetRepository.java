@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import com.project.hucemoney.DAOs.BudgetDAO;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Budget;
+import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 import com.project.hucemoney.models.requests.BudgetAddRequest;
 import com.project.hucemoney.models.requests.BudgetEditRequest;
 
@@ -22,8 +23,8 @@ public class BudgetRepository {
 
     public Budget create(BudgetAddRequest budgetAddRequest) {
         try {
-            Budget check = budgetDAO.getCurrentBudgetForCategory(budgetAddRequest.getCategory());
-            if (check != null) {
+            Budget check = budgetDAO.findCurrentBudgetForCategory(budgetAddRequest.getCategory());
+            if (check != null && budgetAddRequest.getEndDate().isAfter(check.getStartDate())) {
                 throw new RuntimeException("Hạn mức cho danh mục này đang tồn tại trong thời hạn");
             }
             Budget budget = new Budget();
@@ -53,7 +54,7 @@ public class BudgetRepository {
         }
     }
 
-    public LiveData<List<Budget>> getAll(String user) {
+    public LiveData<List<BudgetWithCategory>> getAll(String user) {
         try {
             return budgetDAO.findAll(user);
         } catch (Exception e) {
@@ -87,7 +88,7 @@ public class BudgetRepository {
             if (budget == null) {
                 throw new RuntimeException("Hạn mức không tồn tại");
             }
-            Budget check = budgetDAO.getCurrentBudgetForCategory(budgetEditRequest.getCategory());
+            Budget check = budgetDAO.findCurrentBudgetForCategory(budgetEditRequest.getCategory());
             if (check != null && !Objects.equals(check.getCategory(), budget.getCategory())) {
                 throw new RuntimeException("Hạn mức cho danh mục này đang tồn tại trong thời hạn");
             }
@@ -95,6 +96,7 @@ public class BudgetRepository {
             budget.setStartDate(budgetEditRequest.getStartDate());
             budget.setEndDate(budgetEditRequest.getEndDate());
             budget.setInitialLimit(budgetEditRequest.getInitialLimit());
+            budget.setCurrentBalance(budgetEditRequest.getCurrentBalance());
             budget.setCategory(budgetEditRequest.getCategory());
             budget.setNote(budgetEditRequest.getNote());
             long rowID = budgetDAO.update(budget);
@@ -102,6 +104,14 @@ public class BudgetRepository {
                 throw new RuntimeException("Cập nhật hạn mức thất bại");
             }
             return budget;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Budget getCurrentBudgetForCategory(String category) {
+        try {
+            return budgetDAO.findCurrentBudgetForCategory(category);
         } catch (Exception e) {
             throw e;
         }
