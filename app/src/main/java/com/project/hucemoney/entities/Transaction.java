@@ -73,11 +73,13 @@ public class Transaction implements Parcelable {
         private String category;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_AMOUNT)
         private long amount ;
+        @ColumnInfo(name = FieldData.TRANSACTION_FIELD_BUDGET)
+        private String budget;
         @ColumnInfo(name = FieldData.TRANSACTION_FIELD_NOTE)
         private String note;
 
         @Ignore
-        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String name, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, String note) {
+        public Transaction(@NonNull String UUID, @NonNull String id, @NonNull String name, @NonNull String account, @NonNull LocalDate date, @NonNull Boolean type, @NonNull String category, long amount, String budget, String note) {
                 this.UUID = UUID;
                 this.id = id;
                 this.name = name;
@@ -86,6 +88,7 @@ public class Transaction implements Parcelable {
                 this.type = type;
                 this.category = category;
                 this.amount = amount;
+                this.budget = budget;
                 this.note = note;
         }
 
@@ -99,6 +102,7 @@ public class Transaction implements Parcelable {
                 type = in.readByte() != 0;
                 category = Objects.requireNonNull(in.readString());
                 amount = in.readLong();
+                budget = in.readString();
                 note = in.readString();
         }
         public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
@@ -128,6 +132,7 @@ public class Transaction implements Parcelable {
                 dest.writeByte((byte) (type ? 1 : 0));
                 dest.writeString(category);
                 dest.writeLong(amount);
+                dest.writeString(budget);
                 dest.writeString(note);
         }
 

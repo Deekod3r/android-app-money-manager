@@ -64,7 +64,7 @@ public class FieldData {
     public static final String TRANSACTION_FIELD_CATEGORY = "category";
     public static final String TRANSACTION_FIELD_AMOUNT = "amount";
     public static final String TRANSACTION_FIELD_NOTE = "note";
-
+    public static final String TRANSACTION_FIELD_BUDGET = "budget";
 
     // Budgets table fields
     public static final String BUDGET_FIELD_NAME = "name";

@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class AccountFragment extends Fragment {
                             accountViewModel.addAccountLiveData(account);
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("AccountFragment", "mLauncher: " + e.getMessage());
                     }
                 }
         );

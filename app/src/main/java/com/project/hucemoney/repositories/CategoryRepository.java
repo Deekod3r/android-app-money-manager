@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.CategoryDAO;
 import com.project.hucemoney.database.AppDatabase;
@@ -22,6 +23,7 @@ public class CategoryRepository {
         this.categoryDAO = appDatabase.categoryDAO();
     }
 
+    @Transaction
     public Category create(CategoryAddRequest categoryAddRequest) {
         try {
             Category category = new Category();
@@ -42,7 +44,7 @@ public class CategoryRepository {
         }
     }
 
-    public Category findByUUID(String uuid) {
+    public Category getByUUID(String uuid) {
         try {
             return categoryDAO.findByUuid(uuid);
         } catch (Exception e) {
@@ -61,6 +63,7 @@ public class CategoryRepository {
         }
     }
 
+    @Transaction
     public boolean delete(String uuid) {
         try {
             Category category = categoryDAO.findByUuid(uuid);
@@ -81,6 +84,7 @@ public class CategoryRepository {
         }
     }
 
+    @Transaction
     public Category update(CategoryEditRequest categoryEditRequest) {
         try {
             Category category = categoryDAO.findByUuid(categoryEditRequest.getUUID());

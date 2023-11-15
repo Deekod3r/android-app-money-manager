@@ -2,6 +2,7 @@ package com.project.hucemoney.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -96,7 +97,7 @@ public class CategoryActivity extends AppCompatActivity {
                             }
                         }
                     } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("CategoryActivity", "mLauncher: " + e.getMessage());
                     }
                 }
         );

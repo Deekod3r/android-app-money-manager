@@ -92,12 +92,74 @@ public class TransactionViewModel extends AndroidViewModel {
         }
     }
 
+    public void editTransaction() {
+        Response<Transaction> response = new Response<>();
+        try {
+            if (transactionEditRequest.getAmount() <= 0) {
+                response.setMessage("Số tiền phải lớn hơn 0");
+                resultEditTransaction.setValue(response);
+                return;
+            }
+            if (transactionEditRequest.getDate() == null) {
+                response.setMessage("Ngày giao dịch không được để trống");
+                resultEditTransaction.setValue(response);
+                return;
+            }
+            if (transactionEditRequest.getCategory() == null) {
+                response.setMessage("Danh mục không được để trống");
+                resultEditTransaction.setValue(response);
+                return;
+            }
+            if (transactionEditRequest.getAccount() == null) {
+                response.setMessage("Tài khoản không được để trống");
+                resultEditTransaction.setValue(response);
+                return;
+            }
+            if (transactionEditRequest.getName() == null) {
+                response.setMessage("Tên giao dịch không được để trống");
+                resultEditTransaction.setValue(response);
+                return;
+            }
+            Transaction transaction = transactionRepository.update(transactionEditRequest);
+            response.setStatus(ResponseCode.SUCCESS);
+            response.setMessage("Cập nhật giao dịch thành công");
+            response.setData(transaction);
+            resultEditTransaction.setValue(response);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "editTransaction: " + e.getMessage());
+            response.setMessage("Except: Cập nhật giao dịch thất bại");
+            resultEditTransaction.setValue(response);
+        }
+    }
+
+    public void deleteTransaction() {
+        Response<Boolean> response = new Response<>();
+        try {
+            boolean result = transactionRepository.delete(transactionEditRequest.getUUID());
+            if(result){
+                response.setStatus(ResponseCode.SUCCESS);
+                response.setMessage("Xóa giao dịch thành công");
+            } else {
+                response.setMessage("Xóa giao dịch thất bại");
+            }
+            resultDeleteTransaction.setValue(response);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "deleteTransaction: " + e.getMessage());
+            response.setMessage("Except: Xóa giao dịch thất bại");
+            resultDeleteTransaction.setValue(response);
+        }
+    }
+
     public LiveData<Response<Transaction>> getResultAddTransaction() {
         return resultAddTransaction;
     }
 
     public LiveData<Response<Transaction>> getResultEditTransaction() {
         return resultEditTransaction;
+    }
+
+    public LiveData<Response<Boolean>> getResultDeleteTransaction() {
+        return resultDeleteTransaction;
     }
 
     public LiveData<List<TransactionWithCategoryAndAccount>> getTransactions() {

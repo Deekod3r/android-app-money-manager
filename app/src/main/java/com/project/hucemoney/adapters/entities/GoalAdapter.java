@@ -52,12 +52,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.ViewHolder> {
         holder.target.setText(String.format("%s %s", format.format(goal.getTargetAmount()), context.getString(R.string.vi_currency)));
         holder.current.setText(String.format("Đã đạt: %s %s", format.format(goal.getCurrentAmount()), context.getString(R.string.vi_currency)));
         holder.time.setText(String.format("%s - %s", goal.getStartDate().format(Constants.DATE_FORMATTER), goal.getEndDate().format(Constants.DATE_FORMATTER)));
-        long daysDifference = ChronoUnit.DAYS.between(LocalDate.now(), goal.getEndDate());
-        if (daysDifference < 0) {
-            holder.timeRemaining.setText("Đã kết thúc");
-            holder.timeRemaining.setTextColor(context.getColor(R.color.red));
+        long dayDiffToStart = ChronoUnit.DAYS.between(LocalDate.now(), goal.getStartDate());
+        if (dayDiffToStart > 0) {
+            holder.timeRemaining.setText(String.format("Bắt đầu sau: %s ngày", dayDiffToStart));
         } else {
-            holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifference));
+            long daysDifferenceToEnd = ChronoUnit.DAYS.between(LocalDate.now(), goal.getEndDate());
+            if (daysDifferenceToEnd < 0) {
+                holder.timeRemaining.setText("Đã kết thúc");
+                holder.timeRemaining.setTextColor(context.getColor(R.color.red));
+            } else {
+                holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifferenceToEnd));
+            }
         }
         int progress = (int) (goal.getCurrentAmount() * 100 / goal.getTargetAmount());
         holder.progressBar.setProgress(progress);

@@ -58,12 +58,17 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
             holder.notifyBudget.setTextColor(context.getColor(R.color.red));
         }
         holder.budgetRemaining.setText(String.format("Còn lại: %s %s", format.format(budgetRemaining), context.getString(R.string.vi_currency)));
-        long daysDifference = ChronoUnit.DAYS.between(LocalDate.now(), budget.getEndDate());
-        if (daysDifference < 0) {
-            holder.timeRemaining.setText("Đã kết thúc");
-            holder.timeRemaining.setTextColor(context.getColor(R.color.red));
+        long dayDiffToStart = ChronoUnit.DAYS.between(LocalDate.now(), budget.getStartDate());
+        if (dayDiffToStart > 0) {
+            holder.timeRemaining.setText(String.format("Bắt đầu sau: %s ngày", dayDiffToStart));
         } else {
-            holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifference));
+            long daysDifferenceToEnd = ChronoUnit.DAYS.between(LocalDate.now(), budget.getEndDate());
+            if (daysDifferenceToEnd < 0) {
+                holder.timeRemaining.setText("Đã kết thúc");
+                holder.timeRemaining.setTextColor(context.getColor(R.color.red));
+            } else {
+                holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifferenceToEnd));
+            }
         }
         int progress = (int) (budget.getCurrentBalance() * 100 / budget.getInitialLimit());
         holder.progressBar.setProgress(progress);

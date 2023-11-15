@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.project.hucemoney.R;
@@ -82,7 +83,7 @@ public class EditBudgetActivity extends AppCompatActivity {
                             binding.edtCategory.setText(category.getName());
                         }
                     } catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("EditBudgetActivity", "mLauncher: " + e.getMessage());
                     }
                 }
         );

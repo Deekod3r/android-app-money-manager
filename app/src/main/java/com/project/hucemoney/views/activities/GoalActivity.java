@@ -93,7 +93,7 @@ public class GoalActivity extends AppCompatActivity {
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("GoalActivity", e.getMessage());
+                        Log.e("GoalActivity", "mLauncher: " + e.getMessage());
                     }
                 }
         );

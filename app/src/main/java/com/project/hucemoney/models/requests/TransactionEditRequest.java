@@ -26,5 +26,6 @@ public class TransactionEditRequest {
     private String account;
     @NonNull
     private LocalDate date;
+    private Boolean type;
     private String note;
 }

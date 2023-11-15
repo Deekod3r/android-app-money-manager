@@ -65,7 +65,7 @@ public class UserRepository {
         try {
             User user = userDAO.findForVerifyRegister(UUID);
             if (user == null) {
-                throw new RuntimeException("User không tồn tại");
+                throw new RuntimeException("Tài khoản không tồn tại");
             }
             user.setIsDeleted(false);
             return userDAO.update(user) > 0;

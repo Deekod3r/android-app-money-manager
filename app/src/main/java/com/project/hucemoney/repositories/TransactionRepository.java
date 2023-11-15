@@ -33,13 +33,14 @@ public class TransactionRepository {
         this.transactionGoalDAO = appDatabase.transactionGoalDAO();
     }
 
+    @androidx.room.Transaction
     public Transaction create(TransactionAddRequest transactionAddRequest) {
         try {
             Account account = accountRepository.findByUUID(transactionAddRequest.getAccount());
-            if(account == null) {
+            if (account == null) {
                 throw new RuntimeException("Tài khoản không tồn tại");
             }
-            if(categoryRepository.findByUUID(transactionAddRequest.getCategory()) == null) {
+            if (categoryRepository.getByUUID(transactionAddRequest.getCategory()) == null) {
                 throw new RuntimeException("Danh mục không tồn tại");
             }
             Transaction transaction = new Transaction();
@@ -52,20 +53,23 @@ public class TransactionRepository {
             transaction.setDate(transactionAddRequest.getDate());
             transaction.setType(transactionAddRequest.getType());
             transaction.setNote(transactionAddRequest.getNote());
-            long rowID = transactionDAO.save(transaction);
-            if (rowID <= 0) {
-                throw new RuntimeException("Thêm giao dịch thất bại");
-            }
-            if(transactionAddRequest.getType()) {
+            if (transactionAddRequest.getType()) {
                 account.setAmount(account.getAmount() + transactionAddRequest.getAmount());
             } else {
                 account.setAmount(account.getAmount() - transactionAddRequest.getAmount());
+                Budget budget = budgetRepository.getCurrentBudgetForCategory(transactionAddRequest.getCategory());
+                if (budget != null) {
+                    if (transaction.getDate().isAfter(budget.getStartDate()) && transaction.getDate().isBefore(budget.getEndDate())) {
+                        transaction.setBudget(budget.getUUID());
+                        budget.setCurrentBalance(budget.getCurrentBalance() + transactionAddRequest.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
+                    }
+                }
             }
             accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
-            Budget budget = budgetRepository.getCurrentBudgetForCategory(transactionAddRequest.getCategory());
-            if (budget != null) {
-                budget.setCurrentBalance(budget.getCurrentBalance() + transactionAddRequest.getAmount());
-                budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
+            long rowID = transactionDAO.save(transaction);
+            if (rowID <= 0) {
+                throw new RuntimeException("Thêm giao dịch thất bại");
             }
             return transaction;
         } catch (Exception e) {
@@ -73,7 +77,7 @@ public class TransactionRepository {
         }
     }
 
-    public Transaction findByUUID(String uuid) {
+    public Transaction getByUUID(String uuid) {
         try {
             return transactionDAO.findByUuid(uuid);
         } catch (Exception e) {
@@ -89,12 +93,28 @@ public class TransactionRepository {
         }
     }
 
+    @androidx.room.Transaction
     public boolean delete(String uuid) {
         try {
             if (!transactionDAO.isExists(uuid)) {
                 throw new RuntimeException("Giao dịch không tồn tại");
             }
             Transaction transaction = transactionDAO.findByUuid(uuid);
+            Account account = accountRepository.findByUUID(transaction.getAccount());
+            if (account == null) {
+                throw new RuntimeException("Tài khoản không tồn tại");
+            }
+            if (transaction.getType()) {
+                account.setAmount(account.getAmount() - transaction.getAmount());
+            } else {
+                account.setAmount(account.getAmount() + transaction.getAmount());
+            }
+            accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
+            Budget budget = budgetRepository.getByUUID(transaction.getBudget());
+            if (budget != null) {
+                budget.setCurrentBalance(budget.getCurrentBalance() - transaction.getAmount());
+                budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
+            }
             return transactionDAO.delete(transaction) > 0;
         } catch (Exception e) {
             throw e;
@@ -109,11 +129,46 @@ public class TransactionRepository {
         }
     }
 
+    @androidx.room.Transaction
     public Transaction update(TransactionEditRequest transactionEditRequest) {
         try {
             Transaction transaction = transactionDAO.findByUuid(transactionEditRequest.getUUID());
             if (transaction == null) {
                 throw new RuntimeException("Giao dịch không tồn tại");
+            }
+            transaction.setName(transactionEditRequest.getName());
+            transaction.setAmount(transactionEditRequest.getAmount());
+            transaction.setCategory(transactionEditRequest.getCategory());
+            transaction.setAccount(transactionEditRequest.getAccount());
+            transaction.setDate(transactionEditRequest.getDate());
+            transaction.setNote(transactionEditRequest.getNote());
+            if (!transaction.getAccount().equals(transactionEditRequest.getAccount())) {
+                Account account = accountRepository.findByUUID(transaction.getAccount());
+                if (account == null) {
+                    throw new RuntimeException("Tài khoản không tồn tại");
+                }
+                if (transactionEditRequest.getType()) {
+                    account.setAmount(account.getAmount() - transaction.getAmount());
+                } else {
+                    account.setAmount(account.getAmount() + transaction.getAmount());
+                }
+                accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
+            }
+            if (!transaction.getType()) {
+                if (!transaction.getCategory().equals(transactionEditRequest.getCategory()) || !transaction.getDate().isEqual(transactionEditRequest.getDate())) {
+                    Budget oldBudget = budgetRepository.getByUUID(transaction.getBudget());
+                    if (oldBudget != null) {
+                        oldBudget.setCurrentBalance(oldBudget.getCurrentBalance() - transaction.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(oldBudget.getUUID(), oldBudget.getName(), oldBudget.getStartDate(), oldBudget.getEndDate(), oldBudget.getInitialLimit(), oldBudget.getCurrentBalance(), oldBudget.getCategory(), oldBudget.getNote()));
+                        transaction.setBudget(null);
+                    }
+                    Budget newBudget = budgetRepository.getCurrentBudgetForCategory(transactionEditRequest.getCategory());
+                    if (newBudget != null) {
+                        newBudget.setCurrentBalance(newBudget.getCurrentBalance() + transactionEditRequest.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(newBudget.getUUID(), newBudget.getName(), newBudget.getStartDate(), newBudget.getEndDate(), newBudget.getInitialLimit(), newBudget.getCurrentBalance(), newBudget.getCategory(), newBudget.getNote()));
+                        transaction.setBudget(newBudget.getUUID());
+                    }
+                }
             }
             long rowID = transactionDAO.update(transaction);
             if (rowID <= 0) {

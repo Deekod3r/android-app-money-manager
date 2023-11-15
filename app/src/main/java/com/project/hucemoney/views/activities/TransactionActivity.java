@@ -72,9 +72,17 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
                                 Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+                            switch (data.getStringExtra("action")) {
+                                case Constants.ACTION_EDIT:
+                                    transactionViewModel.loadTransactions();
+                                    break;
+                                case Constants.ACTION_DELETE:
+                                    transactionViewModel.loadTransactions();
+                                    break;
+                            }
                         }
                     } catch (Exception e) {
-                        Log.e("TransactionActivity", e.getMessage());
+                        Log.e("TransactionActivity", "mLauncher: " + e.getMessage());
                     }
                 }
         );

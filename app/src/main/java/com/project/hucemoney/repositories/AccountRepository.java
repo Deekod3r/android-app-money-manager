@@ -3,6 +3,7 @@ package com.project.hucemoney.repositories;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.AccountDAO;
 import com.project.hucemoney.database.AppDatabase;
@@ -21,6 +22,7 @@ public class AccountRepository {
         this.accountDAO = appDatabase.accountDAO();
     }
 
+    @Transaction
     public Account create(AccountAddRequest accountAddRequest) {
         try {
             Account account = new Account();
@@ -57,6 +59,7 @@ public class AccountRepository {
         }
     }
 
+    @Transaction
     public boolean delete(String uuid) {
         try {
             if (!accountDAO.isExists(uuid)) {
@@ -77,6 +80,7 @@ public class AccountRepository {
         }
     }
 
+    @Transaction
     public Account update(AccountEditRequest accountEditRequest) {
         try {
             Account account = accountDAO.findByUuid(accountEditRequest.getUUID());

@@ -1,6 +1,7 @@
 package com.project.hucemoney.repositories;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.BudgetDAO;
 import com.project.hucemoney.database.AppDatabase;
@@ -21,10 +22,11 @@ public class BudgetRepository {
         this.budgetDAO = appDatabase.budgetDAO();
     }
 
+    @Transaction
     public Budget create(BudgetAddRequest budgetAddRequest) {
         try {
             Budget check = budgetDAO.findCurrentBudgetForCategory(budgetAddRequest.getCategory());
-            if (check != null && budgetAddRequest.getEndDate().isAfter(check.getStartDate())) {
+            if (check != null && budgetAddRequest.getEndDate().isAfter(check.getStartDate()) && budgetAddRequest.getEndDate().isBefore(check.getEndDate())) {
                 throw new RuntimeException("Hạn mức cho danh mục này đang tồn tại trong thời hạn");
             }
             Budget budget = new Budget();
@@ -46,7 +48,7 @@ public class BudgetRepository {
         }
     }
 
-    public Budget findByUUID(String uuid) {
+    public Budget getByUUID(String uuid) {
         try {
             return budgetDAO.findByUuid(uuid);
         } catch (Exception e) {
@@ -62,6 +64,7 @@ public class BudgetRepository {
         }
     }
 
+    @Transaction
     public boolean delete(String uuid) {
         try {
             if (!budgetDAO.isExists(uuid)) {
@@ -82,6 +85,7 @@ public class BudgetRepository {
         }
     }
 
+    @Transaction
     public Budget update(BudgetEditRequest budgetEditRequest) {
         try {
             Budget budget = budgetDAO.findByUuid(budgetEditRequest.getUUID());

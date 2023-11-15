@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.GoalDAO;
 import com.project.hucemoney.database.AppDatabase;
@@ -23,6 +24,7 @@ public class GoalRepository {
         this.goalDAO = appDatabase.goalDAO();
     }
 
+    @Transaction
     public Goal create(GoalAddRequest goalAddRequest) {
         try {
             Goal goal = new Goal();
@@ -45,7 +47,7 @@ public class GoalRepository {
         }
     }
 
-    public Goal findByUUID(String uuid) {
+    public Goal getByUUID(String uuid) {
         try {
             return goalDAO.findByUuid(uuid);
         } catch (Exception e) {
@@ -61,6 +63,7 @@ public class GoalRepository {
         }
     }
 
+    @Transaction
     public boolean delete(String uuid) {
         try {
             Goal goal = goalDAO.findByUuid(uuid);
@@ -81,6 +84,7 @@ public class GoalRepository {
         }
     }
 
+    @Transaction
     public Goal update(GoalEditRequest goalEditRequest) {
         try {
             Goal goal = goalDAO.findByUuid(goalEditRequest.getUUID());

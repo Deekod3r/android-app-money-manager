@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
+import com.project.hucemoney.common.ResponseCode;
+import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.ActivityEditTransactionBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Category;
@@ -24,6 +27,7 @@ import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class EditTransactionActivity extends AppCompatActivity {
 
@@ -157,6 +161,44 @@ public class EditTransactionActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+
+        binding.btnSave.setOnClickListener(v -> {
+            transactionViewModel.editTransaction();
+            transactionViewModel.getResultEditTransaction().observe(this, response -> {
+                if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                    FunctionUtils.hideKeyboard(this,v);
+                    Intent data = new Intent();
+                    data.putExtra("action", Constants.ACTION_EDIT);
+                    setResult(Activity.RESULT_OK, data);
+                    Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
+                }
+                transactionViewModel.getResultEditTransaction().removeObservers(this);
+            });
+        });
+
+        binding.btnDelete.setOnClickListener(v -> {
+            FunctionUtils.showDialogConfirm(this, "", "Bạn có chắc chắn muốn xóa giao dịch này không?", DialogType.WARNING,
+                    (dialog, which) -> {
+                        transactionViewModel.deleteTransaction();
+                        transactionViewModel.getResultDeleteTransaction().observe(this, response -> {
+                            if (response.getStatus().equals(ResponseCode.SUCCESS)) {
+                                FunctionUtils.hideKeyboard(this,v);
+                                Intent data = new Intent();
+                                data.putExtra("action", Constants.ACTION_DELETE);
+                                setResult(Activity.RESULT_OK, data);
+                                Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
+                            }
+                            transactionViewModel.getResultDeleteTransaction().removeObservers(this);
+                        });
+                    }, (dialog, which) -> {
+                    });
         });
     }
 }

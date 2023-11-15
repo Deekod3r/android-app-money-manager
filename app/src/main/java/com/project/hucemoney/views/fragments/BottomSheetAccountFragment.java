@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
                         }
                         dismiss();
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                        Log.e("BottomSheetAccount", "mLauncher: " + e.getMessage());
                     }
                 }
         );
