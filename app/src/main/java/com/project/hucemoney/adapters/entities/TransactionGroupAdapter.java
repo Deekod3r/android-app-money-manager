@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.hucemoney.R;
 import com.project.hucemoney.entities.Transaction;
 import com.project.hucemoney.entities.pojo.TransactionGroup;
+import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 
 import java.text.NumberFormat;
 import java.time.format.TextStyle;
@@ -23,11 +24,12 @@ public class TransactionGroupAdapter extends RecyclerView.Adapter<TransactionGro
 
     private final List<TransactionGroup> transactionGroups;
     private Context context;
-    private TransactionGroupAdapter.OnItemClickListener onItemClickListener;
+    private OnTransactionItemClickListener onTransactionItemClickListener;
 
-    public TransactionGroupAdapter(Context context, List<TransactionGroup> transactionGroups) {
+    public TransactionGroupAdapter(Context context, List<TransactionGroup> transactionGroups, OnTransactionItemClickListener onTransactionItemClickListener) {
         this.transactionGroups = transactionGroups;
         this.context = context;
+        this.onTransactionItemClickListener = onTransactionItemClickListener;
     }
 
     @NonNull
@@ -43,6 +45,11 @@ public class TransactionGroupAdapter extends RecyclerView.Adapter<TransactionGro
         TransactionAdapter transactionAdapter = new TransactionAdapter(context, transactionGroup.transactions);
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.rvTransaction.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        transactionAdapter.setOnItemClickListener(transaction -> {
+            if (onTransactionItemClickListener != null) {
+                onTransactionItemClickListener.onTransactionItemClick(transaction);
+            }
+        });
         holder.rvTransaction.setAdapter(transactionAdapter);
         holder.dayOfWeek.setText(transactionGroup.date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("vi", "VN")));
         holder.dayOfMonth.setText(String.valueOf(transactionGroup.date.getDayOfMonth()));
@@ -55,7 +62,6 @@ public class TransactionGroupAdapter extends RecyclerView.Adapter<TransactionGro
                 .filter(transaction -> !transaction.transaction.getType())
                 .mapToLong(transaction -> transaction.transaction.getAmount())
                 .sum();
-
         holder.sumIncome.setText(String.format("%s %s", format.format(sumIncome), context.getString(R.string.vi_currency)));
         holder.sumExpense.setText(String.format("%s %s", format.format(sumExpense), context.getString(R.string.vi_currency)));
 
@@ -91,12 +97,8 @@ public class TransactionGroupAdapter extends RecyclerView.Adapter<TransactionGro
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(TransactionGroup transactionGroup, int position);
-    }
-
-    public void setOnItemClickListener(TransactionGroupAdapter.OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public interface OnTransactionItemClickListener {
+        void onTransactionItemClick(TransactionWithCategoryAndAccount transaction);
     }
 
 }

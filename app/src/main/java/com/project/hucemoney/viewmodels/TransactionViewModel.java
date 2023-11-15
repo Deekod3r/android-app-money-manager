@@ -96,6 +96,10 @@ public class TransactionViewModel extends AndroidViewModel {
         return resultAddTransaction;
     }
 
+    public LiveData<Response<Transaction>> getResultEditTransaction() {
+        return resultEditTransaction;
+    }
+
     public LiveData<List<TransactionWithCategoryAndAccount>> getTransactions() {
         return transactionsLiveData;
     }
@@ -103,4 +107,9 @@ public class TransactionViewModel extends AndroidViewModel {
     public TransactionAddRequest getTransactionAddRequest() {
         return transactionAddRequest;
     }
+
+    public TransactionEditRequest getTransactionEditRequest() {
+        return transactionEditRequest;
+    }
+
 }

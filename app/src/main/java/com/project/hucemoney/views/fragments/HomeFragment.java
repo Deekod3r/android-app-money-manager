@@ -14,12 +14,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.enums.DialogType;
 import com.project.hucemoney.databinding.FragmentHomeBinding;
+import com.project.hucemoney.entities.Exrate;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.utils.SessionManager;
 import com.project.hucemoney.viewmodels.AccountViewModel;
+import com.project.hucemoney.viewmodels.ExrateViewModel;
 import com.project.hucemoney.views.activities.AppActivity;
 import com.project.hucemoney.views.activities.BudgetActivity;
 import com.project.hucemoney.views.activities.CategoryActivity;
+import com.project.hucemoney.views.activities.ExrateActivity;
 import com.project.hucemoney.views.activities.GoalActivity;
 import com.project.hucemoney.views.activities.LauncherActivity;
 import com.project.hucemoney.views.activities.TransactionActivity;
@@ -126,6 +129,11 @@ public class HomeFragment extends Fragment {
 
         binding.btnCategory.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), CategoryActivity.class);
+            startActivity(intent);
+        });
+
+        binding.btnExchangeRate.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), ExrateActivity.class);
             startActivity(intent);
         });
 

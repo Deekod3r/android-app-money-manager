@@ -26,20 +26,6 @@
             android:background="@color/grey" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnTranfer"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/custom_button_underline_bg"
-            android:drawableStart="@drawable/baseline_sync_alt_24"
-            android:drawableEnd="@drawable/baseline_next_grey_24"
-            android:drawablePadding="10dp"
-            android:gravity="start|center_vertical"
-            android:paddingHorizontal="10dp"
-            android:text="Chuyển khoản"
-            android:textAllCaps="false"
-            android:textColor="@color/black" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnTransaction"
             android:layout_width="match_parent"
             android:layout_height="55dp"

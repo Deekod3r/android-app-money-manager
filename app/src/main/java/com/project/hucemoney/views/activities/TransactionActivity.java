@@ -1,17 +1,25 @@
 package com.project.hucemoney.views.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.TransactionGroupAdapter;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.databinding.ActivityTransactionBinding;
+import com.project.hucemoney.entities.Goal;
+import com.project.hucemoney.entities.Transaction;
 import com.project.hucemoney.entities.pojo.TransactionGroup;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
@@ -24,12 +32,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TransactionActivity extends AppCompatActivity {
+public class TransactionActivity extends AppCompatActivity implements TransactionGroupAdapter.OnTransactionItemClickListener {
 
     private ActivityTransactionBinding binding;
     private List<TransactionGroup> transactionGroups = new ArrayList<>();
     private TransactionViewModel transactionViewModel;
     private TransactionGroupAdapter transactionGroupAdapter;
+    private ActivityResultLauncher<Intent> mLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +58,26 @@ public class TransactionActivity extends AppCompatActivity {
 
     private void init() {
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
-        transactionGroupAdapter = new TransactionGroupAdapter(this, transactionGroups);
+        transactionGroupAdapter = new TransactionGroupAdapter(this, transactionGroups, this);
         transactionViewModel.loadTransactions();
         binding.setLifecycleOwner(this);
         binding.setTransactionViewModel(transactionViewModel);
+        mLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) {
+                                Toast.makeText(this, "Có lỗi xảy ra. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("TransactionActivity", e.getMessage());
+                    }
+                }
+        );
     }
 
     private void initRecyclerView() {
@@ -101,5 +126,14 @@ public class TransactionActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onTransactionItemClick(TransactionWithCategoryAndAccount transactionWithCategoryAndAccount) {
+        Intent intent = new Intent(this, EditTransactionActivity.class);
+        intent.putExtra("transaction", transactionWithCategoryAndAccount.transaction);
+        intent.putExtra("category", transactionWithCategoryAndAccount.category);
+        intent.putExtra("account", transactionWithCategoryAndAccount.account);
+        mLauncher.launch(intent);
     }
 }

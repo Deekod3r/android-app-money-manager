@@ -9,18 +9,13 @@
     android:paddingStart="10dp">
 
 
-    <View
-        android:layout_width="30dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center"
-        android:background="@drawable/baseline_next_grey_24" />
-
     <ImageView
+        android:id="@+id/ivTransactionType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/non"
-        android:src="@drawable/baseline_currency_exchange_blue_24" />
+        android:src="@drawable/baseline_up_red_24" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -87,22 +82,14 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/grey"/>
+
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imgMoreActionAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="10dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:contentDescription="more"
-        android:focusable="true"
-        android:src="@drawable/baseline_more_vert_grey_24"
-        android:visibility="gone"
-        tools:ignore="TouchTargetSizeCheck" />
-
 </LinearLayout>
 
 
