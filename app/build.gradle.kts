@@ -69,4 +69,5 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
     implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
