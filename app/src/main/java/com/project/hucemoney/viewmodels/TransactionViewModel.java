@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Transaction;
+import com.project.hucemoney.entities.pojo.TimeSummary;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.TransactionAddRequest;
@@ -18,6 +19,7 @@ import com.project.hucemoney.models.requests.TransactionEditRequest;
 import com.project.hucemoney.repositories.TransactionRepository;
 import com.project.hucemoney.utils.SessionManager;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TransactionViewModel extends AndroidViewModel {
@@ -25,10 +27,16 @@ public class TransactionViewModel extends AndroidViewModel {
     private MutableLiveData<Response<Transaction>> resultAddTransaction = new MutableLiveData<>();
     private MutableLiveData<Response<Transaction>> resultEditTransaction = new MutableLiveData<>();
     private MutableLiveData<Response<Boolean>> resultDeleteTransaction = new MutableLiveData<>();
+    private MutableLiveData<Response<TimeSummary>> summaryDate = new MutableLiveData<>();
+    private MutableLiveData<Response<TimeSummary>> summaryMonth = new MutableLiveData<>();
+    private MutableLiveData<Response<TimeSummary>> summaryYear = new MutableLiveData<>();
+    private MutableLiveData<List<TimeSummary>> summaryMonths = new MutableLiveData<>();
+    private MutableLiveData<List<TimeSummary>> summaryYears = new MutableLiveData<>();
     private TransactionAddRequest transactionAddRequest = new TransactionAddRequest();
     private TransactionEditRequest transactionEditRequest = new TransactionEditRequest();
     private TransactionRepository transactionRepository;
     private SessionManager sessionManager;
+    private LocalDate date;
 
     public TransactionViewModel(Application application) {
         super(application);
@@ -150,6 +158,75 @@ public class TransactionViewModel extends AndroidViewModel {
         }
     }
 
+    public void summaryDate() {
+        Response<TimeSummary> response = new Response<>();
+        try {
+            TimeSummary timeSummary = transactionRepository.getDateSummary(sessionManager.getUUID(),date);
+            if (timeSummary != null && timeSummary.getTime() != null) {
+                response.setStatus(ResponseCode.SUCCESS);
+                response.setMessage("Thống kê thành công");
+            }
+            response.setData(timeSummary);
+            summaryDate.setValue(response);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "summaryDate: " + e.getMessage());
+            response.setMessage("Except: Thống kê thất bại");
+            summaryDate.setValue(response);
+        }
+    }
+
+    public void summaryMonth() {
+        Response<TimeSummary> response = new Response<>();
+        try {
+            TimeSummary timeSummary = transactionRepository.getMonthSummary(sessionManager.getUUID(),date);
+            if (timeSummary != null && timeSummary.getTime() != null) {
+                response.setStatus(ResponseCode.SUCCESS);
+                response.setMessage("Thống kê thành công");
+            }
+            response.setData(timeSummary);
+            summaryMonth.setValue(response);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "summaryMonth: " + e.getMessage());
+            response.setMessage("Except: Thống kê thất bại");
+            summaryMonth.setValue(response);
+        }
+    }
+
+    public void summaryYear() {
+        Response<TimeSummary> response = new Response<>();
+        try {
+            TimeSummary timeSummary = transactionRepository.getYearSummary(sessionManager.getUUID(),date);
+            if (timeSummary != null && timeSummary.getTime() != null) {
+                response.setStatus(ResponseCode.SUCCESS);
+                response.setMessage("Thống kê thành công");
+            }
+            response.setData(timeSummary);
+            summaryYear.setValue(response);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "summaryYear: " + e.getMessage());
+            response.setMessage("Except: Thống kê thất bại");
+            summaryYear.setValue(response);
+        }
+    }
+
+    public void summaryMonths() {
+        try {
+            List<TimeSummary> timeSummaries = transactionRepository.getMonthsSummary(sessionManager.getUUID(), date);
+            summaryMonths.setValue(timeSummaries);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "setSummaryMonths: " + e.getMessage());
+        }
+    }
+
+    public void summaryYears() {
+        try {
+            List<TimeSummary> timeSummaries = transactionRepository.getYearsSummary(sessionManager.getUUID());
+            summaryYears.setValue(timeSummaries);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "setSummaryYears: " + e.getMessage());
+        }
+    }
+
     public LiveData<Response<Transaction>> getResultAddTransaction() {
         return resultAddTransaction;
     }
@@ -166,6 +243,26 @@ public class TransactionViewModel extends AndroidViewModel {
         return transactionsLiveData;
     }
 
+    public LiveData<Response<TimeSummary>> getSummaryDate() {
+        return summaryDate;
+    }
+
+    public LiveData<Response<TimeSummary>> getSummaryMonth() {
+        return summaryMonth;
+    }
+
+    public LiveData<Response<TimeSummary>> getSummaryYear() {
+        return summaryYear;
+    }
+
+    public LiveData<List<TimeSummary>> getSummaryMonths() {
+        return summaryMonths;
+    }
+
+    public LiveData<List<TimeSummary>> getSummaryYears() {
+        return summaryYears;
+    }
+
     public TransactionAddRequest getTransactionAddRequest() {
         return transactionAddRequest;
     }
@@ -173,5 +270,10 @@ public class TransactionViewModel extends AndroidViewModel {
     public TransactionEditRequest getTransactionEditRequest() {
         return transactionEditRequest;
     }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
 
 }

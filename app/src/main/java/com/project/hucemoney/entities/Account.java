@@ -15,8 +15,6 @@ import com.project.hucemoney.database.FieldData;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

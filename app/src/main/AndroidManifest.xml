@@ -20,6 +20,24 @@
         android:theme="@style/Theme.HUCEMoney"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".views.activities.DebtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.AnalystFinanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.IncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.ExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.TransactionStatisticActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.CurrentFinanceActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.EditTransactionActivity"
             android:exported="false" />
         <activity

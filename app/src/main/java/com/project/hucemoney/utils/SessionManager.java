@@ -69,8 +69,21 @@ public class SessionManager {
         return pref.getString(KEY_SYNC_DATE, null);
     }
 
+    public void setFirstLogin(String userUUID, boolean isFirstLogin) {
+        editor.putBoolean(userUUID, isFirstLogin);
+        editor.commit();
+    }
+
+    public boolean isFirstLogin(String userUUID) {
+        return pref.getBoolean(userUUID, true);
+    }
+
     public void logoutUser() {
-        editor.clear();
+        editor.remove(KEY_UUID);
+        editor.remove(KEY_USERNAME);
+        editor.remove(KEY_EMAIL);
+        editor.remove(KEY_LOGGED_IN);
+        editor.remove(KEY_SYNC_DATE);
         editor.commit();
     }
 }

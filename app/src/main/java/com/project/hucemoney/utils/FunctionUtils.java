@@ -14,11 +14,14 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -202,6 +205,33 @@ public class FunctionUtils {
         positiveButton.setTextColor(ContextCompat.getColor(context, R.color.blue));
     }
 
+    public static void showDialogYear(Context context, EditText editText) {
+        int currentYear = editText.getText().toString().isEmpty() ? LocalDate.now().getYear() : Integer.parseInt(editText.getText().toString());
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Chọn năm");
+        final NumberPicker numberPicker = new NumberPicker(context);
+        numberPicker.setMaxValue(LocalDate.now().getYear());
+        numberPicker.setMinValue(LocalDate.now().getYear() - 10);
+        numberPicker.setValue(currentYear);
+        numberPicker.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.blue)));
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(numberPicker);
+        builder.setView(layout);
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            int selectedYearValue = numberPicker.getValue();
+            editText.setText(String.valueOf(selectedYearValue));
+        });
+        builder.setNegativeButton("Huỷ", (dialog, which) -> dialog.dismiss());
+        AlertDialog alertDialog = builder.create();
+        Objects.requireNonNull(alertDialog.getWindow()).setGravity(Gravity.CENTER);
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context, R.color.blue)));
+        Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+        Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+    }
 
 
     public static String randomCodeVerify() {

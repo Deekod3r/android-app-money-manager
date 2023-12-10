@@ -8,12 +8,14 @@ import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Transaction;
+import com.project.hucemoney.entities.pojo.TimeSummary;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.models.requests.AccountEditRequest;
 import com.project.hucemoney.models.requests.BudgetEditRequest;
 import com.project.hucemoney.models.requests.TransactionAddRequest;
 import com.project.hucemoney.models.requests.TransactionEditRequest;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TransactionRepository {
@@ -175,6 +177,52 @@ public class TransactionRepository {
                 throw new RuntimeException("Cập nhật giao dịch thất bại");
             }
             return transaction;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @androidx.room.Transaction
+    public TimeSummary getDateSummary(String user, LocalDate date) {
+        try {
+            return transactionDAO.findDateSummary(user, date);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @androidx.room.Transaction
+    public TimeSummary getMonthSummary(String user, LocalDate date) {
+        try {
+            return transactionDAO.findMonthSummary(user, date);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @androidx.room.Transaction
+    public TimeSummary getYearSummary(String user, LocalDate date) {
+        try {
+            return transactionDAO.findYearSummary(user, date);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @androidx.room.Transaction
+    public List<TimeSummary> getMonthsSummary(String user, LocalDate date) {
+        try {
+            List<TimeSummary> timeSummaries = transactionDAO.findMonthsSummary(user, date);
+            return transactionDAO.findMonthsSummary(user, date);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @androidx.room.Transaction
+    public List<TimeSummary> getYearsSummary(String user) {
+        try {
+            return transactionDAO.findYearsSummary(user);
         } catch (Exception e) {
             throw e;
         }

@@ -13,8 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.enums.DialogType;
+import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.databinding.FragmentHomeBinding;
 import com.project.hucemoney.entities.Exrate;
+import com.project.hucemoney.repositories.AccountRepository;
+import com.project.hucemoney.repositories.CategoryRepository;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.utils.SessionManager;
 import com.project.hucemoney.viewmodels.AccountViewModel;
@@ -70,6 +73,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void init() {
+        SessionManager sessionManager = new SessionManager(requireContext());
+        boolean isFirstLogin = sessionManager.isFirstLogin(sessionManager.getUUID());
+        if (isFirstLogin) {
+            sessionManager.setFirstLogin(sessionManager.getUUID(), false);
+            CategoryRepository categoryRepository = new CategoryRepository(AppDatabase.getDatabase(requireContext()));
+            categoryRepository.insertDefaultCategory(sessionManager.getUUID());
+            AccountRepository accountRepository = new AccountRepository(AppDatabase.getDatabase(requireContext()));
+            accountRepository.insertDefaultAccount(sessionManager.getUUID());
+        }
         accountViewModel = new ViewModelProvider(requireActivity()).get(AccountViewModel.class);
         accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
@@ -137,18 +149,6 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        binding.btnDeleteDatabase.setOnClickListener(v -> {
-            boolean isDeleted = getContext().deleteDatabase("huce.money");
-            SessionManager sessionManager = new SessionManager(getContext());
-            sessionManager.logoutUser();
-            if (isDeleted) {
-                Intent intent = new Intent(getContext(), LauncherActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            } else {
-                FunctionUtils.showDialogNotify(getContext(), "", "Xóa CSDL thất bại", DialogType.ERROR);
-            }
-        });
     }
 
     private void fillData() {

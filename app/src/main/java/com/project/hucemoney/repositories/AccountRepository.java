@@ -23,6 +23,41 @@ public class AccountRepository {
     }
 
     @Transaction
+    public void insertDefaultAccount(String user) {
+        try {
+            Account account = new Account();
+            account.setUUID(java.util.UUID.randomUUID().toString());
+            account.setId("account" + System.currentTimeMillis());
+            account.setName("Tiền mặt");
+            account.setAmount(0L);
+            account.setNote("Tài khoản mặc định");
+            account.setUser(user);
+            accountDAO.save(account);
+
+            account = new Account();
+            account.setUUID(java.util.UUID.randomUUID().toString());
+            account.setId("account" + System.currentTimeMillis());
+            account.setName("Thẻ tín dụng");
+            account.setAmount(0L);
+            account.setNote("Tài khoản mặc định");
+            account.setUser(user);
+            accountDAO.save(account);
+
+            account = new Account();
+            account.setUUID(java.util.UUID.randomUUID().toString());
+            account.setId("account" + System.currentTimeMillis());
+            account.setName("Ngân hàng");
+            account.setAmount(0L);
+            account.setNote("Tài khoản mặc định");
+            account.setUser(user);
+            accountDAO.save(account);
+
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Transaction
     public Account create(AccountAddRequest accountAddRequest) {
         try {
             Account account = new Account();

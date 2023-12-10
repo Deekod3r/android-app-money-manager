@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="transactionViewModel"
+            type="com.project.hucemoney.viewmodels.TransactionViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.fragments.MonthTransactionFragment">
+
+        <EditText
+            android:id="@+id/edtYear"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:paddingHorizontal="16dp"
+            android:layout_height="55dp"
+            android:ems="10"
+            android:cursorVisible="false"
+            android:clickable="true"
+            android:focusable="false"
+            android:textColor="@color/black"
+            android:drawableStart="@drawable/baseline_date_blue_24"
+            android:text="2023"
+            android:drawablePadding="5dp"
+            android:textColorHint="@color/grey"
+            android:hint="Thời gian"
+            android:textSize="16sp"
+            android:autofillHints=""
+            android:inputType="text" />
+
+        <View
+            android:id="@+id/horizontalLine1"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="60dp"
+            android:background="@color/grey" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartMonthTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="420dp"
+            android:layout_marginTop="70dp" />
+
+
+        <View
+            android:id="@+id/horizontalLine2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="500dp"
+            android:background="@color/grey" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMonthTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="510dp"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_time_transaction" />
+
+    </FrameLayout>
+</layout>

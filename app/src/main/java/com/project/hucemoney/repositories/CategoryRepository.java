@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.CategoryDAO;
+import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.models.requests.CategoryAddRequest;
@@ -21,6 +22,64 @@ public class CategoryRepository {
     public CategoryRepository(AppDatabase appDatabase) {
         this.appDatabase = appDatabase;
         this.categoryDAO = appDatabase.categoryDAO();
+    }
+
+    @Transaction
+    public void insertDefaultCategory(String user) {
+        try {
+            Category category = new Category();
+            category.setUUID(java.util.UUID.randomUUID().toString());
+            category.setId("category" + System.currentTimeMillis());
+            category.setName("Ăn uống");
+            category.setNote("Danh mục mặc định");
+            category.setUser(user);
+            category.setParent("0");
+            category.setType(Constants.TYPE_EXPENSE);
+            categoryDAO.save(category);
+
+            category = new Category();
+            category.setUUID(java.util.UUID.randomUUID().toString());
+            category.setId("category" + System.currentTimeMillis());
+            category.setName("Di chuyển");
+            category.setNote("Danh mục mặc định");
+            category.setUser(user);
+            category.setParent("0");
+            category.setType(Constants.TYPE_EXPENSE);
+            categoryDAO.save(category);
+
+            category = new Category();
+            category.setUUID(java.util.UUID.randomUUID().toString());
+            category.setId("category" + System.currentTimeMillis());
+            category.setName("Mua sắm");
+            category.setNote("Danh mục mặc định");
+            category.setUser(user);
+            category.setParent("0");
+            category.setType(Constants.TYPE_EXPENSE);
+            categoryDAO.save(category);
+
+            category = new Category();
+            category.setUUID(java.util.UUID.randomUUID().toString());
+            category.setId("category" + System.currentTimeMillis());
+            category.setName("Giải trí");
+            category.setNote("Danh mục mặc định");
+            category.setUser(user);
+            category.setParent("0");
+            category.setType(Constants.TYPE_EXPENSE);
+            categoryDAO.save(category);
+
+            category = new Category();
+            category.setUUID(java.util.UUID.randomUUID().toString());
+            category.setId("category" + System.currentTimeMillis());
+            category.setName("Tiền lương");
+            category.setNote("Danh mục mặc định");
+            category.setUser(user);
+            category.setParent("0");
+            category.setType(Constants.TYPE_INCOME);
+            categoryDAO.save(category);
+
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Transaction

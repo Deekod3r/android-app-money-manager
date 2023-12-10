@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.project.hucemoney.R;
 import com.project.hucemoney.adapters.entities.AccountAdapter;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.databinding.FragmentAccountBinding;
@@ -96,7 +97,7 @@ public class AccountFragment extends Fragment {
 
     private void init() {
         accountViewModel = new ViewModelProvider(requireActivity()).get(AccountViewModel.class);
-        accountAdapter = new AccountAdapter(getContext(), accounts, true);
+        accountAdapter = new AccountAdapter(getContext(), accounts, true, R.layout.item_account);
         accountViewModel.loadAccounts();
         binding.setAccountViewModel(accountViewModel);
         binding.setLifecycleOwner(this);

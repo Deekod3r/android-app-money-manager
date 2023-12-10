@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    kotlin("android") version "1.8.20"
 }
 
 android {
@@ -31,6 +32,7 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
 }
 
 dependencies {

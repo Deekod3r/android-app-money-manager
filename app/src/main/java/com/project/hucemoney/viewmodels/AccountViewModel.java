@@ -15,7 +15,6 @@ import com.project.hucemoney.R;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
-import com.project.hucemoney.entities.Category;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.AccountAddRequest;
 import com.project.hucemoney.models.requests.AccountEditRequest;
@@ -24,6 +23,8 @@ import com.project.hucemoney.utils.SessionManager;
 
 import java.text.NumberFormat;
 import java.util.List;
+
+import lombok.Getter;
 
 public class AccountViewModel extends AndroidViewModel {
     private MutableLiveData<List<Account>> accountsLiveData = new MutableLiveData<>();
@@ -35,7 +36,6 @@ public class AccountViewModel extends AndroidViewModel {
     private AccountEditRequest accountEditRequest = new AccountEditRequest();
     private AccountRepository accountRepository;
     private SessionManager sessionManager;
-    private String amountAsString;
 
     public AccountViewModel(@NonNull Application application) {
         super(application);

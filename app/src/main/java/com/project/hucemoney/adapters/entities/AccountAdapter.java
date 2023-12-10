@@ -28,22 +28,19 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
     private OnItemClickListener onItemClickListener;
     private boolean isMoreActive;
     private int positionSelected = -1;
+    private static int resource;
 
-    public AccountAdapter(Context context, List<Account> accounts, boolean isMoreActive) {
+    public AccountAdapter(Context context, List<Account> accounts, boolean isMoreActive, int resource) {
         this.accounts = accounts;
         this.context = context;
         this.isMoreActive = isMoreActive;
-    }
-
-    public AccountAdapter(List<Account> accounts, OnItemClickListener onItemClickListener) {
-        this.accounts = accounts;
-        this.onItemClickListener = onItemClickListener;
+        AccountAdapter.resource = resource;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_account, parent, false);
+        View view = LayoutInflater.from(context).inflate(resource, parent, false);
         return new ViewHolder(view);
     }
 
@@ -53,24 +50,26 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         holder.name.setText(account.getName());
         holder.amount.setText(String.format("%s %s", format.format(account.getAmount()), context.getString(R.string.vi_currency)));
-        if(isMoreActive) {
-            holder.more.setVisibility(View.VISIBLE);
-        }
-        if (positionSelected == position) {
-            holder.more.setVisibility(View.VISIBLE);
-            holder.more.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_check_circle_blue_24));
-        }
-        holder.more.setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(account, position);
+        if (resource == R.layout.item_account) {
+            if(isMoreActive) {
+                holder.more.setVisibility(View.VISIBLE);
             }
-        });
-        if (!isMoreActive) {
-            holder.itemView.setOnClickListener(v -> {
+            if (positionSelected == position) {
+                holder.more.setVisibility(View.VISIBLE);
+                holder.more.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_check_circle_blue_24));
+            }
+            holder.more.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(account, position);
                 }
             });
+            if (!isMoreActive) {
+                holder.itemView.setOnClickListener(v -> {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(account, position);
+                    }
+                });
+            }
         }
     }
 
@@ -102,7 +101,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
             super(itemView);
             name = itemView.findViewById(R.id.tvAccountName);
             amount = itemView.findViewById(R.id.tvAccountAmount);
-            more = itemView.findViewById(R.id.imgMoreActionAccount);
+            if (AccountAdapter.resource == R.layout.item_account) {
+                more = itemView.findViewById(R.id.imgMoreActionAccount);
+            }
         }
 
     }

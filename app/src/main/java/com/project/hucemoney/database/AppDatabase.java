@@ -24,11 +24,12 @@ import com.project.hucemoney.entities.User;
 import com.project.hucemoney.entities.crossref.TransactionGoal;
 import com.project.hucemoney.utils.AnnotationUtils;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Account.class, Goal.class, Category.class, Transaction.class, TransactionGoal.class, Budget.class},
-        version = 22 , exportSchema = false)
+        version = 23 , exportSchema = false)
 @TypeConverters(AnnotationUtils.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO userDAO();
@@ -43,7 +44,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public static final Executor databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {

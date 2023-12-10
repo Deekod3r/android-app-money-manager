@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="transactionViewModel"
+            type="com.project.hucemoney.viewmodels.TransactionViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.fragments.YearTransactionFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/non"
+                android:src="@drawable/baseline_date_blue_24" />
+
+            <TextView
+                android:id="@+id/tvYearToYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="x - x"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/horizontalLine1"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="60dp"
+            android:background="@color/grey" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChartYearTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="420dp"
+            android:layout_marginTop="70dp" />
+
+
+        <View
+            android:id="@+id/horizontalLine2"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="500dp"
+            android:background="@color/grey" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvYearTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="510dp"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_time_transaction" />
+
+    </FrameLayout>
+</layout>
