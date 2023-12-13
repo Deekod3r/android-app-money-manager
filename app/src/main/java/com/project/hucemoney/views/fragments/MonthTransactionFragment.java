@@ -1,5 +1,6 @@
 package com.project.hucemoney.views.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -18,12 +19,17 @@ import android.view.ViewGroup;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.project.hucemoney.adapters.custom.TimeTransactionAdapter;
 import com.project.hucemoney.databinding.FragmentMonthTransactionBinding;
 import com.project.hucemoney.entities.pojo.TimeSummary;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
+import com.project.hucemoney.views.activities.TimeStatisticActivity;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -118,6 +124,12 @@ public class MonthTransactionFragment extends Fragment {
             public void afterTextChanged(Editable s) {
             }
         });
+        timeTransactionAdapter.setOnItemClickListener(timeSummary -> {
+            Intent intent = new Intent(getContext(), TimeStatisticActivity.class);
+            intent.putExtra("time", timeSummary.getTime());
+            intent.putExtra("type", 2);
+            startActivity(intent);
+        });
     }
 
     private void observer() {
@@ -131,17 +143,14 @@ public class MonthTransactionFragment extends Fragment {
                 BarDataSet barDataSet = new BarDataSet(values, "");
                 barDataSet.setColors(Color.rgb(104, 241, 175), Color.rgb(164, 228, 251));
                 barDataSet.setStackLabels(new String[]{"Thu", "Chi"});
-                barDataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return "";
-                    }
-                });
+                barDataSet.setDrawValues(false);
                 BarData barData = new BarData(barDataSet);
+                barData.setBarWidth(0.4f);
                 binding.barChartMonthTransaction.getAxisRight().setDrawLabels(false);
                 binding.barChartMonthTransaction.getXAxis().setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getFormattedValue(float value) {
+                        int roundedValue = Math.round(value);
                         if (Math.ceil(value) == value) {
                             return String.valueOf((int) value);
                         } else {
@@ -149,8 +158,11 @@ public class MonthTransactionFragment extends Fragment {
                         }
                     }
                 });
+
+                binding.barChartMonthTransaction.getXAxis().setGranularityEnabled(false);
+                binding.barChartMonthTransaction.getXAxis().setGranularity(1f);
                 binding.barChartMonthTransaction.setData(barData);
-                binding.barChartMonthTransaction.getDescription().setText("(Đơn vị: Triệu đồng)");
+                binding.barChartMonthTransaction.getDescription().setText("(Đơn vị: đồng)");
                 binding.barChartMonthTransaction.getDescription().setYOffset(-10f);
                 binding.barChartMonthTransaction.setFitBars(true);
                 binding.barChartMonthTransaction.invalidate();

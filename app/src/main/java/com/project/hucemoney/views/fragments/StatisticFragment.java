@@ -65,23 +65,23 @@ public class StatisticFragment extends Fragment {
         });
 
         binding.btnExpense.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ExpenseActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), ExpenseActivity.class);
+//            startActivity(intent);
         });
 
         binding.btnIncome.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), IncomeActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), IncomeActivity.class);
+//            startActivity(intent);
         });
 
         binding.btnAnalystFinance.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AnalystFinanceActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), AnalystFinanceActivity.class);
+//            startActivity(intent);
         });
 
         binding.btnDebt.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), DebtActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), DebtActivity.class);
+//            startActivity(intent);
         });
     }
 }

@@ -1,5 +1,6 @@
 package com.project.hucemoney.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,9 +22,11 @@ import com.project.hucemoney.databinding.FragmentCurrentTransactionBinding;
 import com.project.hucemoney.entities.pojo.TimeSummary;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
+import com.project.hucemoney.views.activities.TimeStatisticActivity;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -75,6 +78,9 @@ public class CurrentTransactionFragment extends Fragment {
         binding.setTransactionViewModel(transactionViewModel);
         binding.setLifecycleOwner(this);
         binding.edtYear.setText(String.valueOf(LocalDate.now().getYear()));
+        binding.tvToday.setText(String.format("Hôm nay (%s)", LocalDate.now().toString()));
+        binding.tvThisMonth.setText(String.format("Tháng này (%s)", YearMonth.from(LocalDate.now()).toString()));
+        binding.tvThisYear.setText(String.format("Năm nay (%s)", LocalDate.now().getYear()));
         transactionViewModel.setDate(LocalDate.now());
         transactionViewModel.summaryDate();
         transactionViewModel.summaryMonth();
@@ -86,14 +92,32 @@ public class CurrentTransactionFragment extends Fragment {
     }
     
     private void controlAction() {
+        binding.sumThisMonth.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TimeStatisticActivity.class);
+            intent.putExtra("time", FunctionUtils.getTextInParentheses(binding.tvThisMonth.getText().toString()));
+            intent.putExtra("type", 2);
+            startActivity(intent);
+        });
 
+        binding.sumThisYear.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TimeStatisticActivity.class);
+            intent.putExtra("time", FunctionUtils.getTextInParentheses(binding.tvThisYear.getText().toString()));
+            intent.putExtra("type", 1);
+            startActivity(intent);
+        });
+
+        binding.sumToday.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TimeStatisticActivity.class);
+            intent.putExtra("time", FunctionUtils.getTextInParentheses(binding.tvToday.getText().toString()));
+            intent.putExtra("type", 3);
+            startActivity(intent);
+        });
     }
     
     private void observer() {
         transactionViewModel.getSummaryDate().observe(getViewLifecycleOwner(), response -> {
             if (response != null && Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
                 TimeSummary timeSummary = response.getData();
-                binding.tvToday.setText(String.format("Hôm nay (%s)", timeSummary.getTime()));
                 binding.tvSumIncomeToday.setText(String.format("%s %s", format.format(timeSummary.getIncome()), getContext().getString(R.string.vi_currency)));
                 binding.tvSumExpenseToday.setText(String.format("%s %s", format.format(timeSummary.getExpense()), getContext().getString(R.string.vi_currency)));
                 long sum = timeSummary.getIncome() - timeSummary.getExpense();
@@ -110,7 +134,6 @@ public class CurrentTransactionFragment extends Fragment {
         transactionViewModel.getSummaryMonth().observe(getViewLifecycleOwner(), response -> {
             if (response != null && Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
                 TimeSummary timeSummary = response.getData();
-                binding.tvThisMonth.setText(String.format("Tháng này (%s)", timeSummary.getTime()));
                 binding.tvSumIncomeThisMonth.setText(String.format("%s %s", format.format(timeSummary.getIncome()), getContext().getString(R.string.vi_currency)));
                 binding.tvSumExpenseThisMonth.setText(String.format("%s %s", format.format(timeSummary.getExpense()), getContext().getString(R.string.vi_currency)));
                 long sum = timeSummary.getIncome() - timeSummary.getExpense();
@@ -127,7 +150,6 @@ public class CurrentTransactionFragment extends Fragment {
         transactionViewModel.getSummaryYear().observe(getViewLifecycleOwner(), response -> {
             if (response != null && Objects.equals(response.getStatus(), ResponseCode.SUCCESS)) {
                 TimeSummary timeSummary = response.getData();
-                binding.tvThisYear.setText(String.format("Năm nay (%s)", timeSummary.getTime()));
                 binding.tvSumIncomeThisYear.setText(String.format("%s %s", format.format(timeSummary.getIncome()), getContext().getString(R.string.vi_currency)));
                 binding.tvSumExpenseThisYear.setText(String.format("%s %s", format.format(timeSummary.getExpense()), getContext().getString(R.string.vi_currency)));
                 long sum = timeSummary.getIncome() - timeSummary.getExpense();

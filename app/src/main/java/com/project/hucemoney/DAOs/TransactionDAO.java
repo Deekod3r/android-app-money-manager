@@ -10,7 +10,9 @@ import androidx.room.Update;
 
 import com.project.hucemoney.database.FieldData;
 import com.project.hucemoney.entities.Transaction;
+import com.project.hucemoney.entities.pojo.CategoryStatistic;
 import com.project.hucemoney.entities.pojo.TimeSummary;
+import com.project.hucemoney.entities.pojo.TransactionWithCategory;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 
 import java.time.LocalDate;
@@ -71,6 +73,42 @@ public interface TransactionDAO {
             "ON " + FieldData.TABLE_TRANSACTIONS + "." + FieldData.TRANSACTION_FIELD_ACCOUNT + " = " + FieldData.TABLE_ACCOUNTS + "." + FieldData.FIELD_UUID + " " +
             "WHERE " + FieldData.TABLE_ACCOUNTS + "." + FieldData.ACCOUNT_FIELD_USER + " = :user ORDER BY " + FieldData.TRANSACTION_FIELD_DATE + " DESC")
     LiveData<List<TransactionWithCategoryAndAccount>> findAll(String user);
+
+    @Query("SELECT categories.name, " +
+            "SUM(transactions.amount) AS amount, " +
+            "categories.type " +
+            "FROM " + FieldData.TABLE_TRANSACTIONS + " " +
+            "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
+            "ON " + FieldData.TABLE_TRANSACTIONS + "." + FieldData.TRANSACTION_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
+            "WHERE strftime('%Y', date) = :year AND " +
+            "categories.user = :user " +
+            "GROUP BY categories.uuid " +
+            "ORDER BY date DESC")
+    LiveData<List<CategoryStatistic>> findTransactionWithCategoryByYear(String year, String user);
+
+    @Query("SELECT categories.name, " +
+            "SUM(transactions.amount) AS amount, " +
+            "categories.type " +
+            "FROM " + FieldData.TABLE_TRANSACTIONS + " " +
+            "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
+            "ON " + FieldData.TABLE_TRANSACTIONS + "." + FieldData.TRANSACTION_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
+            "WHERE strftime('%Y-%m', date) = :month AND " +
+            "categories.user = :user " +
+            "GROUP BY categories.uuid " +
+            "ORDER BY date DESC")
+    LiveData<List<CategoryStatistic>> findTransactionWithCategoryByMonth(String month, String user);
+
+    @Query("SELECT categories.name, " +
+            "SUM(transactions.amount) AS amount, " +
+            "categories.type " +
+            "FROM " + FieldData.TABLE_TRANSACTIONS + " " +
+            "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
+            "ON " + FieldData.TABLE_TRANSACTIONS + "." + FieldData.TRANSACTION_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
+            "WHERE strftime('%Y-%m-%d', date) = :day AND " +
+            "categories.user = :user " +
+            "GROUP BY categories.uuid " +
+            "ORDER BY date DESC")
+    LiveData<List<CategoryStatistic>> findTransactionWithCategoryByDay(String day, String user);
 
     @Query("SELECT " +
             "strftime('%Y-%m-%d', date) AS time, " +

@@ -140,9 +140,10 @@
 
             <LinearLayout
                 android:id="@+id/btnExpense"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="130dp"
-                android:background="@drawable/custom_round_blur_blue_bg"
+                android:background="@drawable/custom_round_grey_bg"
                 android:layout_margin="5dp"
                 android:layout_columnWeight="1"
                 android:clickable="true"
@@ -169,9 +170,10 @@
 
             <LinearLayout
                 android:id="@+id/btnIncome"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="130dp"
-                android:background="@drawable/custom_round_blur_blue_bg"
+                android:background="@drawable/custom_round_grey_bg"
                 android:layout_margin="5dp"
                 android:layout_columnWeight="1"
                 android:clickable="true"
@@ -198,6 +200,7 @@
 
             <LinearLayout
                 android:id="@+id/btnAnalystFinance"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="130dp"
                 android:background="@drawable/custom_round_grey_bg"
@@ -227,6 +230,7 @@
 
             <LinearLayout
                 android:id="@+id/btnDebt"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="130dp"
                 android:background="@drawable/custom_round_grey_bg"

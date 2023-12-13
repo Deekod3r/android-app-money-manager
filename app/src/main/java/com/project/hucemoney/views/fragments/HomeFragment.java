@@ -28,6 +28,7 @@ import com.project.hucemoney.views.activities.CategoryActivity;
 import com.project.hucemoney.views.activities.ExrateActivity;
 import com.project.hucemoney.views.activities.GoalActivity;
 import com.project.hucemoney.views.activities.LauncherActivity;
+import com.project.hucemoney.views.activities.TaxActivity;
 import com.project.hucemoney.views.activities.TransactionActivity;
 
 public class HomeFragment extends Fragment {
@@ -146,6 +147,11 @@ public class HomeFragment extends Fragment {
 
         binding.btnExchangeRate.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ExrateActivity.class);
+            startActivity(intent);
+        });
+
+        binding.btnTax.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TaxActivity.class);
             startActivity(intent);
         });
 

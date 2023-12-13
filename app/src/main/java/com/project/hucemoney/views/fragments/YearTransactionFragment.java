@@ -1,5 +1,6 @@
 package com.project.hucemoney.views.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ import com.project.hucemoney.adapters.custom.TimeTransactionAdapter;
 import com.project.hucemoney.databinding.FragmentYearTransactionBinding;
 import com.project.hucemoney.entities.pojo.TimeSummary;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
+import com.project.hucemoney.views.activities.TimeStatisticActivity;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -100,7 +102,12 @@ public class YearTransactionFragment extends Fragment {
     }
 
     private void controlAction() {
-
+        timeTransactionAdapter.setOnItemClickListener(timeSummary -> {
+            Intent intent = new Intent(getContext(), TimeStatisticActivity.class);
+            intent.putExtra("time", timeSummary.getTime());
+            intent.putExtra("type", 1);
+            startActivity(intent);
+        });
     }
 
     private void observer() {
@@ -142,8 +149,10 @@ public class YearTransactionFragment extends Fragment {
                 });
                 YAxis rightAxis = binding.barChartYearTransaction.getAxisRight();
                 rightAxis.setDrawLabels(false);
+                binding.barChartYearTransaction.getXAxis().setGranularityEnabled(false);
+                binding.barChartYearTransaction.getXAxis().setGranularity(1f);
                 binding.barChartYearTransaction.setData(barData);
-                binding.barChartYearTransaction.getDescription().setText("(Đơn vị: Triệu đồng)");
+                binding.barChartYearTransaction.getDescription().setText("(Đơn vị: đồng)");
                 binding.barChartYearTransaction.getDescription().setYOffset(-10f);
                 binding.barChartYearTransaction.setFitBars(true);
                 binding.barChartYearTransaction.groupBars(2020f, 0.5f, 0f);

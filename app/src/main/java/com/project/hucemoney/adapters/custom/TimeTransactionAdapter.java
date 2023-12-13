@@ -48,6 +48,11 @@ public class TimeTransactionAdapter extends RecyclerView.Adapter<TimeTransaction
         } else {
             holder.sum.setTextColor(context.getResources().getColor(R.color.red));
         }
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(timeSummary);
+            }
+        });
     }
 
     @Override
@@ -79,7 +84,7 @@ public class TimeTransactionAdapter extends RecyclerView.Adapter<TimeTransaction
     }
 
     public interface OnItemClickListener {
-        void onItemClick(TimeSummary timeSummary, int position);
+        void onItemClick(TimeSummary timeSummary);
     }
 
     public void setOnItemClickListener(TimeTransactionAdapter.OnItemClickListener onItemClickListener) {

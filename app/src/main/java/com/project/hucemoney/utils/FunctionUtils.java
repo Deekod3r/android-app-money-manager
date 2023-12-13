@@ -44,6 +44,17 @@ public class FunctionUtils {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
+    public static String getTextInParentheses(String text) {
+        int startIndex = text.indexOf("(");
+        int endIndex = text.indexOf(")");
+
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            return text.substring(startIndex + 1, endIndex);
+        } else {
+            return "";
+        }
+    }
+
     public static String md5(String text) {
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");

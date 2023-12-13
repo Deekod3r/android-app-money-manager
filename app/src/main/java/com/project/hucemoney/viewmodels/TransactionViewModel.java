@@ -11,7 +11,9 @@ import androidx.lifecycle.Observer;
 import com.project.hucemoney.common.ResponseCode;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Transaction;
+import com.project.hucemoney.entities.pojo.CategoryStatistic;
 import com.project.hucemoney.entities.pojo.TimeSummary;
+import com.project.hucemoney.entities.pojo.TransactionWithCategory;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.TransactionAddRequest;
@@ -24,6 +26,7 @@ import java.util.List;
 
 public class TransactionViewModel extends AndroidViewModel {
     private MutableLiveData<List<TransactionWithCategoryAndAccount>> transactionsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<CategoryStatistic>> transactionsWithCategoryLiveData = new MutableLiveData<>();
     private MutableLiveData<Response<Transaction>> resultAddTransaction = new MutableLiveData<>();
     private MutableLiveData<Response<Transaction>> resultEditTransaction = new MutableLiveData<>();
     private MutableLiveData<Response<Boolean>> resultDeleteTransaction = new MutableLiveData<>();
@@ -158,6 +161,29 @@ public class TransactionViewModel extends AndroidViewModel {
         }
     }
 
+    public void transactionsWithCategory(String time, int type){
+        try {
+            LiveData<List<CategoryStatistic>> transactions;
+            if (type == 1) {
+                transactions = transactionRepository.getAllByYear(time, sessionManager.getUUID());
+            } else if (type == 2) {
+                transactions = transactionRepository.getAllByMonth(time, sessionManager.getUUID());
+            } else {
+                transactions = transactionRepository.getAllByDay(time, sessionManager.getUUID());
+            }
+            Observer<List<CategoryStatistic>> observer = new Observer<List<CategoryStatistic>>() {
+                @Override
+                public void onChanged(List<CategoryStatistic> tst) {
+                    transactionsWithCategoryLiveData.setValue(tst);
+                    transactions.removeObserver(this);
+                }
+            };
+            transactions.observeForever(observer);
+        } catch (Exception e) {
+            Log.e("TransactionViewModel", "transactionsWithCategory: " + e.getMessage());
+        }
+    }
+
     public void summaryDate() {
         Response<TimeSummary> response = new Response<>();
         try {
@@ -241,6 +267,10 @@ public class TransactionViewModel extends AndroidViewModel {
 
     public LiveData<List<TransactionWithCategoryAndAccount>> getTransactions() {
         return transactionsLiveData;
+    }
+
+    public LiveData<List<CategoryStatistic>> getTransactionsWithCategory() {
+        return transactionsWithCategoryLiveData;
     }
 
     public LiveData<Response<TimeSummary>> getSummaryDate() {

@@ -8,7 +8,9 @@ import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.Transaction;
+import com.project.hucemoney.entities.pojo.CategoryStatistic;
 import com.project.hucemoney.entities.pojo.TimeSummary;
+import com.project.hucemoney.entities.pojo.TransactionWithCategory;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.models.requests.AccountEditRequest;
 import com.project.hucemoney.models.requests.BudgetEditRequest;
@@ -90,6 +92,30 @@ public class TransactionRepository {
     public LiveData<List<TransactionWithCategoryAndAccount>> getAll(String user) {
         try {
             return transactionDAO.findAll(user);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public LiveData<List<CategoryStatistic>> getAllByYear(String year, String user) {
+        try {
+            return transactionDAO.findTransactionWithCategoryByYear(year, user);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public LiveData<List<CategoryStatistic>> getAllByMonth(String month, String user) {
+        try {
+            return transactionDAO.findTransactionWithCategoryByMonth(month, user);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public LiveData<List<CategoryStatistic>> getAllByDay(String day, String user) {
+        try {
+            return transactionDAO.findTransactionWithCategoryByDay(day, user);
         } catch (Exception e) {
             throw e;
         }
@@ -182,7 +208,6 @@ public class TransactionRepository {
         }
     }
 
-    @androidx.room.Transaction
     public TimeSummary getDateSummary(String user, LocalDate date) {
         try {
             return transactionDAO.findDateSummary(user, date);
@@ -191,7 +216,6 @@ public class TransactionRepository {
         }
     }
 
-    @androidx.room.Transaction
     public TimeSummary getMonthSummary(String user, LocalDate date) {
         try {
             return transactionDAO.findMonthSummary(user, date);
@@ -200,7 +224,6 @@ public class TransactionRepository {
         }
     }
 
-    @androidx.room.Transaction
     public TimeSummary getYearSummary(String user, LocalDate date) {
         try {
             return transactionDAO.findYearSummary(user, date);
@@ -209,7 +232,6 @@ public class TransactionRepository {
         }
     }
 
-    @androidx.room.Transaction
     public List<TimeSummary> getMonthsSummary(String user, LocalDate date) {
         try {
             List<TimeSummary> timeSummaries = transactionDAO.findMonthsSummary(user, date);
@@ -219,7 +241,6 @@ public class TransactionRepository {
         }
     }
 
-    @androidx.room.Transaction
     public List<TimeSummary> getYearsSummary(String user) {
         try {
             return transactionDAO.findYearsSummary(user);
