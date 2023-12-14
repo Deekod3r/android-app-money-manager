@@ -71,8 +71,13 @@ public interface TransactionDAO {
             "FROM " + FieldData.TABLE_TRANSACTIONS + " " +
             "INNER JOIN " + FieldData.TABLE_ACCOUNTS + " " +
             "ON " + FieldData.TABLE_TRANSACTIONS + "." + FieldData.TRANSACTION_FIELD_ACCOUNT + " = " + FieldData.TABLE_ACCOUNTS + "." + FieldData.FIELD_UUID + " " +
-            "WHERE " + FieldData.TABLE_ACCOUNTS + "." + FieldData.ACCOUNT_FIELD_USER + " = :user ORDER BY " + FieldData.TRANSACTION_FIELD_DATE + " DESC")
-    LiveData<List<TransactionWithCategoryAndAccount>> findAll(String user);
+            "WHERE " + FieldData.TABLE_ACCOUNTS + "." + FieldData.ACCOUNT_FIELD_USER + " = :user AND " +
+            "(category LIKE :key OR " +
+            "account LIKE :key OR " +
+            "budget LIKE :key) " +
+            "ORDER BY " + FieldData.TRANSACTION_FIELD_DATE + " DESC")
+    LiveData<List<TransactionWithCategoryAndAccount>> findAll(String user, String key);
+
 
     @Query("SELECT categories.name, " +
             "SUM(transactions.amount) AS amount, " +
@@ -140,7 +145,9 @@ public interface TransactionDAO {
             "SUM(CASE WHEN type = 0 THEN transactions.amount ELSE 0 END) AS expense " +
             "FROM transactions INNER JOIN accounts on transactions.account = accounts.UUID " +
             "WHERE user = :user AND strftime('%Y', date) = strftime('%Y', :selectedYear)" +
-            "GROUP BY time")
+            "GROUP BY time " +
+            "ORDER BY time DESC"
+    )
     List<TimeSummary> findMonthsSummary(String user, LocalDate selectedYear);
 
     @Query("SELECT " +
@@ -149,7 +156,9 @@ public interface TransactionDAO {
             "SUM(CASE WHEN type = 0 THEN transactions.amount ELSE 0 END) AS expense " +
             "FROM transactions INNER JOIN accounts on transactions.account = accounts.UUID " +
             "WHERE user = :user " +
-            "GROUP BY time")
+            "GROUP BY time " +
+            "ORDER BY time DESC"
+    )
     List<TimeSummary> findYearsSummary(String user);
 
 }

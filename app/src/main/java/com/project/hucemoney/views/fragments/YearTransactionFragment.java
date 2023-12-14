@@ -116,8 +116,8 @@ public class YearTransactionFragment extends Fragment {
             if (timeSummaries != null && timeSummaries.size() > 0) {
                 valuesIncome.clear();
                 valuesExpense.clear();
-                binding.tvYearToYear.setText(String.format("%s - %s", timeSummaries.get(0).getTime(), timeSummaries.get(timeSummaries.size() - 1).getTime()));
-                for (int i = 0; i < timeSummaries.size(); i++) {
+                binding.tvYearToYear.setText(String.format("%s - %s", timeSummaries.get(timeSummaries.size() - 1).getTime(), timeSummaries.get(0).getTime()));
+                for (int i = timeSummaries.size() - 1; i >= 0; i--) {
                     valuesIncome.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime()), new float[]{timeSummaries.get(i).getIncome()}));
                     valuesExpense.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime()), new float[]{timeSummaries.get(i).getExpense()}));
                 }

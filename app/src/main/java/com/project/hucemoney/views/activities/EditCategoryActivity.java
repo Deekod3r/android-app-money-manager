@@ -110,6 +110,13 @@ public class EditCategoryActivity extends AppCompatActivity {
                     }, (dialog, which) -> {
                     });
         });
+
+        binding.btnDetail.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TransactionActivity.class);
+            intent.putExtra("categoryUUID", category.getUUID());
+            intent.putExtra("categoryName", category.getName());
+            startActivity(intent);
+        });
     }
 
 }

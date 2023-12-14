@@ -39,6 +39,7 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
     private TransactionViewModel transactionViewModel;
     private TransactionGroupAdapter transactionGroupAdapter;
     private ActivityResultLauncher<Intent> mLauncher;
+    private String key = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +58,22 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
     }
 
     private void init() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("categoryUUID")) {
+            key = intent.getStringExtra("categoryUUID");
+            binding.tvKeySearch.setText("Lọc theo danh mục: " + intent.getStringExtra("categoryName"));
+        }
+        if (intent.hasExtra("accountUUID")) {
+            key = intent.getStringExtra("accountUUID");
+            binding.tvKeySearch.setText("Lọc theo tài khoản: " + intent.getStringExtra("accountName"));
+        }
+        if (intent.hasExtra("budgetUUID")) {
+            key = intent.getStringExtra("budgetUUID");
+            binding.tvKeySearch.setText("Lọc theo hạn mức: " + intent.getStringExtra("budgetName"));
+        }
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionGroupAdapter = new TransactionGroupAdapter(this, transactionGroups, this);
-        transactionViewModel.loadTransactions();
+        transactionViewModel.loadTransactions(key);
         binding.setLifecycleOwner(this);
         binding.setTransactionViewModel(transactionViewModel);
         mLauncher = registerForActivityResult(
@@ -74,10 +88,8 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
                             }
                             switch (data.getStringExtra("action")) {
                                 case Constants.ACTION_EDIT:
-                                    transactionViewModel.loadTransactions();
-                                    break;
                                 case Constants.ACTION_DELETE:
-                                    transactionViewModel.loadTransactions();
+                                    transactionViewModel.loadTransactions(key);
                                     break;
                             }
                         }

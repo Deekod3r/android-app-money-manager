@@ -1,5 +1,7 @@
 package com.project.hucemoney.repositories;
 
+import static com.project.hucemoney.utils.ValidationUtils.isNullOrEmpty;
+
 import androidx.lifecycle.LiveData;
 
 import com.project.hucemoney.DAOs.TransactionDAO;
@@ -89,9 +91,12 @@ public class TransactionRepository {
         }
     }
 
-    public LiveData<List<TransactionWithCategoryAndAccount>> getAll(String user) {
+    public LiveData<List<TransactionWithCategoryAndAccount>> getAll(String user, String key) {
         try {
-            return transactionDAO.findAll(user);
+            if (isNullOrEmpty(key)) {
+                key = "%%";
+            }
+            return transactionDAO.findAll(user, key);
         } catch (Exception e) {
             throw e;
         }

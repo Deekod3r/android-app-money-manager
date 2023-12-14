@@ -13,7 +13,6 @@ import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Transaction;
 import com.project.hucemoney.entities.pojo.CategoryStatistic;
 import com.project.hucemoney.entities.pojo.TimeSummary;
-import com.project.hucemoney.entities.pojo.TransactionWithCategory;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
 import com.project.hucemoney.models.Response;
 import com.project.hucemoney.models.requests.TransactionAddRequest;
@@ -47,9 +46,9 @@ public class TransactionViewModel extends AndroidViewModel {
         this.sessionManager = new SessionManager(application);
     }
 
-    public void loadTransactions() {
+    public void loadTransactions(String key) {
         try {
-            LiveData<List<TransactionWithCategoryAndAccount>> transactions = transactionRepository.getAll(sessionManager.getUUID());
+            LiveData<List<TransactionWithCategoryAndAccount>> transactions = transactionRepository.getAll(sessionManager.getUUID(), key);
             Observer<List<TransactionWithCategoryAndAccount>> observer = new Observer<List<TransactionWithCategoryAndAccount>>() {
                 @Override
                 public void onChanged(List<TransactionWithCategoryAndAccount> tst) {

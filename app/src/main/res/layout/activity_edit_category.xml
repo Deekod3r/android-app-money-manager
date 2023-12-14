@@ -86,6 +86,7 @@
                 android:drawableStart="@drawable/baseline_emoticon_blue_24"
                 android:drawablePadding="5dp"
                 android:ems="10"
+                android:visibility="gone"
                 android:hint="Chọn icon"
                 android:enabled="false"
                 android:inputType="text"

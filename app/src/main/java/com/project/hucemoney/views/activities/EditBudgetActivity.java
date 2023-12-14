@@ -203,5 +203,12 @@ public class EditBudgetActivity extends AppCompatActivity {
                     }, (dialog, which) -> {
                     });
         });
+
+        binding.btnDetail.setOnClickListener(v -> {
+            Intent intent = new Intent(this, TransactionActivity.class);
+            intent.putExtra("budgetUUID", budgetViewModel.getBudgetEditRequest().getUUID());
+            intent.putExtra("budgetName", budgetViewModel.getBudgetEditRequest().getName());
+            startActivity(intent);
+        });
     }
 }

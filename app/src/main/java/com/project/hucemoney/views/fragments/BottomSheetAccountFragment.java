@@ -28,6 +28,7 @@ import com.project.hucemoney.models.Response;
 import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 import com.project.hucemoney.views.activities.EditAccountActivity;
+import com.project.hucemoney.views.activities.TransactionActivity;
 
 import java.util.Objects;
 
@@ -107,6 +108,13 @@ public class BottomSheetAccountFragment extends BottomSheetDialogFragment {
     }
 
     private void controlAction() {
+        binding.btnTransaction.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), TransactionActivity.class);
+            intent.putExtra("accountUUID", account.getUUID());
+            intent.putExtra("accountName", account.getName());
+            dismiss();
+            startActivity(intent);
+        });
         binding.btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), EditAccountActivity.class);
             intent.putExtra("account", account);
