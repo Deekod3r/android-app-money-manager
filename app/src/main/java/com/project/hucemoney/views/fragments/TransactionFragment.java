@@ -240,6 +240,7 @@ public class TransactionFragment extends Fragment {
                     FunctionUtils.hideKeyboard(getContext(),v);
                     binding.btnHistory.setColorFilter(ContextCompat.getColor(getContext(), R.color.red), android.graphics.PorterDuff.Mode.SRC_IN);
                     category = null;
+                    account = null;
                     binding.edtCategory.setText("");
                     binding.edtAccount.setText("");
                     binding.edtAmount.setText("0");

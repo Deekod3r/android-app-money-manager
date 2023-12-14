@@ -118,7 +118,6 @@ public class CategoryStatisticFragment extends Fragment {
                 List<CategoryStatistic> expense = new ArrayList<>();
                 long sumIncome = 0;
                 long sumExpense = 0;
-                List<PieEntry> a = entries;
                 for (CategoryStatistic categoryStatistic : categoryStatistics) {
                     if (categoryStatistic.isType()) {
                         income.add(categoryStatistic);
@@ -131,7 +130,6 @@ public class CategoryStatisticFragment extends Fragment {
                         entries.add(new PieEntry(categoryStatistic.getAmount(), categoryStatistic.getName()));
                     }
                 }
-                List<PieEntry> b = entries;
                 PieDataSet dataSet = new PieDataSet(entries, "");
                 dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
                 dataSet.setValueTextColor(android.R.color.white);
@@ -140,8 +138,8 @@ public class CategoryStatisticFragment extends Fragment {
                 binding.pieChart.setData(pieData);
                 binding.pieChart.getDescription().setEnabled(false);
                 binding.pieChart.setDrawEntryLabels(false);
-                binding.pieChart.setHoleRadius(25f);
-                binding.pieChart.setTransparentCircleRadius(30f);
+                binding.pieChart.setHoleRadius(15f);
+                binding.pieChart.setTransparentCircleRadius(10f);
                 binding.pieChart.invalidate();
                 if (type) {
                     binding.tvFinanceAmount.setText(String.format("%s %s", format.format(sumIncome), getString(R.string.vi_currency)));
@@ -150,6 +148,11 @@ public class CategoryStatisticFragment extends Fragment {
                     binding.tvFinanceAmount.setText(String.format("%s %s", format.format(sumExpense), getString(R.string.vi_currency)));
                     categoryStatisticAdapter.setData(expense);
                 }
+                if (entries.size() == 0) {
+                    binding.pieChart.clear();
+                }
+            } else {
+                binding.pieChart.clear();
             }
         });
     }
