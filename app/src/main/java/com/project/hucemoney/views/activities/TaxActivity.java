@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import com.project.hucemoney.R;
 import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.databinding.ActivityTaxBinding;
+import com.project.hucemoney.utils.FunctionUtils;
 
 public class TaxActivity extends AppCompatActivity {
 
@@ -37,6 +38,15 @@ public class TaxActivity extends AppCompatActivity {
     }
 
     private void controlAction() {
+
+        binding.edtArea.setOnClickListener(v -> {
+            FunctionUtils.showDialogChoose(this, binding.edtArea, new String[]{"Vùng 1", "Vùng 2", "Vùng 3", "Vùng 4"});
+        });
+
+        binding.btnChoiseArea.setOnClickListener(v -> {
+            FunctionUtils.showDialogChoose(this, binding.edtArea, new String[]{"Vùng 1", "Vùng 2", "Vùng 3", "Vùng 4"});
+        });
+
         binding.edtIncome.addTextChangedListener(new TextWatcher() {
 
             @Override

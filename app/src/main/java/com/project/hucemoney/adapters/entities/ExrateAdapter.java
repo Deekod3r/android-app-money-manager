@@ -45,11 +45,12 @@ public class ExrateAdapter extends RecyclerView.Adapter<ExrateAdapter.ViewHolder
         NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
         format.setMaximumFractionDigits(6);
         holder.code.setText(exrate.getCurrencyCode());
-        holder.transfer.setText(String.format("%s VND", format.format(exrate.getTransferRateAsDouble())));
         if(type) {
+            holder.transfer.setText(String.format("%s %s", format.format(1/exrate.getTransferRateAsDouble()), exrate.getCurrencyCode()));
             holder.buy.setText(String.format("Mua vào:\n1 VND ~ %s %s", format.format(1/exrate.getBuyRateAsDouble()), exrate.getCurrencyName()));
             holder.sell.setText(String.format("Bán ra:\n1 VND ~ %s %s", format.format(1/exrate.getSellRateAsDouble()), exrate.getCurrencyName()));
         } else {
+            holder.transfer.setText(String.format("%s VND", format.format(exrate.getTransferRateAsDouble())));
             holder.buy.setText(String.format("Mua vào:\n1 %s ~ %s VND", exrate.getCurrencyName(), format.format(exrate.getBuyRateAsDouble())));
             holder.sell.setText(String.format("Bán ra:\n1 %s ~ %s VND", exrate.getCurrencyName(), format.format(exrate.getSellRateAsDouble())));
         }

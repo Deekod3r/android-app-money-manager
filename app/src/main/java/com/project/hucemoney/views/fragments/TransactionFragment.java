@@ -185,7 +185,7 @@ public class TransactionFragment extends Fragment {
                         type = Constants.TYPE_INCOME;
                         binding.edtName.setHint("Tên khoản thu");
                         binding.edtGoal.setEnabled(true);
-                        binding.edtGoal.setVisibility(View.VISIBLE);
+                        binding.edtGoal.setVisibility(View.GONE);
                         binding.tvCurrency.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                         transactionViewModel.getTransactionAddRequest().setCategory("");
                     default:

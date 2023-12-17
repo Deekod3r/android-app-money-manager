@@ -18,10 +18,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -32,6 +35,7 @@ import com.project.hucemoney.common.Constants;
 import com.project.hucemoney.common.enums.DialogType;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
@@ -243,6 +247,39 @@ public class FunctionUtils {
         Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setTextColor(ContextCompat.getColor(context, R.color.white));
     }
+
+    public static void showDialogChoose(Context context, final TextView editText, final String[] stringArray) {
+        final int[] selectedItem = {-1};
+        String currentText = editText.getText().toString();
+        for (int i = 0; i < stringArray.length; i++) {
+            if (stringArray[i].equals(currentText)) {
+                selectedItem[0] = i;
+                break;
+            }
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Chọn một mục");
+        builder.setSingleChoiceItems(stringArray, selectedItem[0], (dialog, which) -> selectedItem[0] = which);
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            if (selectedItem[0] != -1) {
+                editText.setText(stringArray[selectedItem[0]]);
+            }
+        });
+
+        builder.setNegativeButton("Huỷ", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setGravity(Gravity.CENTER);
+        alertDialog.show();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(context, R.color.blue)));
+        Button negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+        Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+    }
+
 
 
     public static String randomCodeVerify() {

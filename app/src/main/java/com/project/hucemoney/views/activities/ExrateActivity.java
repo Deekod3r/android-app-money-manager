@@ -53,7 +53,7 @@ public class ExrateActivity extends AppCompatActivity {
 
     private void init() {
         exrateViewModel = new ViewModelProvider(this).get(ExrateViewModel.class);
-        exrateAdapter = new ExrateAdapter(this, exrates, false);
+        exrateAdapter = new ExrateAdapter(this, exrates, true);
         if (NetworkUtils.isNetworkAvailable(this)) {
             exrateViewModel.fetchData();
         } else {
@@ -109,7 +109,7 @@ public class ExrateActivity extends AppCompatActivity {
                 if (!exrates.isEmpty()) {
                     exratesFilter.clear();
                     for (Exrate exrate : exrates) {
-                        if (exrate.getCurrencyCode().toLowerCase().contains(newText.toLowerCase())) {
+                        if (exrate.getCurrencyCode().toLowerCase().contains(newText.trim().toLowerCase()) || exrate.getCurrencyName().toLowerCase().contains(newText.trim().toLowerCase())) {
                             exratesFilter.add(exrate);
                         }
                     }
