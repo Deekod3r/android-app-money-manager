@@ -63,7 +63,7 @@ public class EditAccountActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
+                if (s.length() == 0 || (s.length() == 1 && s.toString().equals("-"))) {
                     binding.edtAmount.setText("0");
                 } else {
                     if (s.length() > 1 && s.charAt(0) == '0') {

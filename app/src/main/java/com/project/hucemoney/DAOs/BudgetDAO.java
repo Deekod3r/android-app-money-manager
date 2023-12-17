@@ -64,12 +64,14 @@ public interface BudgetDAO {
     long count();
 
     @Transaction
-    @Query("SELECT " + FieldData.TABLE_BUDGETS +".* " +
+    @Query("SELECT " + FieldData.TABLE_BUDGETS +".*" +
             "FROM " + FieldData.TABLE_BUDGETS + " " +
             "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
             "ON " + FieldData.TABLE_BUDGETS + "." + FieldData.BUDGET_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
-            "WHERE " + FieldData.TABLE_CATEGORIES + "." + FieldData.CATEGORY_FIELD_USER + " = :user")
+            "WHERE " + FieldData.TABLE_CATEGORIES + "." + FieldData.CATEGORY_FIELD_USER + " = :user " +
+            "ORDER BY endDate DESC")
     LiveData<List<BudgetWithCategory>> findAll(String user);
+
 
     @Query("SELECT * " +
             "FROM " + FieldData.TABLE_BUDGETS + " " +

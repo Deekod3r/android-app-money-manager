@@ -85,6 +85,10 @@ public class CategoryRepository {
     @Transaction
     public Category create(CategoryAddRequest categoryAddRequest) {
         try {
+            Category check = categoryDAO.findByName(categoryAddRequest.getName());
+            if (check != null && check.getType() == categoryAddRequest.getType()) {
+                throw new RuntimeException("Tên danh mục đã tồn tại");
+            }
             Category category = new Category();
             category.setUUID(java.util.UUID.randomUUID().toString());
             category.setId("category" + System.currentTimeMillis());

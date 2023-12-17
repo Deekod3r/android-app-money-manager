@@ -153,9 +153,9 @@ public class YearTransactionFragment extends Fragment {
                 binding.barChartYearTransaction.getXAxis().setGranularity(1f);
                 binding.barChartYearTransaction.setData(barData);
                 binding.barChartYearTransaction.getDescription().setText("(Đơn vị: đồng)");
-                binding.barChartYearTransaction.getDescription().setYOffset(-10f);
-                binding.barChartYearTransaction.setFitBars(true);
-                binding.barChartYearTransaction.groupBars(2020f, 0.5f, 0f);
+                //binding.barChartYearTransaction.getDescription().setYOffset(-10f);
+                //binding.barChartYearTransaction.setFitBars(true);
+                //binding.barChartYearTransaction.groupBars(2020f, 0.5f, 0f);
                 binding.barChartYearTransaction.invalidate();
             } else {
                 binding.barChartYearTransaction.clear();

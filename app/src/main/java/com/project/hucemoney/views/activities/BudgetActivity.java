@@ -72,26 +72,27 @@ public class BudgetActivity extends AppCompatActivity {
                             Intent data = result.getData();
                             assert data != null;
                             String action = data.getStringExtra("action");
-                            switch (Objects.requireNonNull(action)) {
-                                case Constants.ACTION_ADD: {
-                                    Budget budget = data.getParcelableExtra("budgetAdded");
-                                    Category category = data.getParcelableExtra("category");
-                                    budgetViewModel.addBudgetLiveData(BudgetWithCategory.of(budget, category));
-                                    break;
-                                }
-                                case Constants.ACTION_EDIT: {
-                                    Budget budget = data.getParcelableExtra("budgetEdited");
-                                    Category category = data.getParcelableExtra("category");
-                                    int position = data.getIntExtra("position", -1);
-                                    budgetViewModel.editBudgetLiveData(BudgetWithCategory.of(budget, category), position);
-                                    break;
-                                }
-                                case Constants.ACTION_DELETE: {
-                                    int position = data.getIntExtra("position", -1);
-                                    budgetViewModel.deleteBudgetLiveData(position);
-                                    break;
-                                }
-                            }
+//                            switch (Objects.requireNonNull(action)) {
+//                                case Constants.ACTION_ADD: {
+//                                    Budget budget = data.getParcelableExtra("budgetAdded");
+//                                    Category category = data.getParcelableExtra("category");
+//                                    budgetViewModel.addBudgetLiveData(BudgetWithCategory.of(budget, category));
+//                                    break;
+//                                }
+//                                case Constants.ACTION_EDIT: {
+//                                    Budget budget = data.getParcelableExtra("budgetEdited");
+//                                    Category category = data.getParcelableExtra("category");
+//                                    int position = data.getIntExtra("position", -1);
+//                                    budgetViewModel.editBudgetLiveData(BudgetWithCategory.of(budget, category), position);
+//                                    break;
+//                                }
+//                                case Constants.ACTION_DELETE: {
+//                                    int position = data.getIntExtra("position", -1);
+//                                    budgetViewModel.deleteBudgetLiveData(position);
+//                                    break;
+//                                }
+//                            }
+//
                         }
                     } catch (Exception e) {
                         Log.e("BudgetActivity", "mLauncher: " + e.getMessage());

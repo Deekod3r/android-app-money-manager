@@ -68,7 +68,8 @@ public class AccountViewModel extends AndroidViewModel {
             resultAddAccount.setValue(response);
         } catch (Exception e) {
             Log.e("AccountViewModel", "addAccount: " + e.getMessage());
-            response.setMessage("Except: Thêm tài khoản thất bại");
+            //response.setMessage("Except: Thêm tài khoản thất bại");
+            response.setMessage( e.getMessage());
             resultAddAccount.setValue(response);
         }
     }
@@ -101,7 +102,8 @@ public class AccountViewModel extends AndroidViewModel {
             resultEditAccount.setValue(response);
         } catch (Exception e) {
             Log.e("AccountViewModel", "editAccount: " + e.getMessage());
-            response.setMessage("Except: Cập nhật tài khoản thất bại");
+            //response.setMessage("Except: Cập nhật tài khoản thất bại");
+            response.setMessage( e.getMessage());
             resultEditAccount.setValue(response);
         }
     }
@@ -128,7 +130,8 @@ public class AccountViewModel extends AndroidViewModel {
             resultDeleteAccount.setValue(response);
         } catch (Exception e) {
             Log.e("AccountViewModel", "deleteAccount: " + e.getMessage());
-            response.setMessage("Except: Xóa tài khoản thất bại");
+            //response.setMessage("Except: Xóa tài khoản thất bại");
+            response.setMessage( e.getMessage());
             resultDeleteAccount.setValue(response);
         }
     }

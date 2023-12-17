@@ -66,6 +66,7 @@ public class EditTransactionActivity extends AppCompatActivity {
             transactionViewModel.getTransactionEditRequest().setAmount(transaction.getAmount());
             transactionViewModel.getTransactionEditRequest().setCategory(category.getUUID());
             transactionViewModel.getTransactionEditRequest().setAccount(account.getUUID());
+            transactionViewModel.getTransactionEditRequest().setType(transaction.getType());
             transactionViewModel.getTransactionEditRequest().setDate(transaction.getDate());
             transactionViewModel.getTransactionEditRequest().setNote(transaction.getNote());
             binding.edtCategory.setText(category.getName());

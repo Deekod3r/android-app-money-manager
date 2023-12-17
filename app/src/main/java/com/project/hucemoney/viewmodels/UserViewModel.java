@@ -62,7 +62,8 @@ public class UserViewModel extends AndroidViewModel{
             }
         } catch (Exception e) {
             Log.e("UserViewModel", "login: " + e.getMessage());
-            response.setMessage("Except: Đăng nhập thất bại");
+            //response.setMessage("Except: Đăng nhập thất bại");
+            response.setMessage( e.getMessage());
             loginResult.setValue(response);
         }
     }
@@ -109,7 +110,8 @@ public class UserViewModel extends AndroidViewModel{
             registerResult.setValue(response);
         } catch (Exception e) {
             Log.e("UserViewModel", "register: " + e.getMessage());
-            response.setMessage("Except: Đăng ký thất bại");
+            //response.setMessage("Except: Đăng ký thất bại");
+            response.setMessage( e.getMessage());
             registerResult.setValue(response);
         }
     }
@@ -128,7 +130,8 @@ public class UserViewModel extends AndroidViewModel{
             verifyRegisterResult.setValue(response);
         } catch (Exception e) {
             Log.e("UserViewModel", "verify: " + e.getMessage());
-            response.setMessage("Except: Xác thực thất bại");
+            //response.setMessage("Except: Xác thực thất bại");
+            response.setMessage( e.getMessage());
             verifyRegisterResult.setValue(response);
         }
     }

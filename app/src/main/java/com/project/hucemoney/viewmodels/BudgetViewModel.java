@@ -90,7 +90,8 @@ public class BudgetViewModel extends AndroidViewModel {
             resultAddBudget.setValue(response);
         } catch (Exception e) {
             Log.e("BudgetViewModel", "addBudget: " + e.getMessage());
-            response.setMessage("Except: Thêm hạn mức thất bại");
+            //response.setMessage("Except: Thêm hạn mức thất bại");
+            response.setMessage( e.getMessage());
             resultAddBudget.setValue(response);
         }
     }
@@ -140,7 +141,8 @@ public class BudgetViewModel extends AndroidViewModel {
             resultEditBudget.setValue(response);
         } catch (Exception e) {
             Log.e("BudgetViewModel", "editBudget: " + e.getMessage());
-            response.setMessage("Except: Cập nhật hạn mức thất bại");
+            //response.setMessage("Except: Cập nhật hạn mức thất bại");
+            response.setMessage( e.getMessage());
             resultEditBudget.setValue(response);
         }
     }
@@ -160,7 +162,8 @@ public class BudgetViewModel extends AndroidViewModel {
             resultDeleteBudget.setValue(response);
         } catch (Exception e) {
             Log.e("BudgetViewModel", "deleteBudget: " + e.getMessage());
-            response.setMessage("Except: Xóa hạn mức thất bại");
+            //response.setMessage("Except: Xóa hạn mức thất bại");
+            response.setMessage( e.getMessage());
             resultDeleteBudget.setValue(response);
         }
     }
@@ -209,7 +212,7 @@ public class BudgetViewModel extends AndroidViewModel {
                 @Override
                 public void onChanged(List<BudgetWithCategory> bg) {
                     budgetsLiveData.setValue(bg);
-                    budgets.removeObserver(this);;
+                    budgets.removeObserver(this);
                 }
             };
             budgets.observeForever(observer);

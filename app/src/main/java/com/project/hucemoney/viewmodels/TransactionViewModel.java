@@ -97,7 +97,8 @@ public class TransactionViewModel extends AndroidViewModel {
             resultAddTransaction.setValue(response);
         } catch (Exception e) {
             Log.e("TransactionViewModel", "addTransaction: " + e.getMessage());
-            response.setMessage("Except: Thêm giao dịch thất bại");
+            //response.setMessage("Except: Thêm giao dịch thất bại");
+            response.setMessage( e.getMessage());
             resultAddTransaction.setValue(response);
         }
     }
@@ -137,7 +138,8 @@ public class TransactionViewModel extends AndroidViewModel {
             resultEditTransaction.setValue(response);
         } catch (Exception e) {
             Log.e("TransactionViewModel", "editTransaction: " + e.getMessage());
-            response.setMessage("Except: Cập nhật giao dịch thất bại");
+            //response.setMessage("Except: Cập nhật giao dịch thất bại");
+            response.setMessage( e.getMessage());
             resultEditTransaction.setValue(response);
         }
     }
@@ -155,7 +157,8 @@ public class TransactionViewModel extends AndroidViewModel {
             resultDeleteTransaction.setValue(response);
         } catch (Exception e) {
             Log.e("TransactionViewModel", "deleteTransaction: " + e.getMessage());
-            response.setMessage("Except: Xóa giao dịch thất bại");
+            //response.setMessage("Except: Xóa giao dịch thất bại");
+            response.setMessage( e.getMessage());
             resultDeleteTransaction.setValue(response);
         }
     }

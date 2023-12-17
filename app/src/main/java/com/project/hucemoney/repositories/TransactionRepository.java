@@ -169,12 +169,6 @@ public class TransactionRepository {
             if (transaction == null) {
                 throw new RuntimeException("Giao dịch không tồn tại");
             }
-            transaction.setName(transactionEditRequest.getName());
-            transaction.setAmount(transactionEditRequest.getAmount());
-            transaction.setCategory(transactionEditRequest.getCategory());
-            transaction.setAccount(transactionEditRequest.getAccount());
-            transaction.setDate(transactionEditRequest.getDate());
-            transaction.setNote(transactionEditRequest.getNote());
             if (!transaction.getAccount().equals(transactionEditRequest.getAccount())) {
                 Account account = accountRepository.findByUUID(transaction.getAccount());
                 if (account == null) {
@@ -184,6 +178,17 @@ public class TransactionRepository {
                     account.setAmount(account.getAmount() - transaction.getAmount());
                 } else {
                     account.setAmount(account.getAmount() + transaction.getAmount());
+                }
+                accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
+            } else {
+                Account account = accountRepository.findByUUID(transaction.getAccount());
+                if (account == null) {
+                    throw new RuntimeException("Tài khoản không tồn tại");
+                }
+                if (transactionEditRequest.getType()) {
+                    account.setAmount(account.getAmount() - transaction.getAmount() + transactionEditRequest.getAmount());
+                } else {
+                    account.setAmount(account.getAmount() + transaction.getAmount() - transactionEditRequest.getAmount());
                 }
                 accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
             }
@@ -201,8 +206,27 @@ public class TransactionRepository {
                         budgetRepository.update(BudgetEditRequest.of(newBudget.getUUID(), newBudget.getName(), newBudget.getStartDate(), newBudget.getEndDate(), newBudget.getInitialLimit(), newBudget.getCurrentBalance(), newBudget.getCategory(), newBudget.getNote()));
                         transaction.setBudget(newBudget.getUUID());
                     }
+                } else {
+                    Budget budget = budgetRepository.getByUUID(transaction.getBudget());
+                    if (budget != null) {
+                        budget.setCurrentBalance(budget.getCurrentBalance() - transaction.getAmount() + transactionEditRequest.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
+                    } else {
+                        Budget newBudget = budgetRepository.getCurrentBudgetForCategory(transactionEditRequest.getCategory());
+                        if (newBudget != null) {
+                            newBudget.setCurrentBalance(newBudget.getCurrentBalance() + transactionEditRequest.getAmount());
+                            budgetRepository.update(BudgetEditRequest.of(newBudget.getUUID(), newBudget.getName(), newBudget.getStartDate(), newBudget.getEndDate(), newBudget.getInitialLimit(), newBudget.getCurrentBalance(), newBudget.getCategory(), newBudget.getNote()));
+                            transaction.setBudget(newBudget.getUUID());
+                        }
+                    }
                 }
             }
+            transaction.setName(transactionEditRequest.getName());
+            transaction.setAmount(transactionEditRequest.getAmount());
+            transaction.setCategory(transactionEditRequest.getCategory());
+            transaction.setAccount(transactionEditRequest.getAccount());
+            transaction.setDate(transactionEditRequest.getDate());
+            transaction.setNote(transactionEditRequest.getNote());
             long rowID = transactionDAO.update(transaction);
             if (rowID <= 0) {
                 throw new RuntimeException("Cập nhật giao dịch thất bại");

@@ -43,15 +43,15 @@ public class GoalViewModel extends AndroidViewModel {
 
     public void loadGoals() {
         try {
-            LiveData<List<Goal>> categories = goalRepository.getAll(sessionManager.getUUID());
+            LiveData<List<Goal>> goals = goalRepository.getAll(sessionManager.getUUID());
             Observer<List<Goal>> observer = new Observer<List<Goal>>() {
                 @Override
                 public void onChanged(List<Goal> g) {
                     goalsLiveData.setValue(g);
-                    categories.removeObserver(this);
+                    goals.removeObserver(this);
                 }
             };
-            categories.observeForever(observer);
+            goals.observeForever(observer);
         } catch (Exception e) {
             Log.e("GoalViewModel", "loadGoals: " + e.getMessage());
         }
@@ -147,7 +147,8 @@ public class GoalViewModel extends AndroidViewModel {
             resultAddGoal.setValue(response);
         } catch (Exception e) {
             Log.e("GoalViewModel", "addGoal: " + e.getMessage());
-            response.setMessage("Except: Thêm mục tiêu thất bại");
+            //response.setMessage("Except: Thêm mục tiêu thất bại");
+            response.setMessage( e.getMessage());
             resultAddGoal.setValue(response);
         }
     }
@@ -197,7 +198,8 @@ public class GoalViewModel extends AndroidViewModel {
             resultEditGoal.setValue(response);
         } catch (Exception e) {
             Log.e("GoalViewModel", "editGoal: " + e.getMessage());
-            response.setMessage("Except: Sửa mục tiêu thất bại");
+            //response.setMessage("Except: Sửa mục tiêu thất bại");
+            response.setMessage( e.getMessage());
             resultEditGoal.setValue(response);
         }
     }
@@ -217,7 +219,8 @@ public class GoalViewModel extends AndroidViewModel {
             resultDeleteGoal.setValue(response);
         } catch (Exception e) {
             Log.e("GoalViewModel", "deleteGoal: " + e.getMessage());
-            response.setMessage("Except: Xóa mục tiêu thất bại");
+            //response.setMessage("Except: Xóa mục tiêu thất bại");
+            response.setMessage( e.getMessage());
             resultDeleteGoal.setValue(response);
         }
     }

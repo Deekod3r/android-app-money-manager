@@ -64,7 +64,8 @@ public class CategoryViewModel extends AndroidViewModel {
             resultAddCategory.setValue(response);
         } catch (Exception e) {
             Log.e("CategoryViewModel", "addCategory: " + e.getMessage());
-            response.setMessage("Except: Thêm danh mục thất bại");
+            //response.setMessage("Except: Thêm danh mục thất bại");
+            response.setMessage( e.getMessage());
             resultAddCategory.setValue(response);
         }
     }
@@ -88,7 +89,8 @@ public class CategoryViewModel extends AndroidViewModel {
             resultEditCategory.setValue(response);
         } catch (Exception e) {
             Log.e("CategoryViewModel", "editCategory: " + e.getMessage());
-            response.setMessage("Except: Sửa danh mục thất bại");
+            //response.setMessage("Except: Sửa danh mục thất bại");
+            response.setMessage( e.getMessage());
             resultEditCategory.setValue(response);
         }
     }
@@ -107,7 +109,8 @@ public class CategoryViewModel extends AndroidViewModel {
             resultDeleteCategory.setValue(response);
         } catch (Exception e) {
             Log.e("CategoryViewModel", "deleteCategory: " + e.getMessage());
-            response.setMessage("Except: Xóa danh mục thất bại");
+            //response.setMessage("Except: Xóa danh mục thất bại");
+            response.setMessage( e.getMessage());
             resultDeleteCategory.setValue(response);
         }
     }
