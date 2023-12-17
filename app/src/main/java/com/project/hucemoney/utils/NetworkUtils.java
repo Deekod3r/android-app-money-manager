@@ -61,7 +61,6 @@ public class NetworkUtils {
     }
 
     public void test() {
-        // Tạo một đối tượng RequestBody từ một chuỗi JSON
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         //String json = "{\"username\":\"your_username\",\"password\":\"your_password\"}";
         Gson gson = new Gson();
@@ -69,7 +68,6 @@ public class NetworkUtils {
         String json = gson.toJson(myObject);
         RequestBody body = RequestBody.create(json, JSON);
 
-        // Gửi yêu cầu và xử lý phản hồi
         NetworkUtils.request("POST", "https://example.com/api/login", body, new Callback() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
@@ -84,12 +82,10 @@ public class NetworkUtils {
         }, true);
 
 
-        // Tạo một Map chứa các tham số yêu cầu
         Map<String, String> params = new HashMap<>();
         params.put("username", "your_username");
         params.put("password", "your_password");
 
-        // Gửi yêu cầu và xử lý phản hồi
         NetworkUtils.request("POST", "https://example.com/api/login", params, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {

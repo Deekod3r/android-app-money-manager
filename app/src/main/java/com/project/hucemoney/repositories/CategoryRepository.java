@@ -115,6 +115,8 @@ public class CategoryRepository {
         try {
             if (name == null) {
                 name = "%%";
+            } else {
+                name = "%" + name.trim() + "%";
             }
             return categoryDAO.findAll(user, type, name);
         } catch (Exception e) {

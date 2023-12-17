@@ -116,16 +116,19 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
 
     private void observer() {
         transactionViewModel.getTransactions().observe(this, transactionWithCategoryAndAccounts -> {
+            long totalIncome = 0;
+            long totalExpense = 0;
+            NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
             if (transactionWithCategoryAndAccounts == null || transactionWithCategoryAndAccounts.size() == 0) {
                 binding.tvNotifyNoData.setVisibility(View.VISIBLE);
                 transactionGroupAdapter.setData(new ArrayList<>());
             } else {
-                long totalIncome = transactionWithCategoryAndAccounts.stream()
+                totalIncome = transactionWithCategoryAndAccounts.stream()
                         .filter(transaction -> transaction.transaction.getType())
                         .mapToLong(transaction -> transaction.transaction.getAmount())
                         .sum();
 
-                long totalExpense = transactionWithCategoryAndAccounts.stream()
+                totalExpense = transactionWithCategoryAndAccounts.stream()
                         .filter(transaction -> !transaction.transaction.getType())
                         .mapToLong(transaction -> transaction.transaction.getAmount())
                         .sum();
@@ -138,12 +141,10 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
                         .sorted((group1, group2) -> group2.date.compareTo(group1.date))
                         .collect(Collectors.toList());
                 transactionGroupAdapter.setData(transactionGroups);
-
-                NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
-                binding.tvTotalIncome.setText(String.format("%s %s", format.format(totalIncome), getString(R.string.vi_currency)));
-                binding.tvTotalExpense.setText(String.format("%s %s", format.format(totalExpense), getString(R.string.vi_currency)));
                 binding.tvNotifyNoData.setVisibility(View.GONE);
             }
+            binding.tvTotalIncome.setText(String.format("%s %s", format.format(totalIncome), getString(R.string.vi_currency)));
+            binding.tvTotalExpense.setText(String.format("%s %s", format.format(totalExpense), getString(R.string.vi_currency)));
         });
 
     }
