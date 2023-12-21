@@ -171,15 +171,22 @@ public class TransactionRepository {
             }
             if (!transaction.getAccount().equals(transactionEditRequest.getAccount())) {
                 Account account = accountRepository.findByUUID(transaction.getAccount());
+                Account newAccount = accountRepository.findByUUID(transactionEditRequest.getAccount());
                 if (account == null) {
+                    throw new RuntimeException("Tài khoản không tồn tại");
+                }
+                if (newAccount == null) {
                     throw new RuntimeException("Tài khoản không tồn tại");
                 }
                 if (transactionEditRequest.getType()) {
                     account.setAmount(account.getAmount() - transaction.getAmount());
+                    newAccount.setAmount(newAccount.getAmount() + transactionEditRequest.getAmount());
                 } else {
                     account.setAmount(account.getAmount() + transaction.getAmount());
+                    newAccount.setAmount(newAccount.getAmount() - transactionEditRequest.getAmount());
                 }
                 accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
+                accountRepository.update(AccountEditRequest.of(newAccount.getUUID(), newAccount.getName(), newAccount.getAmount(), newAccount.getNote()));
             } else {
                 Account account = accountRepository.findByUUID(transaction.getAccount());
                 if (account == null) {

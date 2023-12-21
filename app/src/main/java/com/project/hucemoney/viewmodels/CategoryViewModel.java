@@ -117,6 +117,12 @@ public class CategoryViewModel extends AndroidViewModel {
 
     public void loadCategories(boolean type, @Nullable String name) {
         try {
+            if (name == null) {
+                name = "";
+            } else {
+                name = name.trim();
+            }
+            name = "%" + name + "%";
             LiveData<List<Category>> categories = categoryRepository.getAll(sessionManager.getUUID(), type, name);
             Observer<List<Category>> observer = new Observer<List<Category>>() {
                 @Override

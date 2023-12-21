@@ -115,7 +115,7 @@ public class CategoryRepository {
         }
     }
 
-    public LiveData<List<Category>> getAll(String user, boolean type, @Nullable String name) {
+    public LiveData<List<Category>> getAll(String user, boolean type, String name) {
         try {
             return categoryDAO.findAll(user, type, name);
         } catch (Exception e) {

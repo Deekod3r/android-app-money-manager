@@ -42,8 +42,7 @@ public class YearTransactionFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<TimeSummary> timeSummaries = new ArrayList<>();
     private NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
-    private ArrayList<BarEntry> valuesIncome = new ArrayList<>();
-    private ArrayList<BarEntry> valuesExpense = new ArrayList<>();
+    private ArrayList<BarEntry> values = new ArrayList<>();
 
     public YearTransactionFragment() {
     }
@@ -113,49 +112,37 @@ public class YearTransactionFragment extends Fragment {
     private void observer() {
         transactionViewModel.getSummaryYears().observe(getViewLifecycleOwner(), timeSummaries -> {
             timeTransactionAdapter.setData(timeSummaries);
-            if (timeSummaries != null && timeSummaries.size() > 0) {
-                valuesIncome.clear();
-                valuesExpense.clear();
+            if (timeSummaries != null && !timeSummaries.isEmpty()) {
                 binding.tvYearToYear.setText(String.format("%s - %s", timeSummaries.get(timeSummaries.size() - 1).getTime(), timeSummaries.get(0).getTime()));
-                for (int i = timeSummaries.size() - 1; i >= 0; i--) {
-                    valuesIncome.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime()), new float[]{timeSummaries.get(i).getIncome()}));
-                    valuesExpense.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime()), new float[]{timeSummaries.get(i).getExpense()}));
+                values.clear();
+                for (int i = 0; i < timeSummaries.size(); i++) {
+                    values.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime()), new float[]{timeSummaries.get(i).getIncome(), timeSummaries.get(i).getExpense()}));
                 }
-                BarDataSet barDataSet = new BarDataSet(valuesIncome, "Thu");
-                BarDataSet barDataSet2 = new BarDataSet(valuesExpense, "Chi");
-                barDataSet.setColors(Color.rgb(104, 241, 175));
-                barDataSet.setValueFormatter(new ValueFormatter() {
+                BarDataSet barDataSet = new BarDataSet(values, "");
+                barDataSet.setColors(Color.rgb(104, 241, 175), Color.rgb(164, 228, 251));
+                barDataSet.setStackLabels(new String[]{"Thu", "Chi"});
+                barDataSet.setDrawValues(false);
+                BarData barData = new BarData(barDataSet);
+                barData.setBarWidth(0.4f);
+                binding.barChartYearTransaction.getAxisRight().setDrawLabels(false);
+                binding.barChartYearTransaction.getXAxis().setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getFormattedValue(float value) {
-                        return "";
-                    }
-                });
-                barDataSet2.setColors(Color.rgb(164, 228, 251));
-                barDataSet2.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return "";
+                        int roundedValue = Math.round(value);
+                        if (Math.ceil(value) == value) {
+                            return String.valueOf((int) value);
+                        } else {
+                            return "";
+                        }
                     }
                 });
 
-                BarData barData = new BarData(barDataSet, barDataSet2);
-                barData.setBarWidth(0.4f);
-                XAxis xAxis = binding.barChartYearTransaction.getXAxis();
-                xAxis.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.valueOf((int) value);
-                    }
-                });
-                YAxis rightAxis = binding.barChartYearTransaction.getAxisRight();
-                rightAxis.setDrawLabels(false);
                 binding.barChartYearTransaction.getXAxis().setGranularityEnabled(false);
                 binding.barChartYearTransaction.getXAxis().setGranularity(1f);
                 binding.barChartYearTransaction.setData(barData);
                 binding.barChartYearTransaction.getDescription().setText("(Đơn vị: đồng)");
-                //binding.barChartYearTransaction.getDescription().setYOffset(-10f);
-                //binding.barChartYearTransaction.setFitBars(true);
-                //binding.barChartYearTransaction.groupBars(2020f, 0.5f, 0f);
+                binding.barChartYearTransaction.getDescription().setYOffset(-10f);
+                binding.barChartYearTransaction.setFitBars(true);
                 binding.barChartYearTransaction.invalidate();
             } else {
                 binding.barChartYearTransaction.clear();

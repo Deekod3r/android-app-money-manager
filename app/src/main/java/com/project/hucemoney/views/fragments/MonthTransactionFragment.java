@@ -135,7 +135,7 @@ public class MonthTransactionFragment extends Fragment {
     private void observer() {
         transactionViewModel.getSummaryMonths().observe(getViewLifecycleOwner(), timeSummaries -> {
             timeTransactionAdapter.setData(timeSummaries);
-            if (timeSummaries != null && timeSummaries.size() > 0) {
+            if (timeSummaries != null && !timeSummaries.isEmpty()) {
                 values.clear();
                 for (int i = 0; i < timeSummaries.size(); i++) {
                     values.add(new BarEntry(Integer.parseInt(timeSummaries.get(i).getTime().substring(5)), new float[]{timeSummaries.get(i).getIncome(), timeSummaries.get(i).getExpense()}));
