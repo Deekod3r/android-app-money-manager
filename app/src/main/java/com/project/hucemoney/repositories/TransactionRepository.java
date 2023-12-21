@@ -65,11 +65,9 @@ public class TransactionRepository {
                 account.setAmount(account.getAmount() - transactionAddRequest.getAmount());
                 Budget budget = budgetRepository.getCurrentBudgetForCategory(transactionAddRequest.getCategory());
                 if (budget != null) {
-                    if (transaction.getDate().isAfter(budget.getStartDate()) && transaction.getDate().isBefore(budget.getEndDate())) {
-                        transaction.setBudget(budget.getUUID());
-                        budget.setCurrentBalance(budget.getCurrentBalance() + transactionAddRequest.getAmount());
-                        budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
-                    }
+                    transaction.setBudget(budget.getUUID());
+                    budget.setCurrentBalance(budget.getCurrentBalance() + transactionAddRequest.getAmount());
+                    budgetRepository.update(BudgetEditRequest.of(budget.getUUID(), budget.getName(), budget.getStartDate(), budget.getEndDate(), budget.getInitialLimit(), budget.getCurrentBalance(), budget.getCategory(), budget.getNote()));
                 }
             }
             accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
