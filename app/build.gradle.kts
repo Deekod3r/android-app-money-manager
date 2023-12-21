@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.project.hucemoney"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.project.hucemoney"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "5.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
