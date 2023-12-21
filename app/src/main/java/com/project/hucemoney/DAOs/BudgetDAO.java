@@ -78,6 +78,6 @@ public interface BudgetDAO {
             "WHERE " + FieldData.BUDGET_FIELD_NAME + " = :name LIMIT 1")
     Budget findByName(String name);
 
-    @Query( "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate >= date('now') LIMIT 1")
+    @Query( "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate >= date('now') AND startDate <= date('now') LIMIT 1")
     Budget findCurrentBudgetForCategory(String categoryUUID);
 }
