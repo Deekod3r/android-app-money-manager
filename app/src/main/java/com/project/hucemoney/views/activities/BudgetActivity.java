@@ -92,7 +92,6 @@ public class BudgetActivity extends AppCompatActivity {
 //                                    break;
 //                                }
 //                            }
-//
                         }
                     } catch (Exception e) {
                         Log.e("BudgetActivity", "mLauncher: " + e.getMessage());

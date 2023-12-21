@@ -117,11 +117,6 @@ public class CategoryRepository {
 
     public LiveData<List<Category>> getAll(String user, boolean type, @Nullable String name) {
         try {
-            if (name == null) {
-                name = "%%";
-            } else {
-                name = "%" + name.trim() + "%";
-            }
             return categoryDAO.findAll(user, type, name);
         } catch (Exception e) {
             throw e;

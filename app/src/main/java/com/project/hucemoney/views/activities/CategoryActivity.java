@@ -158,6 +158,11 @@ public class CategoryActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText == null) {
+                    newText = "";
+                } else {
+                    newText = newText.trim();
+                }
                 newText = "%" + newText + "%";
                 categoryViewModel.loadCategories(binding.tabLayout.getSelectedTabPosition() != 0, newText);
                 return false;
