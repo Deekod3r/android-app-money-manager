@@ -208,12 +208,9 @@ public class BudgetViewModel extends AndroidViewModel {
     public void loadBudgets() {
         try {
             LiveData<List<BudgetWithCategory>> budgets = budgetRepository.getAll(sessionManager.getUUID());
-            Observer<List<BudgetWithCategory>> observer = new Observer<List<BudgetWithCategory>>() {
-                @Override
-                public void onChanged(List<BudgetWithCategory> bg) {
-                    budgetsLiveData.setValue(bg);
-                    budgets.removeObserver(this);
-                }
+            Observer<List<BudgetWithCategory>> observer = bg -> {
+                budgetsLiveData.setValue(bg);
+                //budgets.removeObserver(this);
             };
             budgets.observeForever(observer);
         } catch (Exception e) {

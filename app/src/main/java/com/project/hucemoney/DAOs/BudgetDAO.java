@@ -68,8 +68,7 @@ public interface BudgetDAO {
             "FROM " + FieldData.TABLE_BUDGETS + " " +
             "INNER JOIN " + FieldData.TABLE_CATEGORIES + " " +
             "ON " + FieldData.TABLE_BUDGETS + "." + FieldData.BUDGET_FIELD_CATEGORY + " = " + FieldData.TABLE_CATEGORIES + "." + FieldData.FIELD_UUID + " " +
-            "WHERE " + FieldData.TABLE_CATEGORIES + "." + FieldData.CATEGORY_FIELD_USER + " = :user " +
-            "ORDER BY endDate DESC")
+            "WHERE " + FieldData.TABLE_CATEGORIES + "." + FieldData.CATEGORY_FIELD_USER + " = :user ")
     LiveData<List<BudgetWithCategory>> findAll(String user);
 
 
