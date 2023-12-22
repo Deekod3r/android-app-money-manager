@@ -45,6 +45,12 @@ public class EditBudgetActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         binding.unbind();
@@ -56,6 +62,7 @@ public class EditBudgetActivity extends AppCompatActivity {
         Budget budget = intent.getParcelableExtra("budget");
         category = intent.getParcelableExtra("category");
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        assert budget != null;
         budgetViewModel.getBudgetEditRequest().setUUID(budget.getUUID());
         budgetViewModel.getBudgetEditRequest().setName(budget.getName());
         budgetViewModel.getBudgetEditRequest().setCategory(budget.getCategory());
