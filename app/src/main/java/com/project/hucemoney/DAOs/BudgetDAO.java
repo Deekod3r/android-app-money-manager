@@ -13,6 +13,7 @@ import com.project.hucemoney.database.FieldData;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.pojo.BudgetWithCategory;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Dao
@@ -79,4 +80,11 @@ public interface BudgetDAO {
 
     @Query( "SELECT * FROM budgets WHERE category = :categoryUUID AND endDate >= date('now') AND startDate <= date('now') LIMIT 1")
     Budget findCurrentBudgetForCategory(String categoryUUID);
+
+    @Query("SELECT * " +
+            "FROM " + FieldData.TABLE_BUDGETS + " " +
+            "WHERE " + FieldData.BUDGET_FIELD_CATEGORY + " = :categoryUUID AND " +
+            "startDate <= :date AND " +
+            "endDate >= :date LIMIT 1")
+    Budget findBudgetForCategory(String categoryUUID, LocalDate date);
 }

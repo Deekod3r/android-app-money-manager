@@ -116,6 +116,26 @@ public class BudgetRepository {
             budget.setCurrentBalance(budgetEditRequest.getCurrentBalance());
             budget.setCategory(budgetEditRequest.getCategory());
             budget.setNote(budgetEditRequest.getNote());
+            List<com.project.hucemoney.entities.Transaction> transactions = transactionDAO.findTransactionsByBudget(budget.getUUID());
+            if (transactions != null && transactions.size() > 0) {
+                for (com.project.hucemoney.entities.Transaction transaction : transactions) {
+                    if (transaction.getDate().isBefore(budget.getStartDate()) || transaction.getDate().isAfter(budget.getEndDate())) {
+                        transaction.setBudget(null);
+                        transactionDAO.update(transaction);
+                        budget.setCurrentBalance(budget.getCurrentBalance() - transaction.getAmount());
+                    }
+                }
+            }
+            transactions = transactionDAO.findTransactionsByCategoryAndCurrentBudget(budget.getCategory(), budget.getStartDate(), budget.getEndDate());
+            if (transactions != null && transactions.size() > 0) {
+                for (com.project.hucemoney.entities.Transaction transaction : transactions) {
+                    if (transaction.getBudget() == null) {
+                        transaction.setBudget(budget.getUUID());
+                        transactionDAO.update(transaction);
+                        budget.setCurrentBalance(budget.getCurrentBalance() + transaction.getAmount());
+                    }
+                }
+            }
             long rowID = budgetDAO.update(budget);
             if (rowID <= 0) {
                 throw new RuntimeException("Cập nhật hạn mức thất bại");

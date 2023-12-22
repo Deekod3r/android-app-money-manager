@@ -4,6 +4,7 @@ import static com.project.hucemoney.utils.ValidationUtils.isNullOrEmpty;
 
 import androidx.lifecycle.LiveData;
 
+import com.project.hucemoney.DAOs.BudgetDAO;
 import com.project.hucemoney.DAOs.TransactionDAO;
 import com.project.hucemoney.DAOs.TransactionGoalDAO;
 import com.project.hucemoney.database.AppDatabase;
@@ -26,6 +27,7 @@ public class TransactionRepository {
     private AccountRepository accountRepository;
     private BudgetRepository budgetRepository;
     private CategoryRepository categoryRepository;
+    private final BudgetDAO budgetDAO;
     private final TransactionDAO transactionDAO;
     private final TransactionGoalDAO transactionGoalDAO;
     private AppDatabase appDatabase;
@@ -37,6 +39,7 @@ public class TransactionRepository {
         this.budgetRepository = new BudgetRepository(appDatabase);
         this.transactionDAO = appDatabase.transactionDAO();
         this.transactionGoalDAO = appDatabase.transactionGoalDAO();
+        this.budgetDAO = appDatabase.budgetDAO();
     }
 
     @androidx.room.Transaction
@@ -167,8 +170,8 @@ public class TransactionRepository {
             if (transaction == null) {
                 throw new RuntimeException("Giao dịch không tồn tại");
             }
+            Account account = accountRepository.findByUUID(transaction.getAccount());
             if (!transaction.getAccount().equals(transactionEditRequest.getAccount())) {
-                Account account = accountRepository.findByUUID(transaction.getAccount());
                 Account newAccount = accountRepository.findByUUID(transactionEditRequest.getAccount());
                 if (account == null) {
                     throw new RuntimeException("Tài khoản không tồn tại");
@@ -186,7 +189,6 @@ public class TransactionRepository {
                 accountRepository.update(AccountEditRequest.of(account.getUUID(), account.getName(), account.getAmount(), account.getNote()));
                 accountRepository.update(AccountEditRequest.of(newAccount.getUUID(), newAccount.getName(), newAccount.getAmount(), newAccount.getNote()));
             } else {
-                Account account = accountRepository.findByUUID(transaction.getAccount());
                 if (account == null) {
                     throw new RuntimeException("Tài khoản không tồn tại");
                 }
@@ -223,6 +225,27 @@ public class TransactionRepository {
                             budgetRepository.update(BudgetEditRequest.of(newBudget.getUUID(), newBudget.getName(), newBudget.getStartDate(), newBudget.getEndDate(), newBudget.getInitialLimit(), newBudget.getCurrentBalance(), newBudget.getCategory(), newBudget.getNote()));
                             transaction.setBudget(newBudget.getUUID());
                         }
+                    }
+                }
+            }
+            if (!transaction.getDate().isEqual(transactionEditRequest.getDate())) {
+                Budget bg = budgetDAO.findBudgetForCategory(transaction.getCategory(), transactionEditRequest.getDate());
+                if (bg != null) {
+                    if (!bg.getUUID().equals(transaction.getBudget())) {
+                        Budget oldBudget = budgetRepository.getByUUID(transaction.getBudget());
+                        if (oldBudget != null) {
+                            oldBudget.setCurrentBalance(oldBudget.getCurrentBalance() - transaction.getAmount());
+                            budgetRepository.update(BudgetEditRequest.of(oldBudget.getUUID(), oldBudget.getName(), oldBudget.getStartDate(), oldBudget.getEndDate(), oldBudget.getInitialLimit(), oldBudget.getCurrentBalance(), oldBudget.getCategory(), oldBudget.getNote()));
+                        }
+                        bg.setCurrentBalance(bg.getCurrentBalance() + transactionEditRequest.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(bg.getUUID(), bg.getName(), bg.getStartDate(), bg.getEndDate(), bg.getInitialLimit(), bg.getCurrentBalance(), bg.getCategory(), bg.getNote()));
+                        transaction.setBudget(bg.getUUID());
+                    }
+                } else {
+                    Budget oldBudget = budgetRepository.getByUUID(transaction.getBudget());
+                    if (oldBudget != null) {
+                        oldBudget.setCurrentBalance(oldBudget.getCurrentBalance() - transaction.getAmount());
+                        budgetRepository.update(BudgetEditRequest.of(oldBudget.getUUID(), oldBudget.getName(), oldBudget.getStartDate(), oldBudget.getEndDate(), oldBudget.getInitialLimit(), oldBudget.getCurrentBalance(), oldBudget.getCategory(), oldBudget.getNote()));
                     }
                 }
             }

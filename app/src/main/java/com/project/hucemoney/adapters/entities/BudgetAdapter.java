@@ -62,6 +62,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
                 holder.timeRemaining.setTextColor(context.getColor(R.color.red));
             } else {
                 holder.timeRemaining.setText(String.format("Còn lại: %s ngày", daysDifferenceToEnd));
+                holder.timeRemaining.setTextColor(context.getColor(R.color.dark_grey));
             }
         }
         int progress = (int) (budget.getCurrentBalance() * 100 / budget.getInitialLimit());

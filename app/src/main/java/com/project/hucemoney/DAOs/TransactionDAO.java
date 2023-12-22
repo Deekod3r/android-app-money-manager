@@ -164,4 +164,7 @@ public interface TransactionDAO {
     @Query("select * from transactions where category = :category and date >= :startDate and date <= :endDate")
     List<Transaction> findTransactionsByCategoryAndCurrentBudget(String category, LocalDate startDate, LocalDate endDate);
 
+    @Query("select * from transactions where budget = :budget")
+    List<Transaction> findTransactionsByBudget(String budget);
+
 }
