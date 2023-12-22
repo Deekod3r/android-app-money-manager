@@ -127,10 +127,9 @@ public class TaxActivity extends AppCompatActivity {
 
         binding.btnCalculate.setOnClickListener(v -> {
             Intent intent = new Intent(this, CalculateTaxActivity.class);
-            intent.putExtra("income", Integer.parseInt(binding.edtIncome.getText().toString()));
-            intent.putExtra("insurance", Integer.parseInt(binding.edtInsurance.getText().toString()));
+            intent.putExtra("income", Long.parseLong(binding.edtIncome.getText().toString()));
+            intent.putExtra("insurance", Long.parseLong(binding.edtInsurance.getText().toString()));
             intent.putExtra("dependentPeople", Integer.parseInt(binding.edtDependentPeople.getText().toString()));
-            intent.putExtra("area", binding.edtArea.getText().toString());
             startActivity(intent);
         });
     }

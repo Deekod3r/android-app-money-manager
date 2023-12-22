@@ -48,9 +48,5 @@ public class Constants {
     public static float BHXH = 0.08f;
     public static float BHYT = 0.015f;
     public static float BHTN = 0.01f;
-    public static long BH_V1 = 1160000;
-    public static long BH_V2 = 1280000;
-    public static long BH_V3 = 1400000;
-    public static long BH_V4 = 1520000;
 
 }
