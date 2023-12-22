@@ -50,18 +50,20 @@ public class CalculateTaxActivity extends AppCompatActivity {
         }
         binding.tvIncomeTax.setText(String.format("%s %s", formatter.format(v), this.getString(R.string.vi_currency)));
         double tax = 0;
-        if (v <= 5000000) {
-            tax = v * 0.05;
-        } else if (v <= 10000000) {
-            tax = 5000000 * 0.05 + (v - 5000000) * 0.1;
-        } else if (v <= 18000000) {
-            tax = 5000000 * 0.05 + 10000000 * 0.1 + (v - 10000000) * 0.15;
-        } else if (v <= 32000000) {
-            tax = 5000000 * 0.05 + 10000000 * 0.1 + 18000000 * 0.15 + (v - 18000000) * 0.2;
-        } else if (v <= 52000000) {
-            tax = 5000000 * 0.05 + 10000000 * 0.1 + 18000000 * 0.15 + 32000000 * 0.2 + (v - 32000000) * 0.25;
+        if (income <= 5000000) {
+            tax = income * 0.05;
+        } else if (income <= 10000000) {
+            tax = 5000000 * 0.05 + (income - 5000000) * 0.1;
+        } else if (income <= 18000000) {
+            tax = 5000000 * 0.05 + 5000000 * 0.1 + (income - 10000000) * 0.15;
+        } else if (income <= 32000000) {
+            tax = 5000000 * 0.05 + 5000000 * 0.1 + 8000000 * 0.15 + (income - 18000000) * 0.2;
+        } else if (income <= 52000000) {
+            tax = 5000000 * 0.05 + 5000000 * 0.1 + 8000000 * 0.15 + 14000000 * 0.2 + (income - 32000000) * 0.25;
+        } else if (income <= 80000000) {
+            tax = 5000000 * 0.05 + 5000000 * 0.1 + 8000000 * 0.15 + 14000000 * 0.2 + 20000000 * 0.25 + (income - 52000000) * 0.3;
         } else {
-            tax = 5000000 * 0.05 + 10000000 * 0.1 + 18000000 * 0.15 + 32000000 * 0.2 + 52000000 * 0.25 + (v - 52000000) * 0.25;
+            tax = 5000000 * 0.05 + 5000000 * 0.1 + 8000000 * 0.15 + 14000000 * 0.2 + 20000000 * 0.25 + 28000000 * 0.3 + (income - 80000000) * 0.35;
         }
         binding.tvTax.setText(String.format("%s %s", formatter.format(tax), this.getString(R.string.vi_currency)));
         binding.tvFinalIncome.setText(String.format("%s %s", formatter.format(income - tax), this.getString(R.string.vi_currency)));
