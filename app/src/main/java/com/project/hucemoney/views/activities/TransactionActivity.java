@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import com.project.hucemoney.entities.Goal;
 import com.project.hucemoney.entities.Transaction;
 import com.project.hucemoney.entities.pojo.TransactionGroup;
 import com.project.hucemoney.entities.pojo.TransactionWithCategoryAndAccount;
+import com.project.hucemoney.utils.FunctionUtils;
 import com.project.hucemoney.viewmodels.TransactionViewModel;
 
 import java.text.NumberFormat;
@@ -36,10 +40,13 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
 
     private ActivityTransactionBinding binding;
     private List<TransactionGroup> transactionGroups = new ArrayList<>();
+    private List<TransactionWithCategoryAndAccount> transactionWithCategoryAndAccounts = new ArrayList<>();
     private TransactionViewModel transactionViewModel;
     private TransactionGroupAdapter transactionGroupAdapter;
     private ActivityResultLauncher<Intent> mLauncher;
     private String key = "";
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,41 +119,99 @@ public class TransactionActivity extends AppCompatActivity implements Transactio
         binding.btnClose.setOnClickListener(v -> {
             finish();
         });
+
+        binding.edtStartDate.setInputType(InputType.TYPE_NULL);
+        binding.edtStartDate.setOnClickListener(v -> {
+            FunctionUtils.showDialogDate(this, binding.edtStartDate);
+        });
+        binding.edtStartDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                startDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        binding.edtEndDate.setInputType(InputType.TYPE_NULL);
+        binding.edtEndDate.setOnClickListener(v -> {
+            FunctionUtils.showDialogDate(this, binding.edtEndDate);
+        });
+        binding.edtEndDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                endDate = LocalDate.parse(s.toString(), Constants.DATE_FORMATTER);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        binding.btnFilter.setOnClickListener(v -> {
+            if (startDate == null || endDate == null) {
+                Toast.makeText(this, "Vui lòng chọn ngày bắt đầu và ngày kết thúc", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (startDate.isAfter(endDate)) {
+                Toast.makeText(this, "Ngày bắt đầu không được lớn hơn ngày kết thúc", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            List<TransactionWithCategoryAndAccount> transactionWithCategoryAndAccountsFilter = transactionWithCategoryAndAccounts.stream()
+                    .filter(transaction -> (transaction.transaction.getDate().isAfter(startDate) || transaction.transaction.getDate().isEqual(startDate))
+                            && (transaction.transaction.getDate().isBefore(endDate) || transaction.transaction.getDate().isEqual(endDate)))
+                    .collect(Collectors.toList());
+            loadData(transactionWithCategoryAndAccountsFilter);
+        });
     }
 
     private void observer() {
         transactionViewModel.getTransactions().observe(this, transactionWithCategoryAndAccounts -> {
-            long totalIncome = 0;
-            long totalExpense = 0;
-            NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
-            if (transactionWithCategoryAndAccounts == null || transactionWithCategoryAndAccounts.size() == 0) {
-                binding.tvNotifyNoData.setVisibility(View.VISIBLE);
-                transactionGroupAdapter.setData(new ArrayList<>());
-            } else {
-                totalIncome = transactionWithCategoryAndAccounts.stream()
-                        .filter(transaction -> transaction.transaction.getType())
-                        .mapToLong(transaction -> transaction.transaction.getAmount())
-                        .sum();
-
-                totalExpense = transactionWithCategoryAndAccounts.stream()
-                        .filter(transaction -> !transaction.transaction.getType())
-                        .mapToLong(transaction -> transaction.transaction.getAmount())
-                        .sum();
-
-                Map<LocalDate, List<TransactionWithCategoryAndAccount>> groupedTransactions = transactionWithCategoryAndAccounts.stream()
-                        .collect(Collectors.groupingBy(transaction -> transaction.transaction.getDate()));
-
-                List<TransactionGroup> transactionGroups = groupedTransactions.entrySet().stream()
-                        .map(entry -> new TransactionGroup(entry.getKey(), entry.getValue()))
-                        .sorted((group1, group2) -> group2.date.compareTo(group1.date))
-                        .collect(Collectors.toList());
-                transactionGroupAdapter.setData(transactionGroups);
-                binding.tvNotifyNoData.setVisibility(View.GONE);
-            }
-            binding.tvTotalIncome.setText(String.format("%s %s", format.format(totalIncome), getString(R.string.vi_currency)));
-            binding.tvTotalExpense.setText(String.format("%s %s", format.format(totalExpense), getString(R.string.vi_currency)));
+            this.transactionWithCategoryAndAccounts = transactionWithCategoryAndAccounts;
+            loadData(transactionWithCategoryAndAccounts);
         });
 
+    }
+
+    private void loadData(List<TransactionWithCategoryAndAccount> transactionWithCategoryAndAccounts) {
+        long totalIncome = 0;
+        long totalExpense = 0;
+        NumberFormat format = NumberFormat.getInstance(Locale.GERMANY);
+        if (transactionWithCategoryAndAccounts == null || transactionWithCategoryAndAccounts.size() == 0) {
+            binding.tvNotifyNoData.setVisibility(View.VISIBLE);
+            transactionGroupAdapter.setData(new ArrayList<>());
+        } else {
+            totalIncome = transactionWithCategoryAndAccounts.stream()
+                    .filter(transaction -> transaction.transaction.getType())
+                    .mapToLong(transaction -> transaction.transaction.getAmount())
+                    .sum();
+
+            totalExpense = transactionWithCategoryAndAccounts.stream()
+                    .filter(transaction -> !transaction.transaction.getType())
+                    .mapToLong(transaction -> transaction.transaction.getAmount())
+                    .sum();
+
+            Map<LocalDate, List<TransactionWithCategoryAndAccount>> groupedTransactions = transactionWithCategoryAndAccounts.stream()
+                    .collect(Collectors.groupingBy(transaction -> transaction.transaction.getDate()));
+
+            List<TransactionGroup> transactionGroups = groupedTransactions.entrySet().stream()
+                    .map(entry -> new TransactionGroup(entry.getKey(), entry.getValue()))
+                    .sorted((group1, group2) -> group2.date.compareTo(group1.date))
+                    .collect(Collectors.toList());
+            transactionGroupAdapter.setData(transactionGroups);
+            binding.tvNotifyNoData.setVisibility(View.GONE);
+        }
+        binding.tvTotalIncome.setText(String.format("%s %s", format.format(totalIncome), getString(R.string.vi_currency)));
+        binding.tvTotalExpense.setText(String.format("%s %s", format.format(totalExpense), getString(R.string.vi_currency)));
     }
 
     @Override

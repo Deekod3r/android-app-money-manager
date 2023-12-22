@@ -89,22 +89,45 @@
                         android:paddingVertical="10dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.9"
-                            android:text="Thời gian"
-                            android:layout_marginBottom="5dp"
-                            android:drawablePadding="10dp"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:drawableEndCompat="@drawable/baseline_date_blue_24" />
-
-                        <View
+                        <EditText
+                            android:id="@+id/edtStartDate"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/grey_blur" />
+                            android:background="@drawable/edt_primary"
+                            android:paddingHorizontal="16dp"
+                            android:layout_height="55dp"
+                            android:ems="10"
+                            android:cursorVisible="false"
+                            android:inputType="date"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:textColor="@color/black"
+                            android:drawableStart="@drawable/baseline_date_blue_24"
+                            android:drawableEnd="@drawable/baseline_next_grey_24"
+                            android:drawablePadding="5dp"
+                            android:textColorHint="@color/grey"
+                            android:hint="Ngày bắt đầu"
+                            android:textSize="16sp"
+                            android:autofillHints="" />
+
+                        <EditText
+                            android:id="@+id/edtEndDate"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/edt_primary"
+                            android:paddingHorizontal="16dp"
+                            android:layout_height="55dp"
+                            android:ems="10"
+                            android:cursorVisible="false"
+                            android:inputType="date"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:textColor="@color/black"
+                            android:drawableStart="@drawable/baseline_date_blue_24"
+                            android:drawableEnd="@drawable/baseline_next_grey_24"
+                            android:drawablePadding="5dp"
+                            android:textColorHint="@color/grey"
+                            android:hint="Ngày kết thúc"
+                            android:textSize="16sp"
+                            android:autofillHints="" />
 
                     </LinearLayout>
 

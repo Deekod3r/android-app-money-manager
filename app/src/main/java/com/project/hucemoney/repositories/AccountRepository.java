@@ -60,7 +60,8 @@ public class AccountRepository {
     @Transaction
     public Account create(AccountAddRequest accountAddRequest) {
         try {
-            if (accountDAO.findByName(accountAddRequest.getName()) != null) {
+            Account a = accountDAO.findByName(accountAddRequest.getName());
+            if (a != null && a.getUser().equals(accountAddRequest.getUser())) {
                 throw new RuntimeException("Tên tài khoản đã tồn tại");
             }
             Account account = new Account();
@@ -126,7 +127,8 @@ public class AccountRepository {
                 throw new RuntimeException("Tài khoản không tồn tại");
             }
             if (!account.getName().equals(accountEditRequest.getName())) {
-                if (accountDAO.findByName(accountEditRequest.getName()) != null) {
+                Account a = accountDAO.findByName(accountEditRequest.getName());
+                if (a != null && a.getUser().equals(account.getUser())) {
                     throw new RuntimeException("Tên tài khoản đã tồn tại");
                 }
             }
