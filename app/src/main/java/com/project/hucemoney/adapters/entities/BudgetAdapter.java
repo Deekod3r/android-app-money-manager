@@ -71,6 +71,10 @@ public class BudgetAdapter extends RecyclerView.Adapter<BudgetAdapter.ViewHolder
             holder.budgetRemaining.setTextColor(context.getColor(R.color.red));
             holder.notifyBudget.setVisibility(View.VISIBLE);
             holder.notifyBudget.setTextColor(context.getColor(R.color.red));
+        } else {
+            holder.notifyBudget.setVisibility(View.GONE);
+            holder.progressBar.setProgressTintList(ColorStateList.valueOf(context.getColor(R.color.green)));
+            holder.budgetRemaining.setTextColor(context.getColor(R.color.black));
         }
         holder.itemView.setOnClickListener(v -> {
             if (onItemClickListener != null) {
