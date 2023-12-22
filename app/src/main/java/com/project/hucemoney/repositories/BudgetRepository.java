@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Transaction;
 
 import com.project.hucemoney.DAOs.BudgetDAO;
+import com.project.hucemoney.DAOs.TransactionDAO;
 import com.project.hucemoney.database.AppDatabase;
 import com.project.hucemoney.entities.Budget;
 import com.project.hucemoney.entities.pojo.BudgetWithCategory;
@@ -15,11 +16,13 @@ import java.util.Objects;
 
 public class BudgetRepository {
     private final BudgetDAO budgetDAO;
+    private final TransactionDAO transactionDAO;
     private AppDatabase appDatabase;
 
     public BudgetRepository(AppDatabase appDatabase) {
         this.appDatabase = appDatabase;
         this.budgetDAO = appDatabase.budgetDAO();
+        this.transactionDAO = appDatabase.transactionDAO();
     }
 
     @Transaction
@@ -38,6 +41,16 @@ public class BudgetRepository {
             budget.setInitialLimit(budgetAddRequest.getInitialLimit());
             budget.setCategory(budgetAddRequest.getCategory());
             budget.setNote(budgetAddRequest.getNote());
+            List<com.project.hucemoney.entities.Transaction> transactions = transactionDAO.findTransactionsByCategoryAndCurrentBudget(budget.getCategory(), budget.getStartDate(), budget.getEndDate());
+            long currentBalance = 0L;
+            if (transactions != null && transactions.size() > 0) {
+                for (com.project.hucemoney.entities.Transaction transaction : transactions) {
+                    currentBalance += transaction.getAmount();
+                    transaction.setBudget(budget.getUUID());
+                    transactionDAO.update(transaction);
+                }
+            }
+            budget.setCurrentBalance(currentBalance);
             long rowID = budgetDAO.save(budget);
             if (rowID <= 0) {
                 throw new RuntimeException("Thêm hạn mức thất bại");

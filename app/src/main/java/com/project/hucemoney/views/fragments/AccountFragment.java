@@ -27,6 +27,7 @@ import com.project.hucemoney.databinding.FragmentAccountBinding;
 import com.project.hucemoney.entities.Account;
 import com.project.hucemoney.viewmodels.AccountViewModel;
 import com.project.hucemoney.views.activities.AddAccountActivity;
+import com.project.hucemoney.views.activities.EditTransactionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,15 @@ public class AccountFragment extends Fragment {
         initRecyclerView();
         controlAction();
         observer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (EditTransactionActivity.isEdit) {
+            accountViewModel.loadAccounts();
+            EditTransactionActivity.isEdit = false;
+        }
     }
 
     @Override

@@ -212,7 +212,7 @@ public class BudgetViewModel extends AndroidViewModel {
                 @Override
                 public void onChanged(List<BudgetWithCategory> bg) {
                     budgetsLiveData.setValue(bg);
-                    //budgets.removeObserver(this);
+                    budgets.removeObserver(this);
                 }
             };
             budgets.observeForever(observer);

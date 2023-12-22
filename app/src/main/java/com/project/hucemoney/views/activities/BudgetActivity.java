@@ -40,6 +40,7 @@ public class BudgetActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<BudgetWithCategory> budgets = new ArrayList<>();
     private ActivityResultLauncher<Intent> mLauncher;
+    public static boolean isEditTransaction = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,15 @@ public class BudgetActivity extends AppCompatActivity {
         initRecyclerView();
         controlAction();
         observer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(EditTransactionActivity.isEdit){
+            budgetViewModel.loadBudgets();
+            EditTransactionActivity.isEdit = false;
+        }
     }
 
     @Override

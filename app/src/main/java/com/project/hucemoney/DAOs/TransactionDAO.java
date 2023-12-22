@@ -161,4 +161,7 @@ public interface TransactionDAO {
     )
     List<TimeSummary> findYearsSummary(String user);
 
+    @Query("select * from transactions where category = :category and date >= :startDate and date <= :endDate")
+    List<Transaction> findTransactionsByCategoryAndCurrentBudget(String category, LocalDate startDate, LocalDate endDate);
+
 }

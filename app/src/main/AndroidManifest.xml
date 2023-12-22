@@ -20,6 +20,9 @@
         android:theme="@style/Theme.HUCEMoney"
         tools:ignore="UnusedAttribute">
         <activity
+            android:name=".views.activities.CalculateTaxActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.TransactionByKeyActivity"
             android:exported="false" />
         <activity

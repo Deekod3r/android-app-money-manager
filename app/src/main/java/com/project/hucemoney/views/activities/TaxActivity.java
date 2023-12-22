@@ -2,6 +2,7 @@ package com.project.hucemoney.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -125,7 +126,12 @@ public class TaxActivity extends AppCompatActivity {
         binding.btnClose.setOnClickListener(v -> finish());
 
         binding.btnCalculate.setOnClickListener(v -> {
-
+            Intent intent = new Intent(this, CalculateTaxActivity.class);
+            intent.putExtra("income", Integer.parseInt(binding.edtIncome.getText().toString()));
+            intent.putExtra("insurance", Integer.parseInt(binding.edtInsurance.getText().toString()));
+            intent.putExtra("dependentPeople", Integer.parseInt(binding.edtDependentPeople.getText().toString()));
+            intent.putExtra("area", binding.edtArea.getText().toString());
+            startActivity(intent);
         });
     }
 }

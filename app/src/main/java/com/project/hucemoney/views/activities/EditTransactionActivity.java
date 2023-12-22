@@ -37,6 +37,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     private Account account;
     private Category category;
     private ActivityResultLauncher<Intent> mLauncher;
+    public static boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +174,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                     data.putExtra("action", Constants.ACTION_EDIT);
                     setResult(Activity.RESULT_OK, data);
                     Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                    this.isEdit = true;
                     finish();
                 } else {
                     FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
@@ -192,6 +194,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                                 data.putExtra("action", Constants.ACTION_DELETE);
                                 setResult(Activity.RESULT_OK, data);
                                 Toast.makeText(this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                this.isEdit = true;
                                 finish();
                             } else {
                                 FunctionUtils.showDialogNotify(this, "", response.getMessage(), DialogType.ERROR);
