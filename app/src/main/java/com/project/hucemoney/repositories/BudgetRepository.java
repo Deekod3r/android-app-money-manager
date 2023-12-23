@@ -29,7 +29,7 @@ public class BudgetRepository {
     public Budget create(BudgetAddRequest budgetAddRequest) {
         try {
             Budget check = budgetDAO.findCurrentBudgetForCategory(budgetAddRequest.getCategory());
-            if (check != null) {
+            if (check != null && !(budgetAddRequest.getStartDate().isAfter(check.getEndDate()) || budgetAddRequest.getEndDate().isBefore(check.getStartDate()))) {
                 throw new RuntimeException("Hạn mức cho danh mục này đang tồn tại trong thời hạn");
             }
             Budget budget = new Budget();
